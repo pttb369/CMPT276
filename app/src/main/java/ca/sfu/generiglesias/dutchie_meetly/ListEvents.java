@@ -4,14 +4,42 @@ import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 
 public class ListEvents extends ActionBarActivity {
+
+    private List<Event> events = new ArrayList<Event>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list_events);
+
+        populateEventList();
+        populateEventListView();
+    }
+
+    private void populateEventList() {
+        for(int i = 1; i < 20; i++) {
+            events.add(new Event(
+                    "Event " + i,
+                    new Date(),
+                    "City " + i,
+                    "Description " + i,
+                    R.drawable.ic_launcher));
+        }
+    }
+
+    private void populateEventListView() {
+        ArrayAdapter<Event> adapter = new EventListAdapter(getApplicationContext(), R.layout.event_list_item, events);
+        ListView list = (ListView) findViewById(R.id.event_list_view);
+        list.setAdapter(adapter);
     }
 
 
