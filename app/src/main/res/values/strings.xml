@@ -9,5 +9,8 @@
     <string name="title_activity_create_event">CreateEventActivity</string>
     <string name="title_activity_welcome_screen">Meetly</string>
     <string name="skip_button">Skip</string>
+    <string name="title_hint">Enter Event Title</string>
+    <string name="description_hint">Enter Event Description</string>
+    <string name="create_event_title">Create an Event</string>
 
 </resources>
