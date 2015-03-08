@@ -1,10 +1,13 @@
 package ca.sfu.generiglesias.dutchie_meetly;
 
+import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
 
 import java.util.ArrayList;
@@ -12,7 +15,7 @@ import java.util.Date;
 import java.util.List;
 
 
-public class ListEvents extends ActionBarActivity {
+public class ListEventsActivity extends ActionBarActivity {
 
     private List<Event> events = new ArrayList<Event>();
 
@@ -23,6 +26,18 @@ public class ListEvents extends ActionBarActivity {
 
         populateEventList();
         populateEventListView();
+
+        setupMapButton();
+    }
+
+    private void setupMapButton() {
+        Button btnMap = (Button) findViewById(R.id.btnViewMap);
+        btnMap.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(ListEventsActivity.this, MapActivity.class));
+            }
+        });
     }
 
     private void populateEventList() {

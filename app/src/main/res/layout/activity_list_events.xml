@@ -4,18 +4,32 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     android:paddingBottom="@dimen/activity_vertical_margin"
-    tools:context="ca.sfu.generiglesias.dutchie_meetly.ListEvents">
+    tools:context="ca.sfu.generiglesias.dutchie_meetly.ListEventsActivity">
 
     <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/event_menu_bar">
 
-        <Button
+        <LinearLayout
+            android:orientation="horizontal"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/event_create"
-            android:text="Create Event"/>
+            android:layout_height="wrap_content">
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/event_create"
+                android:text="Create Event"/>
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Map Test"
+                android:id="@+id/btnViewMap" />
+
+        </LinearLayout>
+
     </RelativeLayout>
 
     <ListView
