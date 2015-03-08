@@ -28,6 +28,18 @@ public class ListEventsActivity extends ActionBarActivity {
         populateEventListView();
 
         setupMapButton();
+        createEventButton();
+
+    }
+
+    private void createEventButton(){
+        Button CreateEventBtn = (Button) findViewById(R.id.event_create);
+        CreateEventBtn.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+                startActivity(new Intent(ListEventsActivity.this, CreateEventActivity.class));
+            }
+        });
     }
 
     private void setupMapButton() {
