@@ -44,6 +44,7 @@ public class WelcomeScreenActivity extends ActionBarActivity {
             @Override
             public void onClick(View v){
                 startActivity(new Intent(WelcomeScreenActivity.this, ListEventsActivity.class));
+                WelcomeScreenActivity.this.finish();
             }
         });
     }
