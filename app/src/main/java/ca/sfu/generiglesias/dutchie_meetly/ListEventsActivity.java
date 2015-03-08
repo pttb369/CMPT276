@@ -6,9 +6,11 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -26,6 +28,7 @@ public class ListEventsActivity extends ActionBarActivity {
 
         populateEventList();
         populateEventListView();
+        registerClickCallback();
 
         setupMapButton();
         createEventButton();
@@ -67,6 +70,24 @@ public class ListEventsActivity extends ActionBarActivity {
         ArrayAdapter<Event> adapter = new EventListAdapter(getApplicationContext(), R.layout.event_list_item, events);
         ListView list = (ListView) findViewById(R.id.event_list_view);
         list.setAdapter(adapter);
+    }
+
+    private void registerClickCallback() {
+        ListView list = (ListView) findViewById(R.id.event_list_view);
+        list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View viewClicked,
+                                    int position, long id) {
+
+                Event clickedEvent = events.get(position);
+                String message = "Position " + position
+                        + " Event Name: " + clickedEvent.getEventName()
+                        + " Location: " + clickedEvent.getEventLocation()
+                        + " Date: " + clickedEvent.getEventDate()
+                        + " Description: " + clickedEvent.getEventDescription();
+                Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
+            }
+        });
     }
 
 
