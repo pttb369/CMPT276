@@ -7,7 +7,7 @@
     <string name="title_activity_list_events">ListEvents</string>
     <string name="title_activity_map">Map</string>
     <string name="title_activity_create_event">CreateEventActivity</string>
-    <string name="title_activity_welcome_screen">WelcomeScreenActivity</string>
+    <string name="title_activity_welcome_screen">Meetly</string>
     <string name="skip_button">Skip</string>
 
 </resources>

@@ -91,4 +91,9 @@ public class ListEventsActivity extends ActionBarActivity {
 
         return super.onOptionsItemSelected(item);
     }
+
+    @Override
+    public void onBackPressed() {
+        finish();
+    }
 }

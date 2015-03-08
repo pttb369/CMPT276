@@ -14,7 +14,8 @@
         android:gravity="center"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="65dp" />
+        android:layout_marginTop="65dp"
+        android:id="@+id/welcome_title" />
 
     <Button
         android:layout_width="wrap_content"
@@ -23,6 +24,8 @@
         android:id="@+id/skip_button"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="112dp" />
+        android:layout_marginBottom="112dp"
+        android:width="150dp"
+        android:height="20dp"/>
 
 </RelativeLayout>
