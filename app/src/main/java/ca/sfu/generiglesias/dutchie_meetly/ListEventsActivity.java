@@ -26,12 +26,12 @@ public class ListEventsActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list_events);
 
+        createEventButton();
         populateEventList();
         populateEventListView();
         registerClickCallback();
 
         setupMapButton();
-        createEventButton();
 
     }
 

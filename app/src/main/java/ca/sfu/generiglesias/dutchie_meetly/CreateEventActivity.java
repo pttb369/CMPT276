@@ -16,7 +16,10 @@ import android.widget.EditText;
 import android.widget.TimePicker;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 
 
@@ -25,8 +28,10 @@ public class CreateEventActivity extends ActionBarActivity {
     private SimpleDateFormat dateFormatter;
     private DatePickerDialog DatePicker;
     private TimePickerDialog TimePick;
-    private EditText showDate;
-    private EditText showTime;
+    private EditText eventTitle, eventDescription, eventLocation, eventDuration, showDate, showTime;
+    private List<Event> events = new ArrayList<Event>();
+    String evTitle, evDescription;
+    Date evDate;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,6 +39,14 @@ public class CreateEventActivity extends ActionBarActivity {
         setContentView(R.layout.activity_create_event);
 
         dateFormatter = new SimpleDateFormat("dd-MM-yyyy", Locale.CANADA);
+        evDate = new Date();
+
+        eventTitle = (EditText) findViewById(R.id.eventTitleText);
+        eventDescription = (EditText) findViewById(R.id.eventDescriptionId);
+
+        evTitle = eventTitle.toString();
+        evDescription = eventTitle.toString();
+
 
         showDate = (EditText) findViewById(R.id.showDate);
         showDate.setInputType(InputType.TYPE_NULL);
@@ -62,6 +75,25 @@ public class CreateEventActivity extends ActionBarActivity {
             }
         });
 
+        Button CreateEventButton = (Button) findViewById(R.id.createEventButton);
+        CreateEventButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                events.add(new Event(
+                        evTitle,
+                        new Date(),
+                        "Surrey",
+                        evDescription,
+                        R.drawable.ic_launcher));
+
+                for(int i = 0; i < events.size(); i++)
+                {
+                    System.out.println(events.get(i).getEventName());
+                }
+                //finish();
+            }
+        });
+
     }
 
     //Source: http://androidopentutorials.com/android-datepickerdialog-on-edittext-click-event/
@@ -75,6 +107,7 @@ public class CreateEventActivity extends ActionBarActivity {
                 Calendar newDate = Calendar.getInstance();
                 newDate.set(year, monthOfYear, dayOfMonth);
                 showDate.setText(dateFormatter.format(newDate.getTime()));
+
             }
 
         },newCalendar.get(Calendar.YEAR), newCalendar.get(Calendar.MONTH),
@@ -89,9 +122,9 @@ public class CreateEventActivity extends ActionBarActivity {
         TimePick = new TimePickerDialog(this,
                 new TimePickerDialog.OnTimeSetListener() {
 
-                    public void onTimeSet(TimePicker view, int hourOfDay,
-                                          int minute) {
-                        showTime.setText(hourOfDay + ":" + minute);
+                    public void onTimeSet(TimePicker view, int hourOfDay,int minute) {
+                        String output = String.format("%02d:%02d", hourOfDay, minute);
+                        showTime.setText(output);
                     }
 
                 }, hour, minutes, true);
