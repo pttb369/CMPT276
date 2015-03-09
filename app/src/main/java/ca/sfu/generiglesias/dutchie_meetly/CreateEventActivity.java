@@ -7,6 +7,7 @@ import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.text.InputType;
 import android.text.format.DateFormat;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -38,13 +39,13 @@ public class CreateEventActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_event);
 
-        dateFormatter = new SimpleDateFormat("dd-MM-yyyy", Locale.CANADA);
+        dateFormatter = new SimpleDateFormat("", Locale.CANADA);
         evDate = new Date();
 
         eventTitle = (EditText) findViewById(R.id.eventTitleText);
         eventDescription = (EditText) findViewById(R.id.eventDescriptionId);
 
-        evTitle = eventTitle.toString();
+        evTitle = eventTitle.getText().toString();
         evDescription = eventTitle.toString();
 
 
@@ -80,7 +81,7 @@ public class CreateEventActivity extends ActionBarActivity {
             @Override
             public void onClick(View v) {
                 events.add(new Event(
-                        evTitle,
+                        eventTitle.getText().toString(),
                         new Date(),
                         "Surrey",
                         evDescription,
@@ -88,7 +89,8 @@ public class CreateEventActivity extends ActionBarActivity {
 
                 for(int i = 0; i < events.size(); i++)
                 {
-                    System.out.println(events.get(i).getEventName());
+                    System.out.println("EventName: " + events.get(i).getEventName());
+                    //Log.v("Event", events.get(i).getEventName());
                 }
                 //finish();
             }
