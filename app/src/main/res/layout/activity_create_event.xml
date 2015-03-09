@@ -32,6 +32,8 @@
         android:layout_height="wrap_content"
         android:paddingTop="20sp"
         android:id="@+id/eventDescriptionId"
+        android:inputType="text"
+        android:maxLength="40"
         android:layout_below="@+id/eventTitleText"
         android:layout_alignParentStart="true"
         android:hint="@string/description_hint" />
@@ -39,7 +41,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:paddingTop="20sp"
+        android:paddingTop="10sp"
         android:text="Event Date:"
         android:id="@+id/datePickerView"
         android:layout_below="@+id/eventDescriptionId"
@@ -49,7 +51,7 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Pick Date"
+        android:text="Choose Date"
         android:id="@+id/pickDateButtonId"
         android:layout_below="@+id/datePickerView"
         android:layout_alignParentStart="true" />
@@ -65,11 +67,12 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Choose Location"
+        android:paddingTop="10sp"
+        android:text="Event Location:"
         android:id="@+id/ChooseLocationView"
-        android:layout_below="@+id/pickDateButtonId"
-        android:layout_alignParentStart="true"
-        android:textSize="20sp" />
+        android:textSize="20sp"
+        android:layout_below="@+id/pickTimeButtonId"
+        android:layout_alignParentLeft="true" />
 
     <Button
         android:layout_width="wrap_content"
@@ -78,4 +81,45 @@
         android:id="@+id/pickLocationId"
         android:layout_below="@+id/ChooseLocationView"
         android:layout_alignParentStart="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingTop="10sp"
+        android:text="Event Start:"
+        android:id="@+id/textView"
+        android:layout_below="@+id/pickDateButtonId"
+        android:layout_alignParentLeft="true"
+        android:textSize="20sp" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Choose start time"
+        android:id="@+id/pickTimeButtonId"
+        android:layout_below="@+id/textView"
+        android:layout_alignParentLeft="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Duration:"
+        android:id="@+id/textView2"
+        android:layout_below="@+id/pickLocationId"
+        android:layout_alignParentLeft="true"
+        android:textSize="20sp" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/showDate"
+        android:layout_alignTop="@+id/pickDateButtonId"
+        android:layout_toEndOf="@+id/createEventButton" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/showTime"
+        android:layout_alignTop="@+id/pickTimeButtonId"
+        android:layout_alignStart="@+id/showDate" />
 </RelativeLayout>
