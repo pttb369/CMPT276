@@ -78,14 +78,14 @@ public class ListEventsActivity extends ActionBarActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View viewClicked,
                                     int position, long id) {
-
                 Event clickedEvent = events.get(position);
-                String message = "Position " + position
-                        + " Event Name: " + clickedEvent.getEventName()
-                        + " Location: " + clickedEvent.getEventLocation()
-                        + " Date: " + clickedEvent.getEventDate()
-                        + " Description: " + clickedEvent.getEventDescription();
-                Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
+                Intent launchNewActivity = new Intent(getApplicationContext(),ViewEventActivity.class);
+                launchNewActivity.putExtra("EventName",clickedEvent.getEventName());
+                launchNewActivity.putExtra("Location",clickedEvent.getEventLocation());
+                launchNewActivity.putExtra("Date",clickedEvent.getEventDate());
+                launchNewActivity.putExtra("Description",clickedEvent.getEventDescription());
+
+                startActivity(launchNewActivity);
             }
         });
     }

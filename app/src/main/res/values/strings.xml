@@ -12,5 +12,13 @@
     <string name="title_hint">Enter Event Title</string>
     <string name="description_hint">Enter Event Description</string>
     <string name="create_event_title">Create an Event</string>
+    <string name="title_activity_view_event">ViewEventActivity</string>
+    <string name="event_view_name">Event Name</string>
+    <string name="event_view_date">Event Date</string>
+    <string name="event_view_location">Event Location</string>
+    <string name="event_view_description">Event Description</string>
+    <string name="event_view_see_map">See Map</string>
+    <string name="event_view_time_remaining">Days Left Until Event </string>
+
 
 </resources>
