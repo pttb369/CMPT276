@@ -5,25 +5,53 @@ import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
 
 public class ViewEventActivity extends ActionBarActivity {
+    private String eventName;
+    private String location;
+    private String date;
+    private String description;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_event);
         extractAndInsertEventDetails();
+
+        setupButtons();
     }
 
-    void extractAndInsertEventDetails(){
+    private void setupButtons() {
+        Button btnMap = (Button) findViewById(R.id.button_viewmap);
+
+        btnMap.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                clickViewMap();
+            }
+        });
+    }
+
+    private void clickViewMap() {
+        Intent launchNewActivity = new Intent(ViewEventActivity.this, MapActivity.class);
+        launchNewActivity.putExtra(MapActivity.IS_CREATING, false);
+        launchNewActivity.putExtra(MapActivity.NAME, this.eventName);
+        launchNewActivity.putExtra(MapActivity.SNIPPET, this.location);
+
+        startActivity(launchNewActivity);
+    }
+
+    private void extractAndInsertEventDetails(){
 
         Intent intent = getIntent();
-        String eventName = intent.getStringExtra("EventName");
-        String location = intent.getStringExtra("Location");
-        String date = intent.getStringExtra("Date");
-        String description = intent.getStringExtra("Description");
+        eventName = intent.getStringExtra("EventName");
+        location = intent.getStringExtra("Location");
+        date = intent.getStringExtra("Date");
+        description = intent.getStringExtra("Description");
         String appendTo;
 
         TextView view_eventName = (TextView) findViewById(R.id.event_view_id_name);

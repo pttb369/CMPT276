@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.text.InputType;
-import android.text.format.DateFormat;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -59,6 +58,11 @@ public class CreateEventActivity extends ActionBarActivity {
         setDate();
         setTime();
 
+        setupButtons();
+
+    }
+
+    private void setupButtons() {
         Button PickDateBtn = (Button) findViewById(R.id.pickDateButtonId);
         PickDateBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -72,6 +76,22 @@ public class CreateEventActivity extends ActionBarActivity {
             @Override
             public void onClick(View v) {
                 TimePick.show();
+            }
+        });
+
+        Button PickLocationBtn = (Button) findViewById(R.id.pickLocationId);
+        PickLocationBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent launchNewActivity = new Intent(getApplicationContext(),
+                        MapActivity.class
+                );
+
+                launchNewActivity.putExtra(MapActivity.IS_CREATING, true);
+                launchNewActivity.putExtra(MapActivity.NAME, "Choose Location");
+                launchNewActivity.putExtra(MapActivity.SNIPPET, "");
+
+                startActivity(launchNewActivity);
             }
         });
 
@@ -93,7 +113,6 @@ public class CreateEventActivity extends ActionBarActivity {
                 //finish();
             }
         });
-
     }
 
     //Source: http://androidopentutorials.com/android-datepickerdialog-on-edittext-click-event/
