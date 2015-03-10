@@ -32,8 +32,6 @@ public class Event {
         this.latitude = Math.random() * 100;
     }
 
-
-
     public void setLatitude(double latitude) {
         this.latitude = latitude;
     }
