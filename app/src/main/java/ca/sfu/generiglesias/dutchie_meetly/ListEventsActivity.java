@@ -10,7 +10,6 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -30,9 +29,6 @@ public class ListEventsActivity extends ActionBarActivity {
         populateEventList();
         populateEventListView();
         registerClickCallback();
-
-        setupMapButton();
-
     }
 
     private void createEventButton(){
@@ -41,16 +37,6 @@ public class ListEventsActivity extends ActionBarActivity {
             @Override
             public void onClick(View v){
                 startActivity(new Intent(ListEventsActivity.this, CreateEventActivity.class));
-            }
-        });
-    }
-
-    private void setupMapButton() {
-        Button btnMap = (Button) findViewById(R.id.btnViewMap);
-        btnMap.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(ListEventsActivity.this, MapActivity.class));
             }
         });
     }
@@ -84,7 +70,6 @@ public class ListEventsActivity extends ActionBarActivity {
                 launchNewActivity.putExtra("Location",clickedEvent.getEventLocation());
                 launchNewActivity.putExtra("Date",clickedEvent.getEventDate());
                 launchNewActivity.putExtra("Description",clickedEvent.getEventDescription());
-
                 startActivity(launchNewActivity);
             }
         });
