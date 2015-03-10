@@ -42,7 +42,7 @@ public class EventListAdapter extends ArrayAdapter<Event> {
         title.setTextColor(Color.BLACK);
 
         TextView location = (TextView) itemView.findViewById(R.id.event_location);
-        location.setText(currentEvent.getEventLocation());
+        location.setText(currentEvent.getCityName());
         location.setTextColor(Color.BLACK);
 
         TextView date = (TextView) itemView.findViewById(R.id.event_date);

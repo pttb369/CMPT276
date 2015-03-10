@@ -15,13 +15,16 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import ca.sfu.generiglesias.dutchie_meetly.maplogic.GPSTracker;
+import ca.sfu.generiglesias.dutchie_meetly.mapui.Subactivity_viewer;
 
 public class MapActivity extends FragmentActivity {
     public static final String IS_CREATING = "isCreating";
     public static final String NAME = "name";
     public static final String SNIPPET = "snippet";
 
-    private final int STREET_DEPTH = 17;
+    public static final int STREET_DEPTH = 17;
+
+    //SFU : 49.187559, -122.849545
 
     private GoogleMap map;
     private GPSTracker gpsTracker;
@@ -44,7 +47,7 @@ public class MapActivity extends FragmentActivity {
         if (isCreating) {
             Creating();
         } else {
-            Viewing();
+            Subactivity_viewer.main(getApplicationContext(), map);
         }
     }
 
@@ -56,7 +59,7 @@ public class MapActivity extends FragmentActivity {
 
     private void Creating() {
         Location loc = gpsTracker.getLocation();
-        moveMapToLocation(loc.getLatitude(), loc.getLongitude(), STREET_DEPTH);
+        moveMapToLocation(map, loc.getLatitude(), loc.getLongitude(), STREET_DEPTH);
     }
 
     private void Viewing() {
@@ -71,10 +74,10 @@ public class MapActivity extends FragmentActivity {
         marker.setTitle(eventName);
         marker.setSnippet(eventSnippet);
         marker.showInfoWindow();
-        moveMapToLocation(latitude, longitude, STREET_DEPTH);
+        moveMapToLocation(map, latitude, longitude, STREET_DEPTH);
     }
 
-    private void moveMapToLocation(double latitude, double longitude, int depth) {
+    public static void moveMapToLocation(GoogleMap map, double latitude, double longitude, int depth) {
         LatLng location = new LatLng(latitude, longitude);
         CameraUpdate update = CameraUpdateFactory.newLatLngZoom(location, depth);
         map.animateCamera(update);
@@ -88,7 +91,7 @@ public class MapActivity extends FragmentActivity {
             public void onClick(View v) {
                 if (! gpsTracker.isLocationUnknown()) {
                     Location loc = gpsTracker.getLocation();
-                    moveMapToLocation(loc.getLatitude(), loc.getLongitude(), 16);
+                    moveMapToLocation(map, loc.getLatitude(), loc.getLongitude(), 16);
                 }
             }
         });

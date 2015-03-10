@@ -9,20 +9,43 @@ import java.util.Date;
 public class Event {
     private String eventName;
     private Date eventDate;
-    private String eventLocation;
+    private String cityName;
     private String eventDescription;
     private int eventIconId;
 
+    private double latitude;
+    private double longitude;
+
     public Event(String eventName,
                  Date eventDate,
-                 String eventLocation,
+                 String cityName,
                  String eventDescription,
                  int eventIconId) {
         this.eventName = eventName;
         this.eventDate = eventDate;
-        this.eventLocation = eventLocation;
+        this.cityName = cityName;
         this.eventDescription = eventDescription;
         this.eventIconId = eventIconId;
+
+        // TODO: get rid of random!!
+        this.longitude = Math.random() * 100;
+        this.latitude = Math.random() * 100;
+    }
+
+    public void setLatitude(double latitude) {
+        this.latitude = latitude;
+    }
+
+    public void setLongitude(double longitude) {
+        this.longitude = longitude;
+    }
+
+    public double getLatitude() {
+        return this.latitude;
+    }
+
+    public double getLongitude() {
+        return this.longitude;
     }
 
     public String getEventName() {
@@ -33,8 +56,8 @@ public class Event {
         return new SimpleDateFormat("MM-dd-yyyy").format(eventDate);
     }
 
-    public String getEventLocation() {
-        return eventLocation;
+    public String getCityName() {
+        return cityName;
     }
 
     public String getEventDescription() {
