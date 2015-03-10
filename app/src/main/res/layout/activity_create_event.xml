@@ -1,4 +1,9 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:fillViewport="true">
+<RelativeLayout
     xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
     android:layout_height="match_parent" android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
@@ -24,8 +29,7 @@
         android:inputType="text"
         android:maxLength="40"
         android:layout_below="@+id/createEventTitleView"
-        android:layout_alignParentStart="true"
-        android:layout_marginTop="20dp" />
+        android:layout_alignParentStart="true" />
 
     <EditText
         android:layout_width="fill_parent"
@@ -71,8 +75,8 @@
         android:text="Event Location:"
         android:id="@+id/ChooseLocationView"
         android:textSize="20sp"
-        android:layout_below="@+id/pickTimeButtonId"
-        android:layout_alignParentLeft="true" />
+        android:layout_below="@+id/pickTimeEndButtonId"
+        android:layout_alignParentStart="true" />
 
     <Button
         android:layout_width="wrap_content"
@@ -106,9 +110,9 @@
         android:text="Duration:"
         android:paddingTop="5sp"
         android:id="@+id/textView2"
+        android:textSize="20sp"
         android:layout_below="@+id/pickLocationId"
-        android:layout_alignParentLeft="true"
-        android:textSize="20sp" />
+        android:layout_alignParentStart="true" />
 
     <EditText
         android:layout_width="wrap_content"
@@ -123,4 +127,37 @@
         android:id="@+id/showTime"
         android:layout_alignTop="@+id/pickTimeButtonId"
         android:layout_alignStart="@+id/showDate" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Event End:"
+        android:id="@+id/textView3"
+        android:layout_below="@+id/pickTimeButtonId"
+        android:layout_alignParentStart="true"
+        android:textSize="20sp" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Choose End Time"
+        android:id="@+id/pickTimeEndButtonId"
+        android:layout_below="@+id/textView3"
+        android:layout_alignParentStart="true" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/showEndTime"
+        android:layout_alignTop="@+id/pickTimeEndButtonId"
+        android:layout_toEndOf="@+id/createEventButton" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/durationTime"
+        android:layout_below="@+id/pickLocationId"
+        android:layout_alignEnd="@+id/showEndTime"
+        android:textSize="10sp" />
 </RelativeLayout>
+</ScrollView>

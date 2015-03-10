@@ -1,24 +1,21 @@
 package ca.sfu.generiglesias.dutchie_meetly;
 
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.text.InputType;
-<<<<<<< HEAD
-import android.text.format.DateFormat;
-import android.util.Log;
-=======
->>>>>>> 77f27a4c8c12b29bd99387e48563367aa8e07f3c
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.TimePicker;
-
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -31,18 +28,22 @@ public class CreateEventActivity extends ActionBarActivity {
 
     private SimpleDateFormat dateFormatter;
     private DatePickerDialog DatePicker;
-    private TimePickerDialog TimePick;
-    private EditText eventTitle, eventDescription, eventLocation, eventDuration, showDate, showTime;
+    private TimePickerDialog TimePick, TimePickEnd;
+    private EditText eventTitle, eventDescription, eventLocation, eventDuration, showDate, showTime,
+    showEndTime;
     private List<Event> events = new ArrayList<Event>();
     String evTitle, evDescription;
     Date evDate;
+    private int startHour, startMinute, endHour, endMinute;
+    private Calendar duration;
+    EditText durationText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_event);
 
-        dateFormatter = new SimpleDateFormat("", Locale.CANADA);
+        dateFormatter = new SimpleDateFormat("dd-MM-yyyy", Locale.CANADA);
         evDate = new Date();
 
         eventTitle = (EditText) findViewById(R.id.eventTitleText);
@@ -50,7 +51,6 @@ public class CreateEventActivity extends ActionBarActivity {
 
         evTitle = eventTitle.getText().toString();
         evDescription = eventTitle.toString();
-
 
         showDate = (EditText) findViewById(R.id.showDate);
         showDate.setInputType(InputType.TYPE_NULL);
@@ -60,8 +60,19 @@ public class CreateEventActivity extends ActionBarActivity {
         showTime.setInputType(InputType.TYPE_NULL);
         showTime.requestFocus();
 
+        showEndTime = (EditText) findViewById(R.id.showEndTime);
+        showEndTime.setInputType(InputType.TYPE_NULL);
+        showEndTime.requestFocus();
+
+        durationText = (EditText)findViewById(R.id.durationTime);
+        durationText.setInputType(InputType.TYPE_NULL);
+        durationText.requestFocus();
+
         setDate();
         setTime();
+        setEndTime();
+
+        duration = Calendar.getInstance();
 
         setupButtons();
 
@@ -81,6 +92,14 @@ public class CreateEventActivity extends ActionBarActivity {
             @Override
             public void onClick(View v) {
                 TimePick.show();
+            }
+        });
+
+        Button PickEndTimeBtn = (Button) findViewById(R.id.pickTimeEndButtonId);
+        PickEndTimeBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                TimePickEnd.show();
             }
         });
 
@@ -104,21 +123,50 @@ public class CreateEventActivity extends ActionBarActivity {
         CreateEventButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                int tempEndHour = (endHour*60) + endMinute;
+                int tempStartHour = (startHour*60) + startMinute;
+
+                if(tempStartHour > tempEndHour)
+                {
+                    AlertDialog.Builder builder1 = new AlertDialog.Builder(CreateEventActivity.this);
+                    builder1.setMessage("Start time cannot happen after end time, please choose" +
+                            " a new start time.");
+                    builder1.setCancelable(true);
+                    builder1.setPositiveButton("Ok",
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
+                                    showTime.setText(null);
+                                    dialog.cancel();
+                                }
+                            });
+
+                    AlertDialog alert11 = builder1.create();
+                    alert11.show();
+                }else{
+                    duration.set(Calendar.HOUR_OF_DAY, endHour);
+                    duration.set(Calendar.MINUTE, endMinute);
+
+                    duration.add(Calendar.HOUR, -startHour);
+                    duration.add(Calendar.MINUTE, -startMinute);
+
+                    durationText.setText(duration.get(Calendar.HOUR_OF_DAY) + " Hours and " +
+                            duration.get(Calendar.MINUTE) + " Minutes");
+                }
+
                 events.add(new Event(
                         eventTitle.getText().toString(),
                         new Date(),
                         "Surrey",
                         evDescription,
                         R.drawable.ic_launcher));
-
-                for(int i = 0; i < events.size(); i++)
-                {
-                    System.out.println("EventName: " + events.get(i).getEventName());
-                    //Log.v("Event", events.get(i).getEventName());
-                }
-                //finish();
             }
         });
+    }
+
+    private void calculateDuration(int startH, int startM, int endH, int endM)
+    {
+
     }
 
     //Source: http://androidopentutorials.com/android-datepickerdialog-on-edittext-click-event/
@@ -148,8 +196,30 @@ public class CreateEventActivity extends ActionBarActivity {
                 new TimePickerDialog.OnTimeSetListener() {
 
                     public void onTimeSet(TimePicker view, int hourOfDay,int minute) {
+                        startHour = hourOfDay;
+                        startMinute = minute;
                         String output = String.format("%02d:%02d", hourOfDay, minute);
                         showTime.setText(output);
+                    }
+
+                }, hour, minutes, true);
+
+    }
+
+    private void setEndTime(){
+        final Calendar TimeCalendar = Calendar.getInstance();
+        int hour = TimeCalendar.get(Calendar.HOUR_OF_DAY);
+        int minutes = TimeCalendar.get(Calendar.MINUTE);
+
+        TimePickEnd = new TimePickerDialog(this,
+                new TimePickerDialog.OnTimeSetListener() {
+
+                    public void onTimeSet(TimePicker view, int hourOfDay,int minute) {
+                        endHour = hourOfDay;
+                        endMinute = minute;
+
+                        String output = String.format("%02d:%02d", hourOfDay, minute);
+                        showEndTime.setText(output);
                     }
 
                 }, hour, minutes, true);
