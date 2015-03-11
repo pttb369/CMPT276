@@ -47,12 +47,16 @@ public class ViewEventMapActivity extends FragmentActivity {
         MapActions.moveMapToLocation(map, latitude, longitude);
     }
     private void clickFindMe() {
-        if (gpsTracker.isLocationUnknown()) {
-            Toast.makeText(getApplicationContext(), "Current Location Unknown", Toast.LENGTH_SHORT)
-            .show();
+        if (gpsTracker.isGPSEnabled()) {
+            if (gpsTracker.isLocationUnknown()) {
+                Toast.makeText(getApplicationContext(), "Current Location Unknown", Toast.LENGTH_SHORT)
+                        .show();
+            } else {
+                Location location = gpsTracker.getLocation();
+                MapActions.moveMapToLocation(map, location.getLatitude(), location.getLongitude());
+            }
         } else {
-            Location location = gpsTracker.getLocation();
-            MapActions.moveMapToLocation(map, location.getLatitude(), location.getLongitude());
+            Toast.makeText(getApplicationContext(), "Please Enable GPS", Toast.LENGTH_SHORT).show();
         }
     }
     private void setupButtons() {

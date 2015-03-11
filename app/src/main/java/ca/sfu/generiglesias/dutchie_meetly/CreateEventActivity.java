@@ -98,12 +98,12 @@ public class CreateEventActivity extends ActionBarActivity {
         CreateEventButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                events.add(new Event(
-                        evTitle,
-                        new Date(),
-                        "Surrey",
-                        evDescription,
-                        R.drawable.ic_launcher));
+//                events.add(new Event(
+//                        evTitle,
+//                        new Date(),
+//                        "Surrey",
+//                        evDescription,
+//                        R.drawable.ic_launcher));
 
                 for(int i = 0; i < events.size(); i++)
                 {

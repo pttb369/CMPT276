@@ -55,11 +55,16 @@ public class CreateEventMapActivity extends FragmentActivity {
         btnFindMe.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (! gpsTracker.isLocationUnknown()) {
-                    Location loc = gpsTracker.getLocation();
-                    MapActions.moveMapToLocation(map, loc.getLatitude(), loc.getLongitude());
+                if (gpsTracker.isGPSEnabled()) {
+                    if (gpsTracker.isLocationUnknown()) {
+                        Toast.makeText(getApplicationContext(), "Current Location Unknown", Toast.LENGTH_SHORT)
+                                .show();
+                    } else {
+                        Location location = gpsTracker.getLocation();
+                        MapActions.moveMapToLocation(map, location.getLatitude(), location.getLongitude());
+                    }
                 } else {
-                    Toast.makeText(context, "Current Location Unknown", Toast.LENGTH_SHORT);
+                    Toast.makeText(getApplicationContext(), "Please Enable GPS", Toast.LENGTH_SHORT).show();
                 }
             }
         });
