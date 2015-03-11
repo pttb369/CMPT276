@@ -1,13 +1,20 @@
 package ca.sfu.generiglesias.dutchie_meetly;
 
 import android.content.Intent;
+import android.os.Handler;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.TextView;
+
+import java.util.Date;
+import java.util.concurrent.TimeUnit;
 
 
 public class ViewEventActivity extends ActionBarActivity {
@@ -15,12 +22,15 @@ public class ViewEventActivity extends ActionBarActivity {
     private String location;
     private String date;
     private String description;
+    private Handler handler;
+    private boolean running = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_event);
         extractAndInsertEventDetails();
+        timeLeftUntilEvent();
 
         setupButtons();
     }
@@ -39,6 +49,7 @@ public class ViewEventActivity extends ActionBarActivity {
     private void clickViewMap() {
         startActivity(new Intent(getApplicationContext(), ViewEventMapActivity.class));
     }
+
 
     private void extractAndInsertEventDetails(){
 
@@ -63,6 +74,59 @@ public class ViewEventActivity extends ActionBarActivity {
         TextView view_eventLocation = (TextView) findViewById(R.id.event_view_id_location);
         appendTo = (String)getResources().getText(R.string.event_view_location);
         view_eventLocation.setText(appendTo + ": " + location);
+    }
+
+    void timeLeftUntilEvent(){
+
+        final Date now = new Date();
+        final Date future = new Date();
+        future.setTime(now.getTime() + 5000000000L);
+
+        final TextView timeRemaining = (TextView) findViewById(R.id.event_view_id_time_remaining);
+
+        timeRemaining.setText("Time Until Event: " + ": calculating time..");
+
+        handler = new Handler();
+
+        Animation TitleFade = AnimationUtils.loadAnimation(this, R.anim.fade_in2);
+        timeRemaining.startAnimation(TitleFade);
+
+
+        Runnable runnable = new Runnable() {
+
+            @Override
+            public void run() {
+                while (running) {
+                    try {
+                        Thread.sleep(1000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    handler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            long diff = future.getTime() - now.getTime();
+                            long newDays = TimeUnit.MILLISECONDS.toDays(diff);
+                            long newHours = TimeUnit.MILLISECONDS.toHours(diff) % 24;
+                            long newMinutes = TimeUnit.MILLISECONDS.toMinutes(diff) % 60;
+                            long newSeconds = TimeUnit.MILLISECONDS.toSeconds(diff) % 60;
+                            timeRemaining.setText("Time Until Event: " + ": " + newDays + "d " + +newHours + "h " + newMinutes + "m " + newSeconds + "s");
+
+                            now.setTime(now.getTime() + 1000L);
+
+                            if(diff == 0L){
+                                running = false;
+                            }
+
+                        }
+                    });
+
+
+                }
+            }
+        };
+
+        new Thread(runnable).start();
 
     }
 

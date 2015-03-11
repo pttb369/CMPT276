@@ -11,6 +11,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -41,13 +42,18 @@ public class ListEventsActivity extends ActionBarActivity {
         });
     }
 
+    //eventTitle.getText().toString()
+
     private void populateEventList() {
         for(int i = 1; i < 20; i++) {
             events.add(new Event(
                     "Event " + i,
-                    new Date(),
+                    "123",
                     "City " + i,
                     "Description " + i,
+                    "10:00",
+                    "13:00",
+                    "3 Hours 0 minutes",
                     R.drawable.ic_launcher));
         }
     }

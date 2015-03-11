@@ -50,5 +50,14 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentStart="true" />
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="@string/event_view_time_remaining"
+        android:id="@+id/event_view_id_time_remaining"
+        android:layout_below="@+id/event_view_id_name"
+        android:layout_alignParentStart="true" />
+
 
 </RelativeLayout>
