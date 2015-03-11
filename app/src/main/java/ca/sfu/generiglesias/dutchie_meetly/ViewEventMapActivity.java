@@ -1,34 +1,77 @@
 package ca.sfu.generiglesias.dutchie_meetly;
 
+import android.location.Location;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
-public class ViewEventMapActivity extends FragmentActivity {
+import ca.sfu.generiglesias.dutchie_meetly.maplogic.GPSTracker;
+import ca.sfu.generiglesias.dutchie_meetly.maplogic.MapActions;
 
-    private GoogleMap mMap; // Might be null if Google Play services APK is not available.
+public class ViewEventMapActivity extends FragmentActivity {
+    private final static int DEPTH = 17;
+
+    private GoogleMap map;
+    private GPSTracker gpsTracker;
+    private Marker marker;
+    private double latitude;
+    private double longitude;
+    private String name;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_event_map);
         setUpMapIfNeeded();
-
         setupButtons();
 
-        Toast.makeText(getApplicationContext(), "HIIIIII", Toast.LENGTH_LONG).show();
+        this.map.clear();
+        this.latitude = EventHolder.getLatitude();
+        this.longitude = EventHolder.getLongitude();
+        this.name = EventHolder.getName();
+        this.gpsTracker = new GPSTracker(getApplicationContext());
+        this.marker = map.addMarker(new MarkerOptions().position(new LatLng(latitude, longitude)));
+
+        MapActions.moveMapToLocation(map, latitude, longitude);
     }
 
+    private void clickFindEvent() {
+        MapActions.moveMapToLocation(map, latitude, longitude);
+    }
+    private void clickFindMe() {
+        if (gpsTracker.isLocationUnknown()) {
+            Toast.makeText(getApplicationContext(), "Current Location Unknown", Toast.LENGTH_SHORT)
+            .show();
+        } else {
+            Location location = gpsTracker.getLocation();
+            MapActions.moveMapToLocation(map, location.getLatitude(), location.getLongitude());
+        }
+    }
     private void setupButtons() {
-        Button
-    }
+        Button btnFindEvent = (Button) findViewById(R.id.btnFindEvent);
+        btnFindEvent.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                clickFindEvent();
+            }
+        });
 
+        Button btnFindMe = (Button) findViewById(R.id.btnFindMe_view);
+        btnFindMe.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                clickFindMe();
+            }
+        });
+    }
     @Override
     protected void onResume() {
         super.onResume();
@@ -36,17 +79,17 @@ public class ViewEventMapActivity extends FragmentActivity {
     }
     private void setUpMapIfNeeded() {
         // Do a null check to confirm that we have not already instantiated the map.
-        if (mMap == null) {
+        if (map == null) {
             // Try to obtain the map from the SupportMapFragment.
-            mMap = ((SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map))
+            map = ((SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map))
                     .getMap();
             // Check if we were successful in obtaining the map.
-            if (mMap != null) {
+            if (map != null) {
                 setUpMap();
             }
         }
     }
     private void setUpMap() {
-        mMap.addMarker(new MarkerOptions().position(new LatLng(0, 0)).title("Marker"));
+        map.addMarker(new MarkerOptions().position(new LatLng(0, 0)).title("Marker"));
     }
 }

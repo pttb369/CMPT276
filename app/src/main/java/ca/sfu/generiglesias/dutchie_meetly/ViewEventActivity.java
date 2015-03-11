@@ -37,10 +37,6 @@ public class ViewEventActivity extends ActionBarActivity {
     }
 
     private void clickViewMap() {
-        //Intent launchNewActivity = new Intent(ViewEventActivity.this, MapActivity.class);
-        //launchNewActivity.putExtra(MapActivity.IS_CREATING, false);
-
-        //startActivity(launchNewActivity);
         startActivity(new Intent(getApplicationContext(), ViewEventMapActivity.class));
     }
 

@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.text.InputType;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -28,6 +29,7 @@ public class CreateEventActivity extends ActionBarActivity {
     private DatePickerDialog DatePicker;
     private TimePickerDialog TimePick;
     private EditText eventTitle, eventDescription, eventLocation, eventDuration, showDate, showTime;
+    private EditText showLocation;
     private List<Event> events = new ArrayList<Event>();
     String evTitle, evDescription;
     Date evDate;
@@ -54,6 +56,10 @@ public class CreateEventActivity extends ActionBarActivity {
         showTime = (EditText) findViewById(R.id.showTime);
         showTime.setInputType(InputType.TYPE_NULL);
         showTime.requestFocus();
+
+        showLocation = (EditText) findViewById(R.id.showLocation);
+        showLocation.setInputType(InputType.TYPE_NULL);
+        showLocation.requestFocus();
 
         setDate();
         setTime();
@@ -83,13 +89,8 @@ public class CreateEventActivity extends ActionBarActivity {
         PickLocationBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent launchNewActivity = new Intent(getApplicationContext(),
-                        CreateEventMapActivity.class
-                );
-
-                launchNewActivity.putExtra(CreateEventMapActivity.IS_CREATING, true);
-
-                startActivity(launchNewActivity);
+                EventHolder.refresh();
+                startActivity(new Intent(getApplicationContext(), CreateEventMapActivity.class));
             }
         });
 

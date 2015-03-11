@@ -123,4 +123,12 @@
         android:id="@+id/showTime"
         android:layout_alignTop="@+id/pickTimeButtonId"
         android:layout_alignStart="@+id/showDate" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/showLocation"
+        android:layout_alignTop="@+id/pickLocationId"
+        android:layout_toEndOf="@+id/createEventButton" />
+
 </RelativeLayout>
