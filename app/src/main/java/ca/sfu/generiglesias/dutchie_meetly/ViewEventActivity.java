@@ -37,12 +37,11 @@ public class ViewEventActivity extends ActionBarActivity {
     }
 
     private void clickViewMap() {
-        Intent launchNewActivity = new Intent(ViewEventActivity.this, MapActivity.class);
-        launchNewActivity.putExtra(MapActivity.IS_CREATING, false);
-        launchNewActivity.putExtra(MapActivity.NAME, this.eventName);
-        launchNewActivity.putExtra(MapActivity.SNIPPET, this.location);
+        //Intent launchNewActivity = new Intent(ViewEventActivity.this, MapActivity.class);
+        //launchNewActivity.putExtra(MapActivity.IS_CREATING, false);
 
-        startActivity(launchNewActivity);
+        //startActivity(launchNewActivity);
+        startActivity(new Intent(getApplicationContext(), ViewEventMapActivity.class));
     }
 
     private void extractAndInsertEventDetails(){

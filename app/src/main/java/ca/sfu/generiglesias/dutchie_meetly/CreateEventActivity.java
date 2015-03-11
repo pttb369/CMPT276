@@ -84,12 +84,10 @@ public class CreateEventActivity extends ActionBarActivity {
             @Override
             public void onClick(View v) {
                 Intent launchNewActivity = new Intent(getApplicationContext(),
-                        MapActivity.class
+                        CreateEventMapActivity.class
                 );
 
-                launchNewActivity.putExtra(MapActivity.IS_CREATING, true);
-                launchNewActivity.putExtra(MapActivity.NAME, "Choose Location");
-                launchNewActivity.putExtra(MapActivity.SNIPPET, "");
+                launchNewActivity.putExtra(CreateEventMapActivity.IS_CREATING, true);
 
                 startActivity(launchNewActivity);
             }

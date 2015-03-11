@@ -7,6 +7,10 @@ public class EventHolder {
     private static double latitude;
     private static double longitude;
 
+    private EventHolder() {
+        // Prevents this object from being instantiated.
+    }
+
     public static void refresh() {
         name = null;
         latitude = Double.NaN;
