@@ -1,6 +1,7 @@
 package ca.sfu.generiglesias.dutchie_meetly;
 
 import android.content.Context;
+import android.content.Intent;
 import android.location.Location;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
@@ -24,8 +25,7 @@ public class CreateEventMapActivity extends FragmentActivity {
     private GoogleMap map;
     private GPSTracker gpsTracker;
     private Marker marker;
-    private double latitude;
-    private double longitude;
+    boolean isLocationChosen = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,11 +73,11 @@ public class CreateEventMapActivity extends FragmentActivity {
         btnCreateEvent.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (Double.isNaN(EventHolder.getLatitude())) {
-                    Toast.makeText(getApplicationContext(), "Please select a location", Toast.LENGTH_SHORT)
-                    .show();
-                } else {
+                if (isLocationChosen) {
                     finish();
+                } else {
+                    Toast.makeText(getApplicationContext(),
+                            "Please select a location", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -85,11 +85,16 @@ public class CreateEventMapActivity extends FragmentActivity {
         map.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
             @Override
             public void onMapClick(LatLng latLng) {
-                EventHolder.setLatitude(latLng.latitude);
-                EventHolder.setLongitude(latLng.longitude);
                 marker.setPosition(latLng);
                 marker.setTitle(latLng.latitude + ":" + latLng.longitude);
                 marker.setVisible(true);
+
+                Intent returnIntent = new Intent();
+                returnIntent.putExtra("latitude", latLng.latitude);
+                returnIntent.putExtra("longitude", latLng.longitude);
+                setResult(RESULT_OK, returnIntent);
+
+                isLocationChosen = true;
             }
         });
     }

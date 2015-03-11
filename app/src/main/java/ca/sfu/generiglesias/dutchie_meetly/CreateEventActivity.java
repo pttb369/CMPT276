@@ -90,7 +90,9 @@ public class CreateEventActivity extends ActionBarActivity {
             @Override
             public void onClick(View v) {
                 EventHolder.refresh();
-                startActivity(new Intent(getApplicationContext(), CreateEventMapActivity.class));
+                startActivityForResult(
+                        new Intent(getApplicationContext(), CreateEventMapActivity.class),
+                        666);
             }
         });
 
@@ -112,6 +114,18 @@ public class CreateEventActivity extends ActionBarActivity {
                 //finish();
             }
         });
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 666) {
+            if (resultCode == RESULT_OK) {
+                double lat = data.getDoubleExtra("latitude", 0);
+                double lng = data.getDoubleExtra("longitude", 0);
+                showLocation.setText(lat + ":" + lng);
+            }
+        }
     }
 
     //Source: http://androidopentutorials.com/android-datepickerdialog-on-edittext-click-event/

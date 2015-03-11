@@ -106,7 +106,7 @@
         android:text="Duration:"
         android:paddingTop="5sp"
         android:id="@+id/textView2"
-        android:layout_below="@+id/pickLocationId"
+        android:layout_below="@+id/showLocation"
         android:layout_alignParentLeft="true"
         android:textSize="20sp" />
 
@@ -128,7 +128,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/showLocation"
-        android:layout_alignTop="@+id/pickLocationId"
-        android:layout_toEndOf="@+id/createEventButton" />
+        android:layout_below="@id/pickLocationId"/>
 
 </RelativeLayout>
