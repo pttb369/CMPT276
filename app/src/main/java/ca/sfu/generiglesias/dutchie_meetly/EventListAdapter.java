@@ -16,6 +16,7 @@ import java.util.List;
  */
 public class EventListAdapter extends ArrayAdapter<Event> {
     private List<Event> events;
+
     public EventListAdapter(Context context, int resource, List<Event> objects) {
         super(context, resource, objects);
         events = objects;
@@ -41,9 +42,9 @@ public class EventListAdapter extends ArrayAdapter<Event> {
         title.setText(currentEvent.getEventName());
         title.setTextColor(Color.BLACK);
 
-        TextView location = (TextView) itemView.findViewById(R.id.event_location);
-        location.setText(currentEvent.getCityName());
-        location.setTextColor(Color.BLACK);
+        TextView duration = (TextView) itemView.findViewById(R.id.event_duration);
+        duration.setText(currentEvent.getEventDuration());
+        duration.setTextColor(Color.BLACK);
 
         TextView date = (TextView) itemView.findViewById(R.id.event_date);
         date.setText(currentEvent.getEventDate());
