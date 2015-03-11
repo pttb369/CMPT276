@@ -32,7 +32,6 @@ public class CreateEventActivity extends ActionBarActivity {
     private EditText eventTitle, eventDescription, eventLocation, eventDuration, showDate, showTime,
     showEndTime;
     private List<Event> events = new ArrayList<Event>();
-    String evTitle, evDescription;
     Date evDate;
     private int startHour, startMinute, endHour, endMinute;
     private Calendar duration;
@@ -48,9 +47,6 @@ public class CreateEventActivity extends ActionBarActivity {
 
         eventTitle = (EditText) findViewById(R.id.eventTitleText);
         eventDescription = (EditText) findViewById(R.id.eventDescriptionId);
-
-        evTitle = eventTitle.getText().toString();
-        evDescription = eventTitle.toString();
 
         showDate = (EditText) findViewById(R.id.showDate);
         showDate.setInputType(InputType.TYPE_NULL);
@@ -158,8 +154,13 @@ public class CreateEventActivity extends ActionBarActivity {
                         eventTitle.getText().toString(),
                         new Date(),
                         "Surrey",
-                        evDescription,
+                        eventDescription.getText().toString(),
                         R.drawable.ic_launcher));
+
+                for(int i = 0; i < events.size(); i++)
+                {
+                    System.out.println(events.get(i).getEventName());
+                }
             }
         });
     }
