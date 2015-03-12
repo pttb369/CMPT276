@@ -17,11 +17,16 @@
     <string name="event_view_date">Event Date</string>
     <string name="event_view_location">Event Location</string>
     <string name="event_view_description">Event Description</string>
+    <string name="event_view_start_time">Event Start Time</string>
+    <string name="event_view_end_time">Event End Time</string>
+    <string name="event_view_duration">Duration</string>
     <string name="event_view_see_map">See Map</string>
     <string name="event_view_time_remaining">Days Left Until Event </string>
     <string name="title_activity_view_event_maps">Map</string>
-    <string name="title_activity_my_create_event">myCreateEventActivity</string>
+
+
 
     <string name="hello_world">Hello world!</string>
+    <string name="title_activity_test_create_event">TestCreateEventActivity</string>
 
 </resources>

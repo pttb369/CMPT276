@@ -1,14 +1,15 @@
 package ca.sfu.generiglesias.dutchie_meetly;
 
+import android.annotation.TargetApi;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Intent;
+import android.location.Address;
+import android.location.Geocoder;
+import android.os.Build;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.text.InputType;
-import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -16,32 +17,17 @@ import android.widget.EditText;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-
 public class CreateEventActivity extends ActionBarActivity {
     private SimpleDateFormat dateFormatter;
-    private DatePickerDialog DatePicker;
-    private TimePickerDialog TimePick;
-    private EditText eventTitle, eventDescription, eventLocation, eventDuration, showDate, showTime;
-    private EditText showLocation;
-    String evTitle, evDescription;
-    Date evDate;
-
-    //Event Information
-    private String name;
-    private String date;
-    private String cityName;
-    private String description;
-    private String startTime;
-    private String endTime;
-
-
+    private DatePickerDialog datePickerDialog;
+    private TimePickerDialog startTimePickerDialog, endTimePickerDialog;
+    private EditText eventTitle, eventDescription, eventLocation, eventDuration, eventDate, eventStartTime, eventEndTime;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,53 +35,77 @@ public class CreateEventActivity extends ActionBarActivity {
         setContentView(R.layout.activity_create_event);
 
         dateFormatter = new SimpleDateFormat("dd-MM-yyyy", Locale.CANADA);
-        evDate = new Date();
 
-        eventTitle = (EditText) findViewById(R.id.eventTitleText);
-        eventDescription = (EditText) findViewById(R.id.eventDescriptionId);
-
-        evTitle = eventTitle.toString();
-        evDescription = eventTitle.toString();
-
-
-        showDate = (EditText) findViewById(R.id.showDate);
-        showDate.setInputType(InputType.TYPE_NULL);
-        showDate.requestFocus();
-
-        showTime = (EditText) findViewById(R.id.showTime);
-        showTime.setInputType(InputType.TYPE_NULL);
-        showTime.requestFocus();
-
-        showLocation = (EditText) findViewById(R.id.showLocation);
-        showLocation.setInputType(InputType.TYPE_NULL);
-        showLocation.requestFocus();
-
+        getViewItemsById();
         setDate();
-        setTime();
+        setStartTime();
+        setEndTime();
 
         setupButtons();
 
     }
 
+    @TargetApi(Build.VERSION_CODES.CUPCAKE)
+    private void getViewItemsById() {
+        eventTitle = (EditText) findViewById(R.id.create_event_name);
+        eventDescription = (EditText) findViewById(R.id.create_event_description);
+
+        eventDate = (EditText) findViewById(R.id.create_event_date);
+        eventDate.setInputType(InputType.TYPE_NULL);
+        eventDate.requestFocus();
+
+        eventStartTime = (EditText) findViewById(R.id.create_event_start_time);
+        eventStartTime.setInputType(InputType.TYPE_NULL);
+        eventStartTime.requestFocus();
+
+        eventEndTime = (EditText) findViewById(R.id.create_event_end_time);
+        eventEndTime.setInputType(InputType.TYPE_NULL);
+        eventEndTime.requestFocus();
+
+        eventLocation = (EditText) findViewById(R.id.create_event_location);
+        eventLocation.setInputType(InputType.TYPE_NULL);
+        eventLocation.requestFocus();
+
+        //showLocation = (EditText) findViewById(R.id.);
+    }
+
     private void setupButtons() {
-        Button PickDateBtn = (Button) findViewById(R.id.pickDateButtonId);
-        PickDateBtn.setOnClickListener(new View.OnClickListener() {
+        setupEventDateListener();
+        setupStartTimeListener();
+        setupEndTimeListener();
+        setupLocationListener();
+        setupCreateEventButton();
+    }
+
+    private void setupEventDateListener() {
+        eventDate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                DatePicker.show();
+                datePickerDialog.show();
             }
         });
+    }
 
-        Button PickTimeBtn = (Button) findViewById(R.id.pickTimeButtonId);
-        PickTimeBtn.setOnClickListener(new View.OnClickListener() {
+    private void setupStartTimeListener() {
+        eventStartTime.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                TimePick.show();
+                startTimePickerDialog.show();
             }
         });
+    }
 
-        Button PickLocationBtn = (Button) findViewById(R.id.pickLocationId);
-        PickLocationBtn.setOnClickListener(new View.OnClickListener() {
+    private void setupEndTimeListener() {
+        eventEndTime.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                endTimePickerDialog.show();
+            }
+        });
+    }
+
+    private void setupLocationListener() {
+        eventLocation.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 EventHolder.refresh();
@@ -104,24 +114,34 @@ public class CreateEventActivity extends ActionBarActivity {
                         666);
             }
         });
+    }
 
+    private void setupCreateEventButton() {
         Button CreateEventButton = (Button) findViewById(R.id.createEventButton);
         CreateEventButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                endTime = "DUMBBBBBBBBBB";
-                name = "This string is not true.";
+                String currentEventName = eventTitle.getText().toString();
+                String currentEventDate = eventDate.getText().toString();
+                String cityName = eventLocation.getText().toString();
+                String currentEventDescription = eventDescription.getText().toString();
+                String startTime = eventStartTime.getText().toString();
+                String endTime = eventEndTime.getText().toString();
 
-                boolean validDetails = name != null &&
-                        date != null &&
-                        startTime != null &&
-                        endTime != null;
+                boolean validDetails = (!currentEventName.isEmpty()
+                        && !cityName.isEmpty()
+                        && !currentEventDescription.isEmpty()
+                        && !currentEventDate.isEmpty()
+                        && !startTime.isEmpty()
+                        && !endTime.isEmpty());
 
                 if (validDetails) {
                     Intent returnIntent = new Intent();
-                    returnIntent.putExtra("name", name);
-                    returnIntent.putExtra("date", date);
+                    returnIntent.putExtra("name", currentEventName);
+                    returnIntent.putExtra("date", currentEventDate);
+                    returnIntent.putExtra("cityName", cityName);
+                    returnIntent.putExtra("description", currentEventDescription);
                     returnIntent.putExtra("startTime", startTime);
                     returnIntent.putExtra("endTime", endTime);
                     setResult(RESULT_OK, returnIntent);
@@ -135,6 +155,70 @@ public class CreateEventActivity extends ActionBarActivity {
         });
     }
 
+    private String getCityName(double lat, double lng) {
+        String cityName = "Unknown Location";
+        Geocoder gcd = new Geocoder(getApplicationContext(), Locale.getDefault());
+
+        try {
+            List<Address> addresses = gcd.getFromLocation(lat, lng, 1);
+            //cityName = addresses.get(0).getLocality();
+            cityName = addresses.get(0).getAddressLine(0) + " " + addresses.get(0).getAddressLine(1);
+
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        } catch (NullPointerException ex) {
+            ex.printStackTrace();
+        }
+
+        return cityName;
+    }
+
+    //Source: http://androidopentutorials.com/android-datepickerdialog-on-edittext-click-event/
+    private void setDate() {
+
+        Calendar newCalendar = Calendar.getInstance();
+        datePickerDialog = new DatePickerDialog(this,
+                new android.app.DatePickerDialog.OnDateSetListener() {
+                    public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                        Calendar newDate = Calendar.getInstance();
+                        newDate.set(year, monthOfYear, dayOfMonth);
+                        eventDate.setText(dateFormatter.format(newDate.getTime()));
+                    }
+        },newCalendar.get(Calendar.YEAR), newCalendar.get(Calendar.MONTH),
+                newCalendar.get(Calendar.DAY_OF_MONTH));
+    }
+
+    private void setStartTime(){
+        Calendar TimeCalendar = Calendar.getInstance();
+        int hour = TimeCalendar.get(Calendar.HOUR_OF_DAY);
+        int minutes = TimeCalendar.get(Calendar.MINUTE);
+
+        startTimePickerDialog = new TimePickerDialog(this,
+                new TimePickerDialog.OnTimeSetListener() {
+
+                    public void onTimeSet(TimePicker view, int hourOfDay,int minute) {
+                        String output = String.format("%02d:%02d", hourOfDay, minute);
+                        eventStartTime.setText(output);
+                    }
+
+                }, hour, minutes, true);
+
+    }
+
+    private void setEndTime(){
+        Calendar TimeCalendar = Calendar.getInstance();
+        int hour = TimeCalendar.get(Calendar.HOUR_OF_DAY);
+        int minutes = TimeCalendar.get(Calendar.MINUTE);
+
+        endTimePickerDialog = new TimePickerDialog(this,
+                new TimePickerDialog.OnTimeSetListener() {
+                    public void onTimeSet(TimePicker view, int hourOfDay,int minute) {
+                        String output = String.format("%02d:%02d", hourOfDay, minute);
+                        eventEndTime.setText(output);
+                    }
+                }, hour, minutes, true);
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -142,66 +226,10 @@ public class CreateEventActivity extends ActionBarActivity {
             if (resultCode == RESULT_OK) {
                 double lat = data.getDoubleExtra("latitude", 0);
                 double lng = data.getDoubleExtra("longitude", 0);
-                showLocation.setText(lat + ":" + lng);
+                String cityName = getCityName(lat, lng);
+                //eventLocation.setText(lat + ":" + lng);
+                eventLocation.setText(cityName);
             }
         }
-    }
-
-    //Source: http://androidopentutorials.com/android-datepickerdialog-on-edittext-click-event/
-    private void setDate() {
-
-        Calendar newCalendar = Calendar.getInstance();
-        DatePicker = new DatePickerDialog(this,
-                new android.app.DatePickerDialog.OnDateSetListener() {
-
-            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                Calendar newDate = Calendar.getInstance();
-                newDate.set(year, monthOfYear, dayOfMonth);
-                date = dateFormatter.format(newDate.getTime());
-
-                showDate.setText(date);
-            }
-
-        },newCalendar.get(Calendar.YEAR), newCalendar.get(Calendar.MONTH),
-                newCalendar.get(Calendar.DAY_OF_MONTH));
-    }
-
-    private void setTime(){
-        Calendar TimeCalendar = Calendar.getInstance();
-        int hour = TimeCalendar.get(Calendar.HOUR_OF_DAY);
-        int minutes = TimeCalendar.get(Calendar.MINUTE);
-
-        TimePick = new TimePickerDialog(this,
-                new TimePickerDialog.OnTimeSetListener() {
-
-                    public void onTimeSet(TimePicker view, int hourOfDay,int minute) {
-                        startTime = String.format("%02d:%02d", hourOfDay, minute);
-                        showTime.setText(startTime);
-                    }
-
-                }, hour, minutes, true);
-
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_create_event, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
     }
 }

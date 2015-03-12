@@ -1,133 +1,160 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
-    android:layout_height="match_parent" android:paddingLeft="@dimen/activity_horizontal_margin"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     android:paddingBottom="@dimen/activity_vertical_margin"
-    tools:context="ca.sfu.generiglesias.dutchie_meetly.CreateEventActivity"
-    android:id="@+id/pickDatebutton">
+    tools:context="ca.sfu.generiglesias.dutchie_meetly.CreateEventActivity" >
 
-    <TextView
+    <ScrollView
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/create_event_title"
-        android:id="@+id/createEventTitleView"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:textSize="40dp" />
+        android:layout_height="wrap_content">
 
-    <EditText
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/eventTitleText"
-        android:hint="@string/title_hint"
-        android:inputType="text"
-        android:maxLength="40"
-        android:layout_below="@+id/createEventTitleView"
-        android:layout_alignParentStart="true"
-        android:layout_marginTop="20dp" />
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
 
-    <EditText
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:paddingTop="20sp"
-        android:id="@+id/eventDescriptionId"
-        android:inputType="text"
-        android:maxLength="40"
-        android:layout_below="@+id/eventTitleText"
-        android:layout_alignParentStart="true"
-        android:hint="@string/description_hint" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/create_event_title"
+                android:id="@+id/createEventTitleView"
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true"
+                android:textSize="40dp" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:paddingTop="10sp"
-        android:text="Event Date:"
-        android:id="@+id/datePickerView"
-        android:layout_below="@+id/eventDescriptionId"
-        android:layout_alignParentStart="true"
-        android:textSize="20sp" />
+            <EditText
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/create_event_name"
+                android:hint="@string/title_hint"
+                android:inputType="text"
+                android:maxLength="40"
+                android:layout_below="@+id/createEventTitleView"
+                android:layout_alignParentStart="true"
+                android:layout_marginTop="20dp" />
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Choose Date"
-        android:id="@+id/pickDateButtonId"
-        android:layout_below="@+id/datePickerView"
-        android:layout_alignParentStart="true" />
+            <EditText
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/create_event_description"
+                android:paddingTop="20sp"
+                android:inputType="text"
+                android:maxLength="40"
+                android:layout_below="@+id/create_event_name"
+                android:layout_alignParentStart="true"
+                android:hint="@string/description_hint" />
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Create"
-        android:id="@+id/createEventButton"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/create_event_date_label"
+                android:paddingTop="10sp"
+                android:text="@string/event_view_date"
+                android:layout_below="@+id/create_event_description"
+                android:layout_alignParentStart="true"
+                android:textSize="20sp" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:paddingTop="5sp"
-        android:text="Event Location:"
-        android:id="@+id/ChooseLocationView"
-        android:textSize="20sp"
-        android:layout_below="@+id/pickTimeButtonId"
-        android:layout_alignParentLeft="true" />
+            <EditText
+                android:id="@+id/create_event_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:layout_below="@+id/create_event_date_label"
+                android:layout_alignParentStart="true"
+                android:inputType="date"/>
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Choose Location"
-        android:id="@+id/pickLocationId"
-        android:layout_below="@+id/ChooseLocationView"
-        android:layout_alignParentStart="true" />
+            <TextView
+                android:id="@+id/create_event_start_time_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingTop="5sp"
+                android:text="@string/event_view_start_time"
+                android:layout_below="@+id/create_event_date"
+                android:layout_alignParentStart="true"
+                android:textSize="20sp" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:paddingTop="5sp"
-        android:text="Event Start:"
-        android:id="@+id/textView"
-        android:layout_below="@+id/pickDateButtonId"
-        android:layout_alignParentLeft="true"
-        android:textSize="20sp" />
+            <EditText
+                android:id="@+id/create_event_start_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:layout_below="@+id/create_event_start_time_label"
+                android:layout_alignParentStart="true"
+                android:inputType="time"/>
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Choose start time"
-        android:id="@+id/pickTimeButtonId"
-        android:layout_below="@+id/textView"
-        android:layout_alignParentLeft="true" />
+            <TextView
+                android:id="@+id/create_event_end_time_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/event_view_end_time"
+                android:paddingTop="5sp"
+                android:layout_below="@+id/create_event_start_time"
+                android:textSize="20sp" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Duration:"
-        android:paddingTop="5sp"
-        android:id="@+id/textView2"
-        android:layout_below="@+id/showLocation"
-        android:layout_alignParentLeft="true"
-        android:textSize="20sp" />
+            <EditText
+                android:id="@+id/create_event_end_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/create_event_end_time_label"
+                android:ems="10" />
 
-    <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/showDate"
-        android:layout_alignTop="@+id/pickDateButtonId"
-        android:layout_toEndOf="@+id/createEventButton" />
+            <TextView
+                android:id="@+id/create_event_location_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingTop="5sp"
+                android:text="@string/event_view_location"
+                android:textSize="20sp"
+                android:layout_below="@+id/create_event_end_time"
+                android:layout_alignParentStart="true" />
 
-    <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/showTime"
-        android:layout_alignTop="@+id/pickTimeButtonId"
-        android:layout_alignStart="@+id/showDate" />
+            <!--<Button-->
+                <!--android:id="@+id/button_event_location"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:text="Choose Location"-->
+                <!--android:layout_below="@+id/create_event_location_label"-->
+                <!--android:layout_alignParentStart="true" />-->
 
-    <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/showLocation"
-        android:layout_below="@id/pickLocationId"/>
+            <EditText
+                android:id="@+id/create_event_location"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/create_event_location_label"
+                android:ems="10" />
+
+            <TextView
+                android:id="@+id/create_event_duration_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/event_view_duration"
+                android:paddingTop="5sp"
+                android:layout_below="@+id/create_event_location"
+                android:layout_alignParentStart="true"
+                android:textSize="20sp" />
+
+            <EditText
+                android:id="@+id/showDuration"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignTop="@+id/create_event_duration_label"
+                android:layout_alignBottom="@+id/create_event_duration_label"
+                android:layout_alignEnd="@+id/createEventTitleView" />
+
+            <Button
+                android:id="@+id/createEventButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Create"
+                android:layout_below="@id/create_event_duration_label"
+                android:layout_centerHorizontal="true" />
+
+        </RelativeLayout>
+    </ScrollView>
+
 
 </RelativeLayout>

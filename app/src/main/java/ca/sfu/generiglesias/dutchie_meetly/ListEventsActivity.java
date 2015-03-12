@@ -1,16 +1,11 @@
 package ca.sfu.generiglesias.dutchie_meetly;
 
-import android.content.Context;
 import android.content.Intent;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
-import android.location.LocationManager;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -18,17 +13,12 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import org.w3c.dom.Text;
-
 import java.io.IOException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
 import ca.sfu.generiglesias.dutchie_meetly.maplogic.GPSTracker;
-
 
 public class ListEventsActivity extends ActionBarActivity {
     public static final int INFO_KEY = 342;
@@ -123,9 +113,9 @@ public class ListEventsActivity extends ActionBarActivity {
             List<Address> addresses = gcd.getFromLocation(loc.getLatitude(), loc.getLongitude(), 1);
             cityName = addresses.get(0).getLocality();
         } catch (IOException ex) {
-
+            ex.printStackTrace();
         } catch (NullPointerException ex) {
-
+            ex.printStackTrace();
         }
 
         return cityName;
@@ -144,12 +134,12 @@ public class ListEventsActivity extends ActionBarActivity {
                 this.events.add(new Event(
                         data.getStringExtra("name"),
                         data.getStringExtra("date"),
-                        "description",
+                        data.getStringExtra("cityName"),
+                        data.getStringExtra("description"),
                         data.getStringExtra("startTime"),
                         data.getStringExtra("endTime"),
                         "duration",
-                        "wat",
-                        4
+                        R.drawable.ic_launcher
                 ));
                 populateEventListView();
             }
