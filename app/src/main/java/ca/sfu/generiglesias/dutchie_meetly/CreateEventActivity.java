@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.text.InputType;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -16,6 +17,7 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.TimePicker;
+
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -48,6 +50,13 @@ public class CreateEventActivity extends ActionBarActivity {
         eventTitle = (EditText) findViewById(R.id.eventTitleText);
         eventDescription = (EditText) findViewById(R.id.eventDescriptionId);
 
+<<<<<<< HEAD
+=======
+        evTitle = eventTitle.getText().toString();
+        evDescription = eventTitle.toString();
+
+
+>>>>>>> 7ed7d467f0c5aee8e6b2e3fefb1c608f0fcc5e93
         showDate = (EditText) findViewById(R.id.showDate);
         showDate.setInputType(InputType.TYPE_NULL);
         showDate.requestFocus();
@@ -150,17 +159,39 @@ public class CreateEventActivity extends ActionBarActivity {
                             duration.get(Calendar.MINUTE) + " Minutes");
                 }
 
+//                events.add(new Event(
+//                        eventTitle.getText().toString(),
+//                        new Date(),
+//                        "Surrey",
+//                        evDescription,
+//                        R.drawable.ic_launcher));
+
                 events.add(new Event(
                         eventTitle.getText().toString(),
-                        new Date(),
+                        showDate.getText().toString(),
                         "Surrey",
                         eventDescription.getText().toString(),
+<<<<<<< HEAD
                         R.drawable.ic_launcher));
 
                 for(int i = 0; i < events.size(); i++)
                 {
                     System.out.println(events.get(i).getEventName());
                 }
+=======
+                        showTime.getText().toString(),
+                        showEndTime.getText().toString(),
+                        durationText.getText().toString(),
+                        R.drawable.ic_launcher));
+
+                for(Event event: events) {
+                    Log.i("Event Name", event.getEventName());
+                    Log.i("Event Date", event.getEventDate());
+                    Log.i("Event Duration", event.getEventDuration());
+                }
+
+                //Log.i()
+>>>>>>> 7ed7d467f0c5aee8e6b2e3fefb1c608f0fcc5e93
             }
         });
     }

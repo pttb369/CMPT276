@@ -19,7 +19,6 @@
         android:id="@+id/event_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/event_date"
         android:layout_toEndOf="@+id/event_icon"
         android:text="Event Name"
         android:textAppearance="?android:attr/textAppearanceLarge" />
@@ -28,19 +27,18 @@
         android:id="@+id/event_date"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/event_location"
-        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentTop="true"
         android:text="MM-DD-YYYY"
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
     <TextView
-        android:id="@+id/event_location"
+        android:id="@+id/event_duration"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_toEndOf="@+id/event_icon"
-        android:layout_alignLeft="@+id/event_name"
-        android:text="City"
-        android:layout_alignBottom="@+id/event_icon" />
+        android:text="00 HR 00 MIN"
+        android:layout_alignParentBottom="true"
+        android:layout_alignEnd="@+id/event_date" />
 
 
 </RelativeLayout>
