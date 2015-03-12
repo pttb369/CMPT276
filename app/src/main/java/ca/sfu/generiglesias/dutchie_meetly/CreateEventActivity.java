@@ -11,6 +11,7 @@ import android.os.Build;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.text.InputType;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -282,6 +283,7 @@ public class CreateEventActivity extends ActionBarActivity {
 
             eventDuration.setText(duration.get(Calendar.HOUR_OF_DAY) + " Hours and " +
                     duration.get(Calendar.MINUTE) + " Minutes");
+            Log.i("Event Duration", eventDuration.getText().toString());
         }
     }
 }
