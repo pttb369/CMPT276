@@ -47,7 +47,10 @@ public class ViewEventActivity extends ActionBarActivity {
     }
 
     private void clickViewMap() {
-        startActivity(new Intent(getApplicationContext(), ViewEventMapActivity.class));
+        Intent intent = new Intent(getApplicationContext(), ViewEventMapActivity.class);
+        intent.putExtra("latitude", getIntent().getDoubleExtra("latitude", 0));
+        intent.putExtra("longitude", getIntent().getDoubleExtra("longitude", 0));
+        startActivity(intent);
     }
 
 

@@ -34,8 +34,8 @@ public class ViewEventMapActivity extends FragmentActivity {
         setupButtons();
 
         this.map.clear();
-        this.latitude = EventHolder.getLatitude();
-        this.longitude = EventHolder.getLongitude();
+        this.latitude = getIntent().getDoubleExtra("latitude", 0);
+        this.longitude = getIntent().getDoubleExtra("longitude", 0);
         this.name = EventHolder.getName();
         this.gpsTracker = new GPSTracker(getApplicationContext());
         this.marker = map.addMarker(new MarkerOptions().position(new LatLng(latitude, longitude)));

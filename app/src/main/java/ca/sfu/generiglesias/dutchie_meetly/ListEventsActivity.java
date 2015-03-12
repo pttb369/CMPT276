@@ -68,7 +68,10 @@ public class ListEventsActivity extends ActionBarActivity {
                     "10:00",
                     "13:00",
                     "3 Hours 0 minutes",
-                    R.drawable.ic_launcher));
+                    R.drawable.ic_launcher,
+                    49.187559,
+                    -122.84954500000003
+            ));
         }
     }
 
@@ -149,8 +152,16 @@ public class ListEventsActivity extends ActionBarActivity {
                         data.getStringExtra("endTime"),
                         "duration",
                         "wat",
-                        4
+                        4,
+                        data.getDoubleExtra("latitude", 0),
+                        data.getDoubleExtra("longitude", 0)
                 ));
+
+                Log.i("WHAT", ""+ data.getDoubleExtra("latitude", 0));
+                Log.i("WHAT", ""+ data.getDoubleExtra("longitude", 0));
+
+
+
                 populateEventListView();
             }
         }

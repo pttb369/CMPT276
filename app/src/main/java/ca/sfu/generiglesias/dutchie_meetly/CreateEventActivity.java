@@ -40,6 +40,8 @@ public class CreateEventActivity extends ActionBarActivity {
     private String description;
     private String startTime;
     private String endTime;
+    private double latitude;
+    private double longitude;
 
 
 
@@ -116,7 +118,8 @@ public class CreateEventActivity extends ActionBarActivity {
                 boolean validDetails = name != null &&
                         date != null &&
                         startTime != null &&
-                        endTime != null;
+                        endTime != null &&
+                        !Double.isNaN(latitude);
 
                 if (validDetails) {
                     Intent returnIntent = new Intent();
@@ -124,6 +127,8 @@ public class CreateEventActivity extends ActionBarActivity {
                     returnIntent.putExtra("date", date);
                     returnIntent.putExtra("startTime", startTime);
                     returnIntent.putExtra("endTime", endTime);
+                    returnIntent.putExtra("latitude", latitude);
+                    returnIntent.putExtra("longitude", longitude);
                     setResult(RESULT_OK, returnIntent);
 
                     finish();
@@ -140,9 +145,9 @@ public class CreateEventActivity extends ActionBarActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 666) {
             if (resultCode == RESULT_OK) {
-                double lat = data.getDoubleExtra("latitude", 0);
-                double lng = data.getDoubleExtra("longitude", 0);
-                showLocation.setText(lat + ":" + lng);
+                latitude = data.getDoubleExtra("latitude", 0);
+                longitude = data.getDoubleExtra("longitude", 0);
+                showLocation.setText(latitude + ":" + longitude);
             }
         }
     }

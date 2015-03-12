@@ -26,7 +26,10 @@ public class Event {
                  String eventStartTime,
                  String eventEndTime,
                  String eventDuration,
-                 int eventIconId) {
+                 int eventIconId,
+                 double latitude,
+                 double longitude) {
+
         this.eventName = eventName;
         this.eventDate = eventDate;
         this.cityName = cityName;
@@ -35,10 +38,8 @@ public class Event {
         this.eventEndTime = eventEndTime;
         this.eventDuration = eventDuration;
         this.eventIconId = eventIconId;
-
-        // Temporary set the coordinates to Surrey
-        this.longitude = 122.8500;
-        this.latitude = 49.1833;
+        this.longitude = latitude;
+        this.latitude = longitude;
     }
 
     public void setLatitude(double latitude) {
