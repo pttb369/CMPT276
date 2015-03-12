@@ -154,6 +154,7 @@ public class CreateEventActivity extends ActionBarActivity {
                     returnIntent.putExtra("cityName", cityName);
                     returnIntent.putExtra("description", currentEventDescription);
                     returnIntent.putExtra("startTime", startTime);
+                    returnIntent.putExtra("duration", durationTime);
                     returnIntent.putExtra("endTime", endTime);
                     returnIntent.putExtra("latitude", lat);
                     returnIntent.putExtra("longitude", lng);

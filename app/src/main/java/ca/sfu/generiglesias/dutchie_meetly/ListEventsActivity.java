@@ -1,5 +1,6 @@
 package ca.sfu.generiglesias.dutchie_meetly;
 
+import android.content.Context;
 import android.content.Intent;
 import android.location.Address;
 import android.location.Geocoder;
@@ -13,7 +14,12 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -23,7 +29,10 @@ import ca.sfu.generiglesias.dutchie_meetly.maplogic.GPSTracker;
 public class ListEventsActivity extends ActionBarActivity {
     public static final int INFO_KEY = 342;
     private static final String TAG = "ListEventsActivity";
-
+    private FileOutputStream fileOutputStream;
+    private FileInputStream fileInputStream;
+    private ObjectOutputStream objectWrite;
+    private ObjectInputStream objectRead;
     private List<Event> events = new ArrayList<Event>();
 
     @Override
@@ -50,7 +59,21 @@ public class ListEventsActivity extends ActionBarActivity {
     }
 
     private void populateEventList() {
-        for(int i = 1; i < 2; i++) {
+
+        try {
+            fileInputStream = openFileInput("eventListData");
+            objectRead = new ObjectInputStream(fileInputStream);
+            events = (ArrayList)objectRead.readObject();
+
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        /*for(int i = 1; i < 2; i++) {
             events.add(new Event(
                     "Event " + i,
                     "123",
@@ -63,7 +86,7 @@ public class ListEventsActivity extends ActionBarActivity {
                     49.187559,
                     -122.84954500000003
             ));
-        }
+        }*/
     }
 
     private void sortEventList(List<Event> events) {
@@ -83,15 +106,15 @@ public class ListEventsActivity extends ActionBarActivity {
             public void onItemClick(AdapterView<?> parent, View viewClicked,
                                     int position, long id) {
                 Event clickedEvent = events.get(position);
-                Intent launchNewActivity = new Intent(getApplicationContext(),ViewEventActivity.class);
-                launchNewActivity.putExtra("EventName",clickedEvent.getEventName());
-                launchNewActivity.putExtra("Location",clickedEvent.getCityName());
-                launchNewActivity.putExtra("Date",clickedEvent.getEventDate());
-                launchNewActivity.putExtra("Description",clickedEvent.getEventDescription());
+                Intent launchNewActivity = new Intent(getApplicationContext(), ViewEventActivity.class);
+                launchNewActivity.putExtra("EventName", clickedEvent.getEventName());
+                launchNewActivity.putExtra("Location", clickedEvent.getCityName());
+                launchNewActivity.putExtra("Date", clickedEvent.getEventDate());
+                launchNewActivity.putExtra("Description", clickedEvent.getEventDescription());
                 launchNewActivity.putExtra("latitude", clickedEvent.getLatitude());
                 launchNewActivity.putExtra("longitude", clickedEvent.getLongitude());
-                launchNewActivity.putExtra("startTime",clickedEvent.getEventStartTime());
-                launchNewActivity.putExtra("endTime",clickedEvent.getEventEndTime());
+                launchNewActivity.putExtra("startTime", clickedEvent.getEventStartTime());
+                launchNewActivity.putExtra("endTime", clickedEvent.getEventEndTime());
                 startActivity(launchNewActivity);
             }
         });
@@ -132,6 +155,7 @@ public class ListEventsActivity extends ActionBarActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == INFO_KEY) {
             if (resultCode == RESULT_OK) {
+
                 this.events.add(new Event(
                         data.getStringExtra("name"),
                         data.getStringExtra("date"),
@@ -139,11 +163,23 @@ public class ListEventsActivity extends ActionBarActivity {
                         data.getStringExtra("description"),
                         data.getStringExtra("startTime"),
                         data.getStringExtra("endTime"),
-                        "duration",
+                        data.getStringExtra("duration"),
                         R.drawable.ic_launcher,
                         data.getDoubleExtra("latitude", Double.NaN),
                         data.getDoubleExtra("longitude", Double.NaN)
                 ));
+
+                try {
+                    fileOutputStream = openFileOutput("eventListData", Context.MODE_PRIVATE);
+                    objectWrite = new ObjectOutputStream(fileOutputStream );
+                    objectWrite.writeObject(events);
+                    objectWrite.close();
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                }catch (IOException e) {
+                    e.printStackTrace();
+                }
+
 
                 populateEventListView();
             }
