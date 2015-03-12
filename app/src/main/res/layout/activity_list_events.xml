@@ -37,13 +37,4 @@
         android:id="@+id/event_list_view"
         android:layout_below="@+id/event_menu_bar"/>
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="New Button"
-        android:id="@+id/button"
-        android:layout_alignParentTop="true"
-        android:layout_alignEnd="@+id/event_list_view"
-        android:onClick="testButton" />
-
 </RelativeLayout>

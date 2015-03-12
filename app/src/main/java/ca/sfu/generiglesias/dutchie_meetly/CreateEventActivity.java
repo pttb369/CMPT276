@@ -1,7 +1,9 @@
 package ca.sfu.generiglesias.dutchie_meetly;
 
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.location.Address;
 import android.location.Geocoder;
@@ -31,6 +33,8 @@ public class CreateEventActivity extends ActionBarActivity {
     private DatePickerDialog datePickerDialog;
     private TimePickerDialog startTimePickerDialog, endTimePickerDialog;
     private EditText eventTitle, eventDescription, eventLocation, eventDuration, eventDate, eventStartTime, eventEndTime;
+    private int startHour, startMinute, endHour, endMinute;
+    private Calendar duration;
     private double lat, lng;
 
     @Override
@@ -68,6 +72,9 @@ public class CreateEventActivity extends ActionBarActivity {
         eventLocation = (EditText) findViewById(R.id.create_event_location);
         eventLocation.setInputType(InputType.TYPE_NULL);
         eventLocation.requestFocus();
+
+        eventDuration = (EditText) findViewById((R.id.showDuration));
+        duration = Calendar.getInstance();
 
     }
 
@@ -130,13 +137,15 @@ public class CreateEventActivity extends ActionBarActivity {
                 String currentEventDescription = eventDescription.getText().toString();
                 String startTime = eventStartTime.getText().toString();
                 String endTime = eventEndTime.getText().toString();
+                String durationTime = eventDuration.getText().toString();
 
                 boolean validDetails = (!currentEventName.isEmpty()
                         && !cityName.isEmpty()
                         && !currentEventDescription.isEmpty()
                         && !currentEventDate.isEmpty()
                         && !startTime.isEmpty()
-                        && !endTime.isEmpty());
+                        && !endTime.isEmpty())
+                        && !durationTime.isEmpty();
 
                 if (validDetails) {
                     Intent returnIntent = new Intent();
@@ -200,8 +209,16 @@ public class CreateEventActivity extends ActionBarActivity {
                 new TimePickerDialog.OnTimeSetListener() {
 
                     public void onTimeSet(TimePicker view, int hourOfDay,int minute) {
+                        String startTime = eventStartTime.getText().toString();
+                        String endTime = eventEndTime.getText().toString();
+                        startHour = hourOfDay;
+                        startMinute = minute;
                         String output = String.format("%02d:%02d", hourOfDay, minute);
                         eventStartTime.setText(output);
+
+                        if(!startTime.isEmpty() && !endTime.isEmpty()) {
+                            setupDuration();
+                        }
                     }
 
                 }, hour, minutes, true);
@@ -215,8 +232,16 @@ public class CreateEventActivity extends ActionBarActivity {
         endTimePickerDialog = new TimePickerDialog(this,
                 new TimePickerDialog.OnTimeSetListener() {
                     public void onTimeSet(TimePicker view, int hourOfDay,int minute) {
+                        String startTime = eventStartTime.getText().toString();
+                        String endTime = eventEndTime.getText().toString();
+                        endHour = hourOfDay;
+                        endMinute = minute;
                         String output = String.format("%02d:%02d", hourOfDay, minute);
                         eventEndTime.setText(output);
+                        if(!startTime.isEmpty() && !endTime.isEmpty())
+                        {
+                            setupDuration();
+                        }
                     }
                 }, hour, minutes, true);
     }
@@ -232,6 +257,30 @@ public class CreateEventActivity extends ActionBarActivity {
                 //eventLocation.setText(lat + ":" + lng);
                 eventLocation.setText(cityName);
             }
+        }
+    }
+
+    protected void setupDuration()
+    {
+        int tempEndHour = (endHour*60) + endMinute;
+        int tempStartHour = (startHour*60) + startMinute;
+
+        if(tempStartHour > tempEndHour)
+        {
+            eventStartTime.setText("");
+            eventDuration.setText("");
+            Toast.makeText(getApplicationContext(), "Start time cannot occur after end time. Choose" +
+                            " a new time.",
+                    Toast.LENGTH_SHORT).show();
+        }else {
+            duration.set(Calendar.HOUR_OF_DAY, endHour);
+            duration.set(Calendar.MINUTE, endMinute);
+
+            duration.add(Calendar.HOUR, -startHour);
+            duration.add(Calendar.MINUTE, -startMinute);
+
+            eventDuration.setText(duration.get(Calendar.HOUR_OF_DAY) + " Hours and " +
+                    duration.get(Calendar.MINUTE) + " Minutes");
         }
     }
 }

@@ -50,7 +50,7 @@ public class ListEventsActivity extends ActionBarActivity {
     }
 
     private void populateEventList() {
-        for(int i = 1; i < 20; i++) {
+        for(int i = 1; i < 2; i++) {
             events.add(new Event(
                     "Event " + i,
                     "123",
