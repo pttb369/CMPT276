@@ -1,6 +1,5 @@
 package ca.sfu.generiglesias.dutchie_meetly;
 
-import android.annotation.TargetApi;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Intent;
@@ -17,6 +16,7 @@ import android.widget.EditText;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -31,6 +31,7 @@ public class CreateEventActivity extends ActionBarActivity {
     private DatePickerDialog datePickerDialog;
     private TimePickerDialog startTimePickerDialog, endTimePickerDialog;
     private EditText eventTitle, eventDescription, eventLocation, eventDuration, eventDate, eventStartTime, eventEndTime;
+    private double lat, lng;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,7 +49,6 @@ public class CreateEventActivity extends ActionBarActivity {
 
     }
 
-    @TargetApi(Build.VERSION_CODES.CUPCAKE)
     private void getViewItemsById() {
         eventTitle = (EditText) findViewById(R.id.create_event_name);
         eventDescription = (EditText) findViewById(R.id.create_event_description);
@@ -110,7 +110,7 @@ public class CreateEventActivity extends ActionBarActivity {
         eventLocation.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                EventHolder.refresh();
+                //EventHolder.refresh();
                 startActivityForResult(
                         new Intent(getApplicationContext(), CreateEventMapActivity.class),
                         REQUEST_CODE);
@@ -146,6 +146,8 @@ public class CreateEventActivity extends ActionBarActivity {
                     returnIntent.putExtra("description", currentEventDescription);
                     returnIntent.putExtra("startTime", startTime);
                     returnIntent.putExtra("endTime", endTime);
+                    returnIntent.putExtra("latitude", lat);
+                    returnIntent.putExtra("longitude", lng);
                     setResult(RESULT_OK, returnIntent);
 
                     finish();
@@ -177,7 +179,6 @@ public class CreateEventActivity extends ActionBarActivity {
 
     //Source: http://androidopentutorials.com/android-datepickerdialog-on-edittext-click-event/
     private void setDate() {
-
         Calendar newCalendar = Calendar.getInstance();
         datePickerDialog = new DatePickerDialog(this,
                 new android.app.DatePickerDialog.OnDateSetListener() {
@@ -204,7 +205,6 @@ public class CreateEventActivity extends ActionBarActivity {
                     }
 
                 }, hour, minutes, true);
-
     }
 
     private void setEndTime(){
@@ -226,8 +226,8 @@ public class CreateEventActivity extends ActionBarActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 666) {
             if (resultCode == RESULT_OK) {
-                double lat = data.getDoubleExtra("latitude", 0);
-                double lng = data.getDoubleExtra("longitude", 0);
+                lat = data.getDoubleExtra("latitude", 0);
+                lng = data.getDoubleExtra("longitude", 0);
                 String cityName = getCityName(lat, lng);
                 //eventLocation.setText(lat + ":" + lng);
                 eventLocation.setText(cityName);
