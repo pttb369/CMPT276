@@ -23,6 +23,7 @@ public class WelcomeScreenActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_welcome_screen);
 
+        /* Image taken from "http://commons.wikimedia.org/wiki/Crystal_Clear" */
         ImageView peopleLeft = (ImageView) findViewById(R.id.GroupOfPeopleLeft);
         Animation MoveLeftToMiddle = AnimationUtils.loadAnimation(this, R.anim.lefttoright);
         MoveLeftToMiddle.setFillAfter(true);
