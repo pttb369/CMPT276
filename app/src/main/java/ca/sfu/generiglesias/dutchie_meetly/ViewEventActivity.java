@@ -33,6 +33,10 @@ public class ViewEventActivity extends ActionBarActivity {
         timeLeftUntilEvent();
 
         setupButtons();
+
+        Log.i("LATLNG", "WHYY IS THIS NOT WORKING?!?!");
+        Log.i("LATLNG", "" + getIntent().getDoubleExtra("latitude", -12324));
+        Log.i("LATLNG", ""+ getIntent().getDoubleExtra("longitude", -12324));
     }
 
     private void setupButtons() {
@@ -47,7 +51,10 @@ public class ViewEventActivity extends ActionBarActivity {
     }
 
     private void clickViewMap() {
-        startActivity(new Intent(getApplicationContext(), ViewEventMapActivity.class));
+        Intent intent = new Intent(getApplicationContext(), ViewEventMapActivity.class);
+        intent.putExtra("latitude", getIntent().getDoubleExtra("latitude", Double.NaN));
+        intent.putExtra("longitude", getIntent().getDoubleExtra("longitude", Double.NaN));
+        startActivity(intent);
     }
 
 

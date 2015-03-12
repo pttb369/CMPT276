@@ -17,13 +17,16 @@ import android.widget.EditText;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
-import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 
+
 public class CreateEventActivity extends ActionBarActivity {
+    public static final int REQUEST_CODE = 666;
+
     private SimpleDateFormat dateFormatter;
     private DatePickerDialog datePickerDialog;
     private TimePickerDialog startTimePickerDialog, endTimePickerDialog;
@@ -66,7 +69,6 @@ public class CreateEventActivity extends ActionBarActivity {
         eventLocation.setInputType(InputType.TYPE_NULL);
         eventLocation.requestFocus();
 
-        //showLocation = (EditText) findViewById(R.id.);
     }
 
     private void setupButtons() {
@@ -111,7 +113,7 @@ public class CreateEventActivity extends ActionBarActivity {
                 EventHolder.refresh();
                 startActivityForResult(
                         new Intent(getApplicationContext(), CreateEventMapActivity.class),
-                        666);
+                        REQUEST_CODE);
             }
         });
     }

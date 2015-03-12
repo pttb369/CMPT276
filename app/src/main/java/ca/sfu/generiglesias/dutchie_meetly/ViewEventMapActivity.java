@@ -3,6 +3,7 @@ package ca.sfu.generiglesias.dutchie_meetly;
 import android.location.Location;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
@@ -18,6 +19,7 @@ import ca.sfu.generiglesias.dutchie_meetly.maplogic.MapActions;
 
 public class ViewEventMapActivity extends FragmentActivity {
     private final static int DEPTH = 17;
+    private final static String TAG = "ViewEventMapActivity";
 
     private GoogleMap map;
     private GPSTracker gpsTracker;
@@ -34,9 +36,12 @@ public class ViewEventMapActivity extends FragmentActivity {
         setupButtons();
 
         this.map.clear();
-        this.latitude = EventHolder.getLatitude();
-        this.longitude = EventHolder.getLongitude();
-        this.name = EventHolder.getName();
+        this.latitude = getIntent().getDoubleExtra("latitude", Double.NaN);
+        this.longitude = getIntent().getDoubleExtra("longitude", Double.NaN);
+        Log.i(TAG, "WHYY IS THIS NOT WORKING?!?!");
+        Log.i(TAG, "" + getIntent().getDoubleExtra("latitude", -12324));
+        Log.i(TAG, ""+ getIntent().getDoubleExtra("longitude", -12324));
+        this.name = "";
         this.gpsTracker = new GPSTracker(getApplicationContext());
         this.marker = map.addMarker(new MarkerOptions().position(new LatLng(latitude, longitude)));
 
