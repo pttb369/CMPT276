@@ -56,8 +56,6 @@ public class ListEventsActivity extends ActionBarActivity {
         });
     }
 
-    //eventTitle.getText().toString()
-
     private void populateEventList() {
         for(int i = 1; i < 20; i++) {
             events.add(new Event(
@@ -70,6 +68,10 @@ public class ListEventsActivity extends ActionBarActivity {
                     "3 Hours 0 minutes",
                     R.drawable.ic_launcher));
         }
+    }
+
+    private void sortEventList(List<Event> events) {
+
     }
 
     private void populateEventListView() {
@@ -107,6 +109,7 @@ public class ListEventsActivity extends ActionBarActivity {
         currentLocation.setText(getCurrentCity());
     }
 
+    //http://stackoverflow.com/questions/20325427/get-current-location-city-name-android
     private String getCurrentCity() {
         String cityName = "Unknown Location";
 
@@ -114,14 +117,9 @@ public class ListEventsActivity extends ActionBarActivity {
         GPSTracker gpsTracker = new GPSTracker(getApplicationContext());
 
         try {
-
             Location loc = gpsTracker.getLocation();
             List<Address> addresses = gcd.getFromLocation(loc.getLatitude(), loc.getLongitude(), 1);
             cityName = addresses.get(0).getLocality();
-//            for(Address address: addresses) {
-//                Log.i("Address", address.getLocality());
-//                cityName = address.getLocality();
-//            }
         } catch (IOException ex) {
 
         } catch (NullPointerException ex) {
@@ -129,28 +127,6 @@ public class ListEventsActivity extends ActionBarActivity {
         }
 
         return cityName;
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_list_events, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
     }
 
     @Override

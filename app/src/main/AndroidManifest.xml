@@ -45,11 +45,7 @@
         <activity
             android:name=".WelcomeScreenActivity"
             android:label="@string/title_activity_welcome_screen" >
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
         <activity
             android:name=".ViewEventActivity"
@@ -58,6 +54,15 @@
         <activity
             android:name=".ViewEventMapActivity"
             android:label="@string/title_activity_view_event_maps" >
+        </activity>
+        <activity
+            android:name=".myActivites.myCreateEventActivity"
+            android:label="@string/title_activity_my_create_event" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
     </application>
 

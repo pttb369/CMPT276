@@ -20,5 +20,8 @@
     <string name="event_view_see_map">See Map</string>
     <string name="event_view_time_remaining">Days Left Until Event </string>
     <string name="title_activity_view_event_maps">Map</string>
+    <string name="title_activity_my_create_event">myCreateEventActivity</string>
+
+    <string name="hello_world">Hello world!</string>
 
 </resources>
