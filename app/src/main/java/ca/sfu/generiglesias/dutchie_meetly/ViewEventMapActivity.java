@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.maps.GoogleMap;
@@ -95,6 +96,33 @@ public class ViewEventMapActivity extends FragmentActivity {
             // Check if we were successful in obtaining the map.
             if (map != null) {
                 setUpMap();
+                map.setInfoWindowAdapter(new GoogleMap.InfoWindowAdapter() {
+
+                    @Override
+                    public View getInfoWindow(Marker marker) {
+                        return null;
+                    }
+
+                    @Override
+                    public View getInfoContents(Marker marker) {
+                        View v = getLayoutInflater().inflate(R.layout.info_window,null);
+                        TextView tvLocality = (TextView) v.findViewById(R.id.info_window_locality);
+                        TextView tvLat = (TextView) v.findViewById(R.id.info_window_lat);
+                        TextView tvLng = (TextView) v.findViewById(R.id.info_window_lng);
+                        TextView tvSnippet = (TextView) v.findViewById(R.id.info_window_snippet);
+
+                        LatLng lg = marker.getPosition();
+                        name = getIntent().getStringExtra("name");
+                        tvLocality.setText(name);
+                        tvLat.setText(("Lattitude: " + lg.latitude));
+                        tvLng.setText(("Longitude: " + lg.longitude));
+                        tvSnippet.setText(name);
+
+                        return v;
+                    }
+                });
+
+
             }
         }
     }
