@@ -207,7 +207,7 @@ public class CreateEventActivity extends ActionBarActivity {
         int hour = TimeCalendar.get(Calendar.HOUR_OF_DAY);
         int minutes = TimeCalendar.get(Calendar.MINUTE);
 
-        startTimePickerDialog = new TimePickerDialog(this,
+        startTimePickerDialog = new TimePickerDialog(this, TimePickerDialog.THEME_HOLO_LIGHT,
                 new TimePickerDialog.OnTimeSetListener() {
 
                     public void onTimeSet(TimePicker view, int hourOfDay,int minute) {
@@ -231,7 +231,7 @@ public class CreateEventActivity extends ActionBarActivity {
         int hour = TimeCalendar.get(Calendar.HOUR_OF_DAY);
         int minutes = TimeCalendar.get(Calendar.MINUTE);
 
-        endTimePickerDialog = new TimePickerDialog(this,
+        endTimePickerDialog = new TimePickerDialog(this, TimePickerDialog.THEME_HOLO_LIGHT,
                 new TimePickerDialog.OnTimeSetListener() {
                     public void onTimeSet(TimePicker view, int hourOfDay,int minute) {
                         String startTime = eventStartTime.getText().toString();
@@ -240,6 +240,7 @@ public class CreateEventActivity extends ActionBarActivity {
                         endMinute = minute;
                         String output = String.format("%02d:%02d", hourOfDay, minute);
                         eventEndTime.setText(output);
+
                         if(!startTime.isEmpty() && !endTime.isEmpty())
                         {
                             setupDuration();
@@ -269,7 +270,7 @@ public class CreateEventActivity extends ActionBarActivity {
 
         if(tempStartHour > tempEndHour)
         {
-            eventStartTime.setText("");
+            //eventStartTime.setText("");
             eventDuration.setText("");
             Toast.makeText(getApplicationContext(), "Start time cannot occur after end time. Choose" +
                             " a new time.",
@@ -283,7 +284,6 @@ public class CreateEventActivity extends ActionBarActivity {
 
             eventDuration.setText(duration.get(Calendar.HOUR_OF_DAY) + " Hours and " +
                     duration.get(Calendar.MINUTE) + " Minutes");
-            Log.i("Event Duration", eventDuration.getText().toString());
         }
     }
 }
