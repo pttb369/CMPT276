@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 /**
@@ -21,6 +22,14 @@ public class WelcomeScreenActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_welcome_screen);
+
+        /*ImageView people1 = (ImageView) findViewById(R.id.GroupOfPeople);
+        Animation MoveLeftToMiddle = AnimationUtils.loadAnimation(this, R.anim.lefttoright);
+        people1.startAnimation(MoveLeftToMiddle);*/
+
+        ImageView people2 = (ImageView) findViewById(R.id.GroupOfPeople2);
+        Animation MoveRightToMiddle = AnimationUtils.loadAnimation(this, R.anim.righttoleft);
+        people2.startAnimation(MoveRightToMiddle);
 
         TextView welcomeTitle = (TextView) findViewById(R.id.welcome_title);
         Animation TitleFade = AnimationUtils.loadAnimation(this, R.anim.fade_in);
