@@ -124,8 +124,6 @@ public class ViewEventMapActivity extends FragmentActivity {
                         return view;
                     }
                 });
-
-
             }
         }
     }

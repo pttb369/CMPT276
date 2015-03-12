@@ -211,12 +211,14 @@ public class CreateEventActivity extends ActionBarActivity {
                 new TimePickerDialog.OnTimeSetListener() {
 
                     public void onTimeSet(TimePicker view, int hourOfDay,int minute) {
+                        String output = String.format("%02d:%02d", hourOfDay, minute);
+                        eventStartTime.setText(output);
+
                         String startTime = eventStartTime.getText().toString();
                         String endTime = eventEndTime.getText().toString();
                         startHour = hourOfDay;
                         startMinute = minute;
-                        String output = String.format("%02d:%02d", hourOfDay, minute);
-                        eventStartTime.setText(output);
+
 
                         if(!startTime.isEmpty() && !endTime.isEmpty()) {
                             setupDuration();
@@ -234,13 +236,15 @@ public class CreateEventActivity extends ActionBarActivity {
         endTimePickerDialog = new TimePickerDialog(this,
                 new TimePickerDialog.OnTimeSetListener() {
                     public void onTimeSet(TimePicker view, int hourOfDay,int minute) {
+                        String output = String.format("%02d:%02d", hourOfDay, minute);
+                        eventEndTime.setText(output);
                         String startTime = eventStartTime.getText().toString();
                         String endTime = eventEndTime.getText().toString();
                         endHour = hourOfDay;
                         endMinute = minute;
-                        String output = String.format("%02d:%02d", hourOfDay, minute);
-                        eventEndTime.setText(output);
-                        if(!startTime.isEmpty() && !endTime.isEmpty())
+
+
+                        if(!startTime.isEmpty()&& !endTime.isEmpty())
                         {
                             setupDuration();
                         }

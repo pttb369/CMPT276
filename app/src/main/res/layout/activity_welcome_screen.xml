@@ -31,7 +31,7 @@
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/GroupOfPeople"
+        android:id="@+id/GroupOfPeopleLeft"
         android:src="@drawable/communityimage"
         android:layout_centerVertical="true"
         android:layout_alignParentStart="true" />
@@ -39,9 +39,9 @@
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/GroupOfPeople2"
+        android:id="@+id/GroupOfPeopleRight"
         android:src="@drawable/communityimage"
-        android:layout_alignTop="@+id/GroupOfPeople"
+        android:layout_alignTop="@+id/GroupOfPeopleLeft"
         android:layout_alignParentEnd="true" />
 
 </RelativeLayout>
