@@ -20,7 +20,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_toEndOf="@+id/event_icon"
-        android:text="Event Name"
+        android:text="@string/event_view_name"
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
     <TextView
@@ -29,16 +29,15 @@
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
         android:layout_alignParentTop="true"
-        android:text="MM-DD-YYYY"
+        android:text="@string/event_item_date"
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
     <TextView
         android:id="@+id/event_duration"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="00 HR 00 MIN"
+        android:text="@string/event_item_duration"
         android:layout_alignParentBottom="true"
         android:layout_alignEnd="@+id/event_date" />
-
 
 </RelativeLayout>

@@ -17,14 +17,14 @@
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Done"
+            android:text="@string/event_button_done"
             android:id="@+id/btnCreateEvent" />
 
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="right"
-            android:text="Find Me"
+            android:layout_gravity="end"
+            android:text="@string/event_button_find_me"
             android:id="@+id/btnFindMe_create"/>
 
     </LinearLayout>
