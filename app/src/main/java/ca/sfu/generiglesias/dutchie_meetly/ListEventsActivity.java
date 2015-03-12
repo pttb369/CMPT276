@@ -31,6 +31,7 @@ import ca.sfu.generiglesias.dutchie_meetly.maplogic.GPSTracker;
 
 
 public class ListEventsActivity extends ActionBarActivity {
+    public static final int INFO_KEY = 342;
 
     private List<Event> events = new ArrayList<Event>();
 
@@ -51,7 +52,8 @@ public class ListEventsActivity extends ActionBarActivity {
         CreateEventBtn.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
-                startActivity(new Intent(ListEventsActivity.this, CreateEventActivity.class));
+                startActivityForResult(new Intent(ListEventsActivity.this, CreateEventActivity.class),
+                        INFO_KEY);
             }
         });
     }
@@ -132,5 +134,25 @@ public class ListEventsActivity extends ActionBarActivity {
     @Override
     public void onBackPressed() {
         finish();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == INFO_KEY) {
+            if (resultCode == RESULT_OK) {
+                this.events.add(new Event(
+                        data.getStringExtra("name"),
+                        data.getStringExtra("date"),
+                        "description",
+                        data.getStringExtra("startTime"),
+                        data.getStringExtra("endTime"),
+                        "duration",
+                        "wat",
+                        4
+                ));
+                populateEventListView();
+            }
+        }
     }
 }

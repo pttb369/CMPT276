@@ -14,6 +14,7 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -24,15 +25,23 @@ import java.util.Locale;
 
 
 public class CreateEventActivity extends ActionBarActivity {
-
     private SimpleDateFormat dateFormatter;
     private DatePickerDialog DatePicker;
     private TimePickerDialog TimePick;
     private EditText eventTitle, eventDescription, eventLocation, eventDuration, showDate, showTime;
     private EditText showLocation;
-    private List<Event> events = new ArrayList<Event>();
     String evTitle, evDescription;
     Date evDate;
+
+    //Event Information
+    private String name;
+    private String date;
+    private String cityName;
+    private String description;
+    private String startTime;
+    private String endTime;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -100,18 +109,28 @@ public class CreateEventActivity extends ActionBarActivity {
         CreateEventButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                events.add(new Event(
-//                        evTitle,
-//                        new Date(),
-//                        "Surrey",
-//                        evDescription,
-//                        R.drawable.ic_launcher));
 
-                for(int i = 0; i < events.size(); i++)
-                {
-                    System.out.println(events.get(i).getEventName());
+                endTime = "DUMBBBBBBBBBB";
+                name = "This string is not true.";
+
+                boolean validDetails = name != null &&
+                        date != null &&
+                        startTime != null &&
+                        endTime != null;
+
+                if (validDetails) {
+                    Intent returnIntent = new Intent();
+                    returnIntent.putExtra("name", name);
+                    returnIntent.putExtra("date", date);
+                    returnIntent.putExtra("startTime", startTime);
+                    returnIntent.putExtra("endTime", endTime);
+                    setResult(RESULT_OK, returnIntent);
+
+                    finish();
+                } else {
+                    Toast.makeText(getApplicationContext(), "Not all details set", Toast.LENGTH_SHORT)
+                            .show();
                 }
-                //finish();
             }
         });
     }
@@ -138,8 +157,9 @@ public class CreateEventActivity extends ActionBarActivity {
             public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
                 Calendar newDate = Calendar.getInstance();
                 newDate.set(year, monthOfYear, dayOfMonth);
-                showDate.setText(dateFormatter.format(newDate.getTime()));
+                date = dateFormatter.format(newDate.getTime());
 
+                showDate.setText(date);
             }
 
         },newCalendar.get(Calendar.YEAR), newCalendar.get(Calendar.MONTH),
@@ -155,8 +175,8 @@ public class CreateEventActivity extends ActionBarActivity {
                 new TimePickerDialog.OnTimeSetListener() {
 
                     public void onTimeSet(TimePicker view, int hourOfDay,int minute) {
-                        String output = String.format("%02d:%02d", hourOfDay, minute);
-                        showTime.setText(output);
+                        startTime = String.format("%02d:%02d", hourOfDay, minute);
+                        showTime.setText(startTime);
                     }
 
                 }, hour, minutes, true);

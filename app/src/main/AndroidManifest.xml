@@ -25,6 +25,12 @@
         <activity
             android:name=".ListEventsActivity"
             android:label="@string/title_activity_list_events" >
+
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
 
         <meta-data
@@ -54,15 +60,6 @@
         <activity
             android:name=".ViewEventMapActivity"
             android:label="@string/title_activity_view_event_maps" >
-        </activity>
-        <activity
-            android:name=".myActivites.myCreateEventActivity"
-            android:label="@string/title_activity_my_create_event" >
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
     </application>
 
