@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Handler;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -56,6 +57,10 @@ public class ViewEventActivity extends ActionBarActivity {
         Intent intent = new Intent(getApplicationContext(), ViewEventMapActivity.class);
         intent.putExtra("latitude", getIntent().getDoubleExtra("latitude", Double.NaN));
         intent.putExtra("longitude", getIntent().getDoubleExtra("longitude", Double.NaN));
+        intent.putExtra("EventName",eventName);
+        intent.putExtra("Location",location);
+        intent.putExtra("StartTime",startTime);
+        intent.putExtra("EndTime",endTime);
         startActivity(intent);
     }
 
