@@ -24,9 +24,11 @@
     <string name="event_view_time_remaining">Days Left Until Event </string>
     <string name="title_activity_view_event_maps">Map</string>
 
+    <string name="event_button_create">Create Event</string>
+    <string name="event_button_done">Done</string>
+    <string name="event_button_find_me">Find Me</string>
+    <string name="event_button_find_event">Find Event</string>
 
-
-    <string name="hello_world">Hello world!</string>
-    <string name="title_activity_test_create_event">TestCreateEventActivity</string>
-
+    <string name="event_item_duration">00 Hours 00 Minutes</string>
+    <string name="event_item_date">dd-MM-yyyy</string>
 </resources>
