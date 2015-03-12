@@ -32,6 +32,7 @@ import ca.sfu.generiglesias.dutchie_meetly.maplogic.GPSTracker;
 
 public class ListEventsActivity extends ActionBarActivity {
     public static final int INFO_KEY = 342;
+    private static final String TAG = "ListEventsActivity";
 
     private List<Event> events = new ArrayList<Event>();
 
@@ -91,19 +92,14 @@ public class ListEventsActivity extends ActionBarActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View viewClicked,
                                     int position, long id) {
-
                 Event clickedEvent = events.get(position);
-
-                EventHolder.refresh();
-                EventHolder.setName(clickedEvent.getEventName());
-                EventHolder.setLatitude(clickedEvent.getLatitude());
-                EventHolder.setLongitude(clickedEvent.getLongitude());
-
                 Intent launchNewActivity = new Intent(getApplicationContext(),ViewEventActivity.class);
                 launchNewActivity.putExtra("EventName",clickedEvent.getEventName());
                 launchNewActivity.putExtra("Location",clickedEvent.getCityName());
                 launchNewActivity.putExtra("Date",clickedEvent.getEventDate());
                 launchNewActivity.putExtra("Description",clickedEvent.getEventDescription());
+                launchNewActivity.putExtra("latitude", clickedEvent.getLatitude());
+                launchNewActivity.putExtra("longitude", clickedEvent.getLongitude());
                 startActivity(launchNewActivity);
             }
         });
@@ -153,14 +149,9 @@ public class ListEventsActivity extends ActionBarActivity {
                         "duration",
                         "wat",
                         4,
-                        data.getDoubleExtra("latitude", 0),
-                        data.getDoubleExtra("longitude", 0)
+                        data.getDoubleExtra("latitude", Double.NaN),
+                        data.getDoubleExtra("longitude", Double.NaN)
                 ));
-
-                Log.i("WHAT", ""+ data.getDoubleExtra("latitude", 0));
-                Log.i("WHAT", ""+ data.getDoubleExtra("longitude", 0));
-
-
 
                 populateEventListView();
             }

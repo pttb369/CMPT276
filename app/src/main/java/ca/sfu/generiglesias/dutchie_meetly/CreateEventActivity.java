@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.text.InputType;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -17,14 +16,14 @@ import android.widget.TimePicker;
 import android.widget.Toast;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.List;
 import java.util.Locale;
 
 
 public class CreateEventActivity extends ActionBarActivity {
+    public static final int REQUEST_CODE = 666;
+
     private SimpleDateFormat dateFormatter;
     private DatePickerDialog DatePicker;
     private TimePickerDialog TimePick;
@@ -100,10 +99,9 @@ public class CreateEventActivity extends ActionBarActivity {
         PickLocationBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                EventHolder.refresh();
                 startActivityForResult(
                         new Intent(getApplicationContext(), CreateEventMapActivity.class),
-                        666);
+                        REQUEST_CODE);
             }
         });
 
@@ -143,7 +141,7 @@ public class CreateEventActivity extends ActionBarActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == 666) {
+        if (requestCode == REQUEST_CODE) {
             if (resultCode == RESULT_OK) {
                 latitude = data.getDoubleExtra("latitude", 0);
                 longitude = data.getDoubleExtra("longitude", 0);

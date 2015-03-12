@@ -33,7 +33,6 @@ public class CreateEventMapActivity extends FragmentActivity {
         setContentView(R.layout.activity_create_event_map);
         setUpMapIfNeeded();
         setupButtons(this);
-        EventHolder.refresh();
 
         map.clear();
         marker = map.addMarker(new MarkerOptions().position(new LatLng(0,0)));

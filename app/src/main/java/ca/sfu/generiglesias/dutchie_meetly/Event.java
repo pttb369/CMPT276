@@ -38,8 +38,8 @@ public class Event {
         this.eventEndTime = eventEndTime;
         this.eventDuration = eventDuration;
         this.eventIconId = eventIconId;
-        this.longitude = latitude;
-        this.latitude = longitude;
+        this.longitude = longitude;
+        this.latitude = latitude;
     }
 
     public void setLatitude(double latitude) {
