@@ -1,36 +1,30 @@
 package ca.sfu.generiglesias.dutchie_meetly;
 
-import android.content.Context;
 import android.content.Intent;
+import android.location.Address;
+import android.location.Geocoder;
+import android.location.Location;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.TextView;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
+import ca.sfu.generiglesias.dutchie_meetly.maplogic.GPSTracker;
 
 public class ListEventsActivity extends ActionBarActivity {
+    public static final int INFO_KEY = 342;
+    private static final String TAG = "ListEventsActivity";
 
     private List<Event> events = new ArrayList<Event>();
-    private List<Event> event2;
-    private List<Event> event3 = new ArrayList<Event>();
-    FileInputStream fileInput;
-    ObjectInputStream objectInput;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,9 +32,10 @@ public class ListEventsActivity extends ActionBarActivity {
         setContentView(R.layout.activity_list_events);
 
         createEventButton();
-        //populateEventList();
+        populateEventList();
         populateEventListView();
         registerClickCallback();
+        setCurrentCity();
     }
 
     private void createEventButton(){
@@ -48,71 +43,31 @@ public class ListEventsActivity extends ActionBarActivity {
         CreateEventBtn.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
-                startActivity(new Intent(ListEventsActivity.this, CreateEventActivity.class));
-                //events.clear();
+                startActivityForResult(new Intent(ListEventsActivity.this, CreateEventActivity.class),
+                        INFO_KEY);
             }
         });
     }
 
-    //eventTitle.getText().toString()
-
     private void populateEventList() {
-
-//        for(int i = 1; i < 20; i++) {
-//            events.add(new Event(
-//                    "Event " + i,
-//                    "123",
-//                    "City " + i,
-//                    "Description " + i,
-//                    "10:00",
-//                    "13:00",
-//                    "3 Hours 0 minutes",
-//                    R.drawable.ic_launcher));
-//        }
-
-        try {
-            FileInputStream fileInput = openFileInput("eventListData");
-            ObjectInputStream objectInput = new ObjectInputStream(fileInput);
-
-            while(fileInput.available() > 0) {
-                event2 = (ArrayList) objectInput.readObject();
-            }
-
-            //objectInput.close();
-        }catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        }
-        catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        //event3.addAll(event2);
-
-        //System.out.println(event3.size());
-
-        for(int i = 0; i < event2.size(); i++) {
+        for(int i = 1; i < 20; i++) {
             events.add(new Event(
-                    event2.get(i).getEventName(),
-                    event2.get(i).getEventDate(),
-                    event2.get(i).getCityName(),
-                    event2.get(i).getEventDescription(),
-                    event2.get(i).getEventStartTime(),
-                    event2.get(i).getEventEndTime(),
-                    event2.get(i).getEventDuration(),
-                    R.drawable.ic_launcher));
+                    "Event " + i,
+                    "123",
+                    "City " + i,
+                    "Description " + i,
+                    "10:00",
+                    "13:00",
+                    "3 Hours 0 minutes",
+                    R.drawable.ic_launcher,
+                    49.187559,
+                    -122.84954500000003
+            ));
         }
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
+    private void sortEventList(List<Event> events) {
 
-        //events.clear();
-        System.out.println(events.size());
-
-        //populateEventList();
-        //populateEventListView();
-        // The activity has become visible (it is now "resumed").
     }
 
     private void populateEventListView() {
@@ -127,45 +82,44 @@ public class ListEventsActivity extends ActionBarActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View viewClicked,
                                     int position, long id) {
-
                 Event clickedEvent = events.get(position);
-
-                EventHolder.refresh();
-                EventHolder.setName(clickedEvent.getEventName());
-                EventHolder.setLatitude(clickedEvent.getLatitude());
-                EventHolder.setLongitude(clickedEvent.getLongitude());
-
                 Intent launchNewActivity = new Intent(getApplicationContext(),ViewEventActivity.class);
                 launchNewActivity.putExtra("EventName",clickedEvent.getEventName());
                 launchNewActivity.putExtra("Location",clickedEvent.getCityName());
                 launchNewActivity.putExtra("Date",clickedEvent.getEventDate());
                 launchNewActivity.putExtra("Description",clickedEvent.getEventDescription());
+                launchNewActivity.putExtra("latitude", clickedEvent.getLatitude());
+                launchNewActivity.putExtra("longitude", clickedEvent.getLongitude());
+                launchNewActivity.putExtra("startTime",clickedEvent.getEventStartTime());
+                launchNewActivity.putExtra("endTime",clickedEvent.getEventEndTime());
                 startActivity(launchNewActivity);
             }
         });
     }
 
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_list_events, menu);
-        return true;
+    public void setCurrentCity() {
+        TextView currentLocation = (TextView) findViewById(R.id.currentLocation);
+        currentLocation.setText(getCurrentCity());
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
+    //http://stackoverflow.com/questions/20325427/get-current-location-city-name-android
+    private String getCurrentCity() {
+        String cityName = "Unknown Location";
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+        Geocoder gcd = new Geocoder(getApplicationContext(), Locale.getDefault());
+        GPSTracker gpsTracker = new GPSTracker(getApplicationContext());
+
+        try {
+            Location loc = gpsTracker.getLocation();
+            List<Address> addresses = gcd.getFromLocation(loc.getLatitude(), loc.getLongitude(), 1);
+            cityName = addresses.get(0).getLocality();
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        } catch (NullPointerException ex) {
+            ex.printStackTrace();
         }
 
-        return super.onOptionsItemSelected(item);
+        return cityName;
     }
 
     @Override
@@ -173,25 +127,26 @@ public class ListEventsActivity extends ActionBarActivity {
         finish();
     }
 
-    public void testButton(View v)
-    {
-        //http://www.eracer.de/2012/07/09/android-objectinputstream-and-objectoutputstream-snippet/
-        /*try {
-            FileInputStream fileInput = openFileInput("eventListData");
-            ObjectInputStream objectInput = new ObjectInputStream(fileInput);
-            event2 = (ArrayList) objectInput.readObject();
-        }catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        }
-        catch (IOException e) {
-            e.printStackTrace();
-        }
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == INFO_KEY) {
+            if (resultCode == RESULT_OK) {
+                this.events.add(new Event(
+                        data.getStringExtra("name"),
+                        data.getStringExtra("date"),
+                        data.getStringExtra("cityName"),
+                        data.getStringExtra("description"),
+                        data.getStringExtra("startTime"),
+                        data.getStringExtra("endTime"),
+                        "duration",
+                        R.drawable.ic_launcher,
+                        data.getDoubleExtra("latitude", Double.NaN),
+                        data.getDoubleExtra("longitude", Double.NaN)
+                ));
 
-        event3.addAll(event2);
-
-        for(Event event: event3) {
-            System.out.println(event3.size());
-            Log.i("Event Name", event.getEventName());
-        }*/
+                populateEventListView();
+            }
+        }
     }
 }

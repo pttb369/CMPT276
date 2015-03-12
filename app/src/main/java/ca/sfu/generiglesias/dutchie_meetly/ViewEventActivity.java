@@ -22,6 +22,8 @@ public class ViewEventActivity extends ActionBarActivity {
     private String location;
     private String date;
     private String description;
+    private String startTime;
+    private String endTime;
     private Handler handler;
     private boolean running = true;
 
@@ -33,6 +35,10 @@ public class ViewEventActivity extends ActionBarActivity {
         timeLeftUntilEvent();
 
         setupButtons();
+
+        Log.i("LATLNG", "WHYY IS THIS NOT WORKING?!?!");
+        Log.i("LATLNG", "" + getIntent().getDoubleExtra("latitude", -12324));
+        Log.i("LATLNG", ""+ getIntent().getDoubleExtra("longitude", -12324));
     }
 
     private void setupButtons() {
@@ -47,12 +53,10 @@ public class ViewEventActivity extends ActionBarActivity {
     }
 
     private void clickViewMap() {
-        Intent launchNewActivity = new Intent(ViewEventActivity.this, MapActivity.class);
-        launchNewActivity.putExtra(MapActivity.IS_CREATING, false);
-        launchNewActivity.putExtra(MapActivity.NAME, this.eventName);
-        launchNewActivity.putExtra(MapActivity.SNIPPET, this.location);
-
-        startActivity(launchNewActivity);
+        Intent intent = new Intent(getApplicationContext(), ViewEventMapActivity.class);
+        intent.putExtra("latitude", getIntent().getDoubleExtra("latitude", Double.NaN));
+        intent.putExtra("longitude", getIntent().getDoubleExtra("longitude", Double.NaN));
+        startActivity(intent);
     }
 
 
@@ -63,22 +67,23 @@ public class ViewEventActivity extends ActionBarActivity {
         location = intent.getStringExtra("Location");
         date = intent.getStringExtra("Date");
         description = intent.getStringExtra("Description");
-        String appendTo;
+        startTime = intent.getStringExtra("startTime");
+        endTime = intent.getStringExtra("endTime");
 
         TextView view_eventName = (TextView) findViewById(R.id.event_view_id_name);
         view_eventName.setText(eventName);
 
         TextView view_eventDate = (TextView) findViewById(R.id.event_view_id_date);
-        appendTo = (String)getResources().getText(R.string.event_view_date);
-        view_eventDate.setText(appendTo + ": " + date);
+        view_eventDate.setText("Date:         " + date);
 
         TextView view_eventDescription = (TextView) findViewById(R.id.event_view_id_description);
-        appendTo = (String)getResources().getText(R.string.event_view_description);
-        view_eventDescription.setText(appendTo + "\n" + description);
+        view_eventDescription.setText("Description:" + description);
 
         TextView view_eventLocation = (TextView) findViewById(R.id.event_view_id_location);
-        appendTo = (String)getResources().getText(R.string.event_view_location);
-        view_eventLocation.setText(appendTo + ": " + location);
+        view_eventLocation.setText("Location:  "+ location);
+
+        TextView view_eventDuration = (TextView) findViewById(R.id.event_view_id_duration);
+        view_eventDuration.setText("Duration:  " + startTime + "- " +endTime);
     }
 
     void timeLeftUntilEvent(){

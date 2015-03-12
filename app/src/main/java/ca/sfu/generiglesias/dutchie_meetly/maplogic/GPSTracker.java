@@ -31,10 +31,10 @@ public class GPSTracker implements LocationListener {
             if (location != null) {
                 currentLocation = location;
             } else {
-                Toast.makeText(context, "Location not found", Toast.LENGTH_SHORT);
+                Toast.makeText(context, "Current Location Unknown", Toast.LENGTH_SHORT);
             }
         } else {
-            Toast.makeText(context, "Please enable GPS", Toast.LENGTH_SHORT);
+            Toast.makeText(context, "Please Enable GPS", Toast.LENGTH_SHORT);
         }
     }
 
