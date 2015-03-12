@@ -1,8 +1,10 @@
 package ca.sfu.generiglesias.dutchie_meetly;
 
+import android.content.Context;
 import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -11,6 +13,11 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -20,6 +27,10 @@ import java.util.List;
 public class ListEventsActivity extends ActionBarActivity {
 
     private List<Event> events = new ArrayList<Event>();
+    private List<Event> event2;
+    private List<Event> event3 = new ArrayList<Event>();
+    FileInputStream fileInput;
+    ObjectInputStream objectInput;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,7 +38,7 @@ public class ListEventsActivity extends ActionBarActivity {
         setContentView(R.layout.activity_list_events);
 
         createEventButton();
-        populateEventList();
+        //populateEventList();
         populateEventListView();
         registerClickCallback();
     }
@@ -38,6 +49,7 @@ public class ListEventsActivity extends ActionBarActivity {
             @Override
             public void onClick(View v){
                 startActivity(new Intent(ListEventsActivity.this, CreateEventActivity.class));
+                //events.clear();
             }
         });
     }
@@ -45,17 +57,62 @@ public class ListEventsActivity extends ActionBarActivity {
     //eventTitle.getText().toString()
 
     private void populateEventList() {
-        for(int i = 1; i < 20; i++) {
+
+//        for(int i = 1; i < 20; i++) {
+//            events.add(new Event(
+//                    "Event " + i,
+//                    "123",
+//                    "City " + i,
+//                    "Description " + i,
+//                    "10:00",
+//                    "13:00",
+//                    "3 Hours 0 minutes",
+//                    R.drawable.ic_launcher));
+//        }
+
+        try {
+            FileInputStream fileInput = openFileInput("eventListData");
+            ObjectInputStream objectInput = new ObjectInputStream(fileInput);
+
+            while(fileInput.available() > 0) {
+                event2 = (ArrayList) objectInput.readObject();
+            }
+
+            //objectInput.close();
+        }catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        //event3.addAll(event2);
+
+        //System.out.println(event3.size());
+
+        for(int i = 0; i < event2.size(); i++) {
             events.add(new Event(
-                    "Event " + i,
-                    "123",
-                    "City " + i,
-                    "Description " + i,
-                    "10:00",
-                    "13:00",
-                    "3 Hours 0 minutes",
+                    event2.get(i).getEventName(),
+                    event2.get(i).getEventDate(),
+                    event2.get(i).getCityName(),
+                    event2.get(i).getEventDescription(),
+                    event2.get(i).getEventStartTime(),
+                    event2.get(i).getEventEndTime(),
+                    event2.get(i).getEventDuration(),
                     R.drawable.ic_launcher));
         }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        //events.clear();
+        System.out.println(events.size());
+
+        //populateEventList();
+        //populateEventListView();
+        // The activity has become visible (it is now "resumed").
     }
 
     private void populateEventListView() {
@@ -114,5 +171,27 @@ public class ListEventsActivity extends ActionBarActivity {
     @Override
     public void onBackPressed() {
         finish();
+    }
+
+    public void testButton(View v)
+    {
+        //http://www.eracer.de/2012/07/09/android-objectinputstream-and-objectoutputstream-snippet/
+        /*try {
+            FileInputStream fileInput = openFileInput("eventListData");
+            ObjectInputStream objectInput = new ObjectInputStream(fileInput);
+            event2 = (ArrayList) objectInput.readObject();
+        }catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        event3.addAll(event2);
+
+        for(Event event: event3) {
+            System.out.println(event3.size());
+            Log.i("Event Name", event.getEventName());
+        }*/
     }
 }

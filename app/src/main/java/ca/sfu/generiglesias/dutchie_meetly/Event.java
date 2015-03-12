@@ -1,12 +1,13 @@
 package ca.sfu.generiglesias.dutchie_meetly;
 
+import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
  * Created by David on 2015-03-07.
  */
-public class Event {
+public class Event implements Serializable{
     private String eventName;
     private String eventDate;
     private String cityName;

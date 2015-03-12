@@ -3,6 +3,7 @@ package ca.sfu.generiglesias.dutchie_meetly;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
@@ -15,9 +16,12 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.TimePicker;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -38,6 +42,9 @@ public class CreateEventActivity extends ActionBarActivity {
     private int startHour, startMinute, endHour, endMinute;
     private Calendar duration;
     EditText durationText;
+    String filename = "eventListData";
+    FileOutputStream file;
+    ObjectOutputStream out;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,13 +57,6 @@ public class CreateEventActivity extends ActionBarActivity {
         eventTitle = (EditText) findViewById(R.id.eventTitleText);
         eventDescription = (EditText) findViewById(R.id.eventDescriptionId);
 
-<<<<<<< HEAD
-=======
-        evTitle = eventTitle.getText().toString();
-        evDescription = eventTitle.toString();
-
-
->>>>>>> 7ed7d467f0c5aee8e6b2e3fefb1c608f0fcc5e93
         showDate = (EditText) findViewById(R.id.showDate);
         showDate.setInputType(InputType.TYPE_NULL);
         showDate.requestFocus();
@@ -157,48 +157,40 @@ public class CreateEventActivity extends ActionBarActivity {
 
                     durationText.setText(duration.get(Calendar.HOUR_OF_DAY) + " Hours and " +
                             duration.get(Calendar.MINUTE) + " Minutes");
+
+                    events.add(new Event(
+                            eventTitle.getText().toString(),
+                            showDate.getText().toString(),
+                            "Surrey",
+                            eventDescription.getText().toString(),
+                            showTime.getText().toString(),
+                            showEndTime.getText().toString(),
+                            durationText.getText().toString(),
+                            R.drawable.ic_launcher));
+
+                    for(Event event: events) {
+                        Log.i("Event Name", event.getEventName());
+                        Log.i("Event Date", event.getEventDate());
+                        Log.i("Event Duration", event.getEventDuration());
+                    }
+
+                    //http://www.eracer.de/2012/07/09/android-objectinputstream-
+                    // and-objectoutputstream-snippet/
+                    try {
+                        file = openFileOutput(filename, Context.MODE_PRIVATE);
+                        out = new ObjectOutputStream(file);
+                        out.writeObject(events);
+                        out.close();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+
+                    //finish();
+
                 }
 
-//                events.add(new Event(
-//                        eventTitle.getText().toString(),
-//                        new Date(),
-//                        "Surrey",
-//                        evDescription,
-//                        R.drawable.ic_launcher));
-
-                events.add(new Event(
-                        eventTitle.getText().toString(),
-                        showDate.getText().toString(),
-                        "Surrey",
-                        eventDescription.getText().toString(),
-<<<<<<< HEAD
-                        R.drawable.ic_launcher));
-
-                for(int i = 0; i < events.size(); i++)
-                {
-                    System.out.println(events.get(i).getEventName());
-                }
-=======
-                        showTime.getText().toString(),
-                        showEndTime.getText().toString(),
-                        durationText.getText().toString(),
-                        R.drawable.ic_launcher));
-
-                for(Event event: events) {
-                    Log.i("Event Name", event.getEventName());
-                    Log.i("Event Date", event.getEventDate());
-                    Log.i("Event Duration", event.getEventDuration());
-                }
-
-                //Log.i()
->>>>>>> 7ed7d467f0c5aee8e6b2e3fefb1c608f0fcc5e93
             }
         });
-    }
-
-    private void calculateDuration(int startH, int startM, int endH, int endM)
-    {
-
     }
 
     //Source: http://androidopentutorials.com/android-datepickerdialog-on-edittext-click-event/
