@@ -105,20 +105,20 @@ public class ViewEventMapActivity extends FragmentActivity {
 
                     @Override
                     public View getInfoContents(Marker marker) {
-                        View v = getLayoutInflater().inflate(R.layout.info_window,null);
-                        TextView tvLocality = (TextView) v.findViewById(R.id.info_window_locality);
-                        TextView tvLat = (TextView) v.findViewById(R.id.info_window_lat);
-                        TextView tvLng = (TextView) v.findViewById(R.id.info_window_lng);
-                        TextView tvSnippet = (TextView) v.findViewById(R.id.info_window_snippet);
+                        View view = getLayoutInflater().inflate(R.layout.info_window,null);
+                        TextView tvLocality = (TextView) view.findViewById(R.id.info_window_locality);
+                        TextView tvLat = (TextView) view.findViewById(R.id.info_window_lat);
+                        TextView tvLng = (TextView) view.findViewById(R.id.info_window_lng);
+                        TextView tvSnippet = (TextView) view.findViewById(R.id.info_window_snippet);
 
                         LatLng lg = marker.getPosition();
                         name = getIntent().getStringExtra("name");
-                        tvLocality.setText(name);
+                        tvLocality.setText("english");
                         tvLat.setText(("Lattitude: " + lg.latitude));
                         tvLng.setText(("Longitude: " + lg.longitude));
-                        tvSnippet.setText(name);
+                        tvSnippet.setText("event");
 
-                        return v;
+                        return view;
                     }
                 });
 
