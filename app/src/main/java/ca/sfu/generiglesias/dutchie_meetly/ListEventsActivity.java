@@ -90,6 +90,8 @@ public class ListEventsActivity extends ActionBarActivity {
                 launchNewActivity.putExtra("Description",clickedEvent.getEventDescription());
                 launchNewActivity.putExtra("latitude", clickedEvent.getLatitude());
                 launchNewActivity.putExtra("longitude", clickedEvent.getLongitude());
+                launchNewActivity.putExtra("startTime",clickedEvent.getEventStartTime());
+                launchNewActivity.putExtra("endTime",clickedEvent.getEventEndTime());
                 startActivity(launchNewActivity);
             }
         });

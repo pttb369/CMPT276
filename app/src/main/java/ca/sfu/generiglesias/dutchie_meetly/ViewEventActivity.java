@@ -22,6 +22,8 @@ public class ViewEventActivity extends ActionBarActivity {
     private String location;
     private String date;
     private String description;
+    private String startTime;
+    private String endTime;
     private Handler handler;
     private boolean running = true;
 
@@ -65,22 +67,23 @@ public class ViewEventActivity extends ActionBarActivity {
         location = intent.getStringExtra("Location");
         date = intent.getStringExtra("Date");
         description = intent.getStringExtra("Description");
-        String appendTo;
+        startTime = intent.getStringExtra("startTime");
+        endTime = intent.getStringExtra("endTime");
 
         TextView view_eventName = (TextView) findViewById(R.id.event_view_id_name);
         view_eventName.setText(eventName);
 
         TextView view_eventDate = (TextView) findViewById(R.id.event_view_id_date);
-        appendTo = (String)getResources().getText(R.string.event_view_date);
-        view_eventDate.setText(appendTo + ": " + date);
+        view_eventDate.setText("Date:         " + date);
 
         TextView view_eventDescription = (TextView) findViewById(R.id.event_view_id_description);
-        appendTo = (String)getResources().getText(R.string.event_view_description);
-        view_eventDescription.setText(appendTo + "\n" + description);
+        view_eventDescription.setText("Description:" + description);
 
         TextView view_eventLocation = (TextView) findViewById(R.id.event_view_id_location);
-        appendTo = (String)getResources().getText(R.string.event_view_location);
-        view_eventLocation.setText(appendTo + ": " + location);
+        view_eventLocation.setText("Location:  "+ location);
+
+        TextView view_eventDuration = (TextView) findViewById(R.id.event_view_id_duration);
+        view_eventDuration.setText("Duration:  " + startTime + "- " +endTime);
     }
 
     void timeLeftUntilEvent(){
