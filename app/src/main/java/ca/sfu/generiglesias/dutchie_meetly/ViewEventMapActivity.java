@@ -27,7 +27,10 @@ public class ViewEventMapActivity extends FragmentActivity {
     private Marker marker;
     private double latitude;
     private double longitude;
+    private String startTime;
+    private String endTime;
     private String name;
+    private String location;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -107,22 +110,20 @@ public class ViewEventMapActivity extends FragmentActivity {
                     public View getInfoContents(Marker marker) {
                         View view = getLayoutInflater().inflate(R.layout.info_window,null);
                         TextView tvLocality = (TextView) view.findViewById(R.id.info_window_locality);
-                        TextView tvLat = (TextView) view.findViewById(R.id.info_window_lat);
-                        TextView tvLng = (TextView) view.findViewById(R.id.info_window_lng);
+                        TextView tvTime = (TextView) view.findViewById(R.id.info_window_time);
                         TextView tvSnippet = (TextView) view.findViewById(R.id.info_window_snippet);
 
-                        LatLng lg = marker.getPosition();
-                        name = getIntent().getStringExtra("name");
-                        tvLocality.setText("english");
-                        tvLat.setText(("Lattitude: " + lg.latitude));
-                        tvLng.setText(("Longitude: " + lg.longitude));
-                        tvSnippet.setText("event");
+                        name = getIntent().getStringExtra("EventName");
+                        startTime = getIntent().getStringExtra("StartTime");
+                        endTime = getIntent().getStringExtra("EndTime");
+                        location = getIntent().getStringExtra("Location");
+                        tvLocality.setText(name);
+                        tvTime.setText(("Time: " +startTime + " - " + endTime ));
+                        tvSnippet.setText(("Location: " + location));
 
                         return view;
                     }
                 });
-
-
             }
         }
     }
