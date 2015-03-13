@@ -177,11 +177,14 @@ public class CreateEventActivity extends ActionBarActivity {
         try {
             List<Address> addresses = gcd.getFromLocation(lat, lng, 1);
             //cityName = addresses.get(0).getLocality();
-            cityName = addresses.get(0).getAddressLine(0) + " " + addresses.get(0).getAddressLine(1);
+            cityName = addresses.get(0).getAddressLine(0)
+                    + " " + addresses.get(0).getAddressLine(1);
 
         } catch (IOException ex) {
             ex.printStackTrace();
         } catch (NullPointerException ex) {
+            ex.printStackTrace();
+        } catch (IndexOutOfBoundsException ex) {
             ex.printStackTrace();
         }
 
