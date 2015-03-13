@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.Handler;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
-import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -14,17 +13,26 @@ import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.TextView;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
 
 public class ViewEventActivity extends ActionBarActivity {
+    // Display
     private String eventName;
     private String location;
     private String date;
     private String description;
+    private String duration;
     private String startTime;
     private String endTime;
+    // Used for calculation
+    private Date eventEndTime = new Date();
+    private Date eventDate = new Date();
     private Handler handler;
     private boolean running = true;
 
@@ -33,13 +41,13 @@ public class ViewEventActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_event);
         extractAndInsertEventDetails();
-        timeLeftUntilEvent();
+        calculateTimeLeftUntilEvent();
 
         setupButtons();
 
         Log.i("LATLNG", "WHYY IS THIS NOT WORKING?!?!");
         Log.i("LATLNG", "" + getIntent().getDoubleExtra("latitude", -12324));
-        Log.i("LATLNG", ""+ getIntent().getDoubleExtra("longitude", -12324));
+        Log.i("LATLNG", "" + getIntent().getDoubleExtra("longitude", -12324));
     }
 
     private void setupButtons() {
@@ -57,21 +65,22 @@ public class ViewEventActivity extends ActionBarActivity {
         Intent intent = new Intent(getApplicationContext(), ViewEventMapActivity.class);
         intent.putExtra("latitude", getIntent().getDoubleExtra("latitude", Double.NaN));
         intent.putExtra("longitude", getIntent().getDoubleExtra("longitude", Double.NaN));
-        intent.putExtra("EventName",eventName);
-        intent.putExtra("Location",location);
-        intent.putExtra("StartTime",startTime);
-        intent.putExtra("EndTime",endTime);
+        intent.putExtra("EventName", eventName);
+        intent.putExtra("Location", location);
+        intent.putExtra("StartTime", startTime);
+        intent.putExtra("EndTime", endTime);
         startActivity(intent);
     }
 
 
-    private void extractAndInsertEventDetails(){
+    private void extractAndInsertEventDetails() {
 
         Intent intent = getIntent();
         eventName = intent.getStringExtra("EventName");
         location = intent.getStringExtra("Location");
         date = intent.getStringExtra("Date");
         description = intent.getStringExtra("Description");
+        duration = intent.getStringExtra("Duration");
         startTime = intent.getStringExtra("startTime");
         endTime = intent.getStringExtra("endTime");
 
@@ -85,29 +94,59 @@ public class ViewEventActivity extends ActionBarActivity {
         view_eventDescription.setText("Description:" + description);
 
         TextView view_eventLocation = (TextView) findViewById(R.id.event_view_id_location);
-        view_eventLocation.setText("Location:  "+ location);
+        view_eventLocation.setText("Location:  " + location);
 
         TextView view_eventDuration = (TextView) findViewById(R.id.event_view_id_duration);
-        view_eventDuration.setText("Duration:  " + startTime + "- " +endTime);
+        view_eventDuration.setText("Duration:  " + duration);
+
+        TextView view_eventTimePeriod = (TextView) findViewById(R.id.event_view_id_timeperiod);
+        view_eventTimePeriod.setText("Time Period:  " + startTime + "- " + endTime);
     }
 
-    void timeLeftUntilEvent(){
+    void calculateTimeLeftUntilEvent() {
 
-        final Date now = new Date();
-        final Date future = new Date();
-        future.setTime(now.getTime() + 5000000000L);
+        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss", Locale.CANADA);
+        Calendar calendarEndTime = Calendar.getInstance();
 
-        final TextView timeRemaining = (TextView) findViewById(R.id.event_view_id_time_remaining);
+        final Date currentDate = new Date();
 
-        timeRemaining.setText("Time Until Event: " + ": calculating time..");
+        try {
+            String parts[] = endTime.split(":");
+            String endHours = parts[0];
+            String endMinutes = parts[1];
+
+            String eventDateToString = date.toString() + " " + startTime.toString() + ":00";
+            eventDate = sdf.parse(eventDateToString);
+            calendarEndTime.set(Calendar.HOUR_OF_DAY, Integer.parseInt(endHours));
+            calendarEndTime.set(Calendar.MINUTE,Integer.parseInt(endMinutes));
+            eventEndTime = calendarEndTime.getTime();
+
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
 
         handler = new Handler();
 
+        final Calendar eventCal = Calendar.getInstance();
+        eventCal.setTime(eventDate);
+
+        final TextView timeRemaining = (TextView) findViewById(R.id.event_view_id_time_remaining);
+        timeRemaining.setText("Time Until Event: calculating...");
         Animation TitleFade = AnimationUtils.loadAnimation(this, R.anim.fade_in2);
         timeRemaining.startAnimation(TitleFade);
 
 
+
         Runnable runnable = new Runnable() {
+            Calendar nowCalendar = Calendar.getInstance();
+            Date now = new Date();
+            long diff;
+            long newYears;
+            long newMonths;
+            long newDays;
+            long newHours;
+            long newMinutes;
+            long newSeconds;
 
             @Override
             public void run() {
@@ -120,19 +159,31 @@ public class ViewEventActivity extends ActionBarActivity {
                     handler.post(new Runnable() {
                         @Override
                         public void run() {
-                            long diff = future.getTime() - now.getTime();
-                            long newDays = TimeUnit.MILLISECONDS.toDays(diff);
-                            long newHours = TimeUnit.MILLISECONDS.toHours(diff) % 24;
-                            long newMinutes = TimeUnit.MILLISECONDS.toMinutes(diff) % 60;
-                            long newSeconds = TimeUnit.MILLISECONDS.toSeconds(diff) % 60;
-                            timeRemaining.setText("Time Until Event: " + ": " + newDays + "d " + +newHours + "h " + newMinutes + "m " + newSeconds + "s");
 
-                            now.setTime(now.getTime() + 1000L);
+                            diff = eventDate.getTime() - currentDate.getTime();
+                            nowCalendar.setTimeInMillis(currentDate.getTime());
+                            newYears = eventCal.get(Calendar.YEAR) - nowCalendar.get(Calendar.YEAR);
+                            newMonths = (newYears * 12 +
+                                    (eventCal.get(Calendar.MONTH)
+                                            - nowCalendar.get(Calendar.MONTH))) % 12;
+                            newDays = TimeUnit.MILLISECONDS.toDays(diff);
+                            newHours = TimeUnit.MILLISECONDS.toHours(diff) % 24;
+                            newMinutes = TimeUnit.MILLISECONDS.toMinutes(diff) % 60;
+                            newSeconds = TimeUnit.MILLISECONDS.toSeconds(diff) % 60;
 
-                            if(diff == 0L){
+                            if(newSeconds < 0) {
+                                if(eventEndTime.before(now)){
+                                    timeRemaining.setText("Event completed");
+                                }
+                                else{
+                                    timeRemaining.setText("Event started");
+                                }
                                 running = false;
                             }
-
+                            else {
+                                displayTimeLeftUntilEvent(newYears, newMonths, newDays, newHours,
+                                        newMinutes, newSeconds, timeRemaining, currentDate);
+                            }
                         }
                     });
 
@@ -144,6 +195,29 @@ public class ViewEventActivity extends ActionBarActivity {
         new Thread(runnable).start();
 
     }
+
+    private void displayTimeLeftUntilEvent(long newYears, long newMonths, long newDays, long newHours,
+                                           long newMinutes, long newSeconds, TextView timeRemaining,
+                                           Date date1) {
+            if (newYears > 0) {
+                if (newYears == 1) {
+                    timeRemaining.setText("Time Until Event: " + newYears + " year");
+                } else {
+                    timeRemaining.setText("Time Until Event: " + newYears + " years");
+                }
+            } else if (newMonths > 0 && newYears == 0) {
+                if (newMonths == 1) {
+                    timeRemaining.setText("Time Until Event: " + newMonths + " month ");
+                } else {
+                    timeRemaining.setText("Time Until Event: " + newMonths + " months");
+                }
+            } else {
+                timeRemaining.setText("Time Until Event: " + ": " + newDays + "d " + +newHours +
+                        "h " + newMinutes + "m " + newSeconds + "s");
+            }
+            date1.setTime(date1.getTime() + 1000L);
+        }
+
 
 
     @Override
