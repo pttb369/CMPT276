@@ -160,6 +160,7 @@ public class ListEventsActivity extends ActionBarActivity {
                 launchNewActivity.putExtra("Location", clickedEvent.getCityName());
                 launchNewActivity.putExtra("Date", clickedEvent.getEventDate());
                 launchNewActivity.putExtra("Description", clickedEvent.getEventDescription());
+                launchNewActivity.putExtra("Duration", clickedEvent.getEventDuration());
                 launchNewActivity.putExtra("latitude", clickedEvent.getLatitude());
                 launchNewActivity.putExtra("longitude", clickedEvent.getLongitude());
                 launchNewActivity.putExtra("startTime", clickedEvent.getEventStartTime());
