@@ -60,6 +60,7 @@ public class ListEventsActivity extends ActionBarActivity {
 
     private void populateEventList() {
 
+        //http://www.eracer.de/2012/07/09/android-objectinputstream-and-objectoutputstream-snippet/
         try {
             fileInputStream = openFileInput("eventListData");
             objectRead = new ObjectInputStream(fileInputStream);
