@@ -21,6 +21,10 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import ca.sfu.generiglesias.dutchie_meetly.maplogic.GPSTracker;
 import ca.sfu.generiglesias.dutchie_meetly.maplogic.MapActions;
 
+/**
+ *  Shows Google Maps to user for choosing
+ *  their location of event
+ */
 public class CreateEventMapActivity extends FragmentActivity {
     private GoogleMap map;
     private GPSTracker gpsTracker;

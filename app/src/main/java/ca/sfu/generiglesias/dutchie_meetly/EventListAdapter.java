@@ -12,7 +12,7 @@ import android.widget.TextView;
 import java.util.List;
 
 /**
- * Created by David on 2015-03-07.
+ * This class holds an array of Events
  */
 public class EventListAdapter extends ArrayAdapter<Event> {
     private List<Event> events;

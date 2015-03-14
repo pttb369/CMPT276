@@ -31,6 +31,9 @@ import java.util.Locale;
 
 import ca.sfu.generiglesias.dutchie_meetly.maplogic.GPSTracker;
 
+/**
+ * User can see a list of their created events
+ */
 public class ListEventsActivity extends ActionBarActivity {
     public static final int INFO_KEY = 342;
     private static final String TAG = "ListEventsActivity";
@@ -47,8 +50,8 @@ public class ListEventsActivity extends ActionBarActivity {
 
         createEventButton();
         populateEventList();
-        populateEventListView();
         sortEventList();
+        populateEventListView();
         registerClickCallback();
         setCurrentCity();
     }
@@ -97,7 +100,7 @@ public class ListEventsActivity extends ActionBarActivity {
 
     private void sortEventList() {
 
-        if(!events.isEmpty()) {
+        //if(!events.isEmpty()) {
 
             Collections.sort(events, new Comparator<Event>() {
 
@@ -105,31 +108,39 @@ public class ListEventsActivity extends ActionBarActivity {
                 public int compare(Event lhs, Event rhs) {
                     int[] lhsDate = splitString(lhs.getEventDate(), "-");
                     int[] rhsDate = splitString(rhs.getEventDate(), "-");
-                    int valueForSorting = 0;
-
                     int[] lhsStartTime = splitString(lhs.getEventStartTime(), ":");
-                    int[] rhsStartTime = splitString(lhs.getEventStartTime(), ":");
-                    //if the day
-                    Log.i("Sorting Events", "Events");
+                    int[] rhsStartTime = splitString(rhs.getEventStartTime(), ":");
+                    int valueForSorting = 0;
+                    int lhsHour, lhsMinute, rhsHour, rhsMinute;
 
                     Calendar lhsCal = Calendar.getInstance();
-                    lhsCal.set(lhsDate[2], lhsDate[1], lhsDate[0], lhsStartTime[0], lhsStartTime[1]);
-
                     Calendar rhsCal = Calendar.getInstance();
+                    lhsCal.set(lhsDate[2], lhsDate[1], lhsDate[0], lhsStartTime[0], lhsStartTime[1]);
+                    lhsHour = lhsCal.get(Calendar.HOUR);
+                    lhsMinute = lhsCal.get(Calendar.MINUTE);
+
                     rhsCal.set(rhsDate[2], rhsDate[1], rhsDate[0], rhsStartTime[0], lhsStartTime[1]);
+                    rhsHour = rhsCal.get(Calendar.HOUR);
+                    rhsMinute = rhsCal.get(Calendar.MINUTE);
 
                     if (lhsCal.before(rhsCal)) {
                         valueForSorting = -1;
                     } else if (lhsCal.after(rhsCal)) {
                         valueForSorting = 1;
                     } else if (lhsCal.equals(rhsCal)) {
-                        valueForSorting = 0;
+                        if(lhsHour < rhsHour && lhsMinute < rhsMinute) {
+                            valueForSorting = -1;
+                        } else if (lhsHour > rhsHour && lhsMinute > rhsMinute) {
+                            valueForSorting = 1;
+                        } else if (lhsHour == rhsHour && lhsMinute == rhsMinute) {
+                            valueForSorting = 0;
+                        }
                     }
 
                     return valueForSorting;
                 }
             });
-        }
+        //}
     }
 
     private int[] splitString(String characters, String delimiter) {
@@ -220,6 +231,8 @@ public class ListEventsActivity extends ActionBarActivity {
                         data.getDoubleExtra("longitude", Double.NaN)
                 ));
 
+                sortEventList();
+
                 try {
                     fileOutputStream = openFileOutput("eventListData", Context.MODE_PRIVATE);
                     objectWrite = new ObjectOutputStream(fileOutputStream );
@@ -233,7 +246,7 @@ public class ListEventsActivity extends ActionBarActivity {
 
 
                 populateEventListView();
-                sortEventList();
+
             }
         }
     }

@@ -18,6 +18,10 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import ca.sfu.generiglesias.dutchie_meetly.maplogic.GPSTracker;
 import ca.sfu.generiglesias.dutchie_meetly.maplogic.MapActions;
 
+/**
+ * Google Maps is used here for user to see
+ * where the event is located.
+ */
 public class ViewEventMapActivity extends FragmentActivity {
     private final static int DEPTH = 17;
     private final static String TAG = "ViewEventMapActivity";
@@ -38,7 +42,6 @@ public class ViewEventMapActivity extends FragmentActivity {
         setContentView(R.layout.activity_view_event_map);
         setUpMapIfNeeded();
         setupButtons();
-
         this.map.clear();
         this.latitude = getIntent().getDoubleExtra("latitude", Double.NaN);
         this.longitude = getIntent().getDoubleExtra("longitude", Double.NaN);

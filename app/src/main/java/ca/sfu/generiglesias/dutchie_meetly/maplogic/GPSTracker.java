@@ -7,6 +7,9 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.widget.Toast;
 
+/**
+ *  This class tracks user location
+ */
 public class GPSTracker implements LocationListener {
     // 5 min
     private final int MIN_TIME = 5 * 6 * 1000;
