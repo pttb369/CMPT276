@@ -31,6 +31,9 @@ import java.util.Locale;
 
 import ca.sfu.generiglesias.dutchie_meetly.maplogic.GPSTracker;
 
+/**
+ * User can see a list of their created events
+ */
 public class ListEventsActivity extends ActionBarActivity {
     public static final int INFO_KEY = 342;
     private static final String TAG = "ListEventsActivity";
