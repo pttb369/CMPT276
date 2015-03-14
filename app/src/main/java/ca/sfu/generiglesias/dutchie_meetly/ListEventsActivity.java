@@ -7,6 +7,7 @@ import android.location.Geocoder;
 import android.location.Location;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -21,6 +22,10 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
@@ -43,6 +48,7 @@ public class ListEventsActivity extends ActionBarActivity {
         createEventButton();
         populateEventList();
         populateEventListView();
+        sortEventList();
         registerClickCallback();
         setCurrentCity();
     }
@@ -65,7 +71,6 @@ public class ListEventsActivity extends ActionBarActivity {
             fileInputStream = openFileInput("eventListData");
             objectRead = new ObjectInputStream(fileInputStream);
             events = (ArrayList)objectRead.readObject();
-
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {
@@ -90,14 +95,58 @@ public class ListEventsActivity extends ActionBarActivity {
         }*/
     }
 
-    private void sortEventList(List<Event> events) {
+    private void sortEventList() {
 
+        if(!events.isEmpty()) {
+
+            Collections.sort(events, new Comparator<Event>() {
+
+                @Override
+                public int compare(Event lhs, Event rhs) {
+                    int[] lhsDate = splitString(lhs.getEventDate(), "-");
+                    int[] rhsDate = splitString(rhs.getEventDate(), "-");
+                    int valueForSorting = 0;
+
+                    int[] lhsStartTime = splitString(lhs.getEventStartTime(), ":");
+                    int[] rhsStartTime = splitString(lhs.getEventStartTime(), ":");
+                    //if the day
+                    Log.i("Sorting Events", "Events");
+
+                    Calendar lhsCal = Calendar.getInstance();
+                    lhsCal.set(lhsDate[2], lhsDate[1], lhsDate[0], lhsStartTime[0], lhsStartTime[1]);
+
+                    Calendar rhsCal = Calendar.getInstance();
+                    rhsCal.set(rhsDate[2], rhsDate[1], rhsDate[0], rhsStartTime[0], lhsStartTime[1]);
+
+                    if (lhsCal.before(rhsCal)) {
+                        valueForSorting = -1;
+                    } else if (lhsCal.after(rhsCal)) {
+                        valueForSorting = 1;
+                    } else if (lhsCal.equals(rhsCal)) {
+                        valueForSorting = 0;
+                    }
+
+                    return valueForSorting;
+                }
+            });
+        }
+    }
+
+    private int[] splitString(String characters, String delimiter) {
+        String[] splitedChar = characters.split(delimiter);
+        int[] intArray = new int[splitedChar.length];
+        for(int i = 0; i < splitedChar.length; i++) {
+            intArray[i] = Integer.parseInt(splitedChar[i]);
+        }
+
+        return intArray;
     }
 
     private void populateEventListView() {
         ArrayAdapter<Event> adapter = new EventListAdapter(getApplicationContext(), R.layout.event_list_item, events);
         ListView list = (ListView) findViewById(R.id.event_list_view);
         list.setAdapter(adapter);
+
     }
 
     private void registerClickCallback() {
@@ -112,6 +161,7 @@ public class ListEventsActivity extends ActionBarActivity {
                 launchNewActivity.putExtra("Location", clickedEvent.getCityName());
                 launchNewActivity.putExtra("Date", clickedEvent.getEventDate());
                 launchNewActivity.putExtra("Description", clickedEvent.getEventDescription());
+                launchNewActivity.putExtra("Duration", clickedEvent.getEventDuration());
                 launchNewActivity.putExtra("latitude", clickedEvent.getLatitude());
                 launchNewActivity.putExtra("longitude", clickedEvent.getLongitude());
                 launchNewActivity.putExtra("startTime", clickedEvent.getEventStartTime());
@@ -183,6 +233,7 @@ public class ListEventsActivity extends ActionBarActivity {
 
 
                 populateEventListView();
+                sortEventList();
             }
         }
     }
