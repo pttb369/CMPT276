@@ -96,8 +96,7 @@ public class ListEventsActivity extends ActionBarActivity {
 
     private void sortEventList() {
 
-        //if(!events.isEmpty()) {
-
+        if(!events.isEmpty()) {
             Collections.sort(events, new Comparator<Event>() {
 
                 @Override
@@ -136,7 +135,7 @@ public class ListEventsActivity extends ActionBarActivity {
                     return valueForSorting;
                 }
             });
-        //}
+        }
     }
 
     private int[] splitString(String characters, String delimiter) {
