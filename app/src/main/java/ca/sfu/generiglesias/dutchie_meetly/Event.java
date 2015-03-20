@@ -5,7 +5,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
- * Created by David on 2015-03-07.
+ * Represents an event. This will be stored on
+ * the android system and can be accessed publicly.
  */
 public class Event implements Serializable{
     private String eventName;

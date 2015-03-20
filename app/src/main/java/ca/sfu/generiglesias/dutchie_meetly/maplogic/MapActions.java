@@ -5,6 +5,9 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.LatLng;
 
+/**
+ *  All map actions are stored here
+ */
 public class MapActions {
     public static final double SFU_LAT = 49.187559;
     public static final double SFU_LNG = -122.849545;

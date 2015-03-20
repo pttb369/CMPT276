@@ -21,6 +21,10 @@ import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
 
+/**
+ * User can see all the details of the event including
+ * its location on the map
+ */
 public class ViewEventActivity extends ActionBarActivity {
     // Display
     private String eventName;
@@ -28,6 +32,7 @@ public class ViewEventActivity extends ActionBarActivity {
     private String date;
     private String description;
     private String duration;
+
     private String startTime;
     private String endTime;
     // Used for calculation
@@ -114,7 +119,7 @@ public class ViewEventActivity extends ActionBarActivity {
             String eventDateToString = date.toString() + " " + startTime.toString() + ":00";
             eventDate = sdf.parse(eventDateToString);
             calendarEndTime.set(Calendar.HOUR_OF_DAY, Integer.parseInt(endHours));
-            calendarEndTime.set(Calendar.MINUTE,Integer.parseInt(endMinutes));
+            calendarEndTime.set(Calendar.MINUTE, Integer.parseInt(endMinutes));
             eventEndTime = calendarEndTime.getTime();
 
         } catch (ParseException e) {
@@ -130,7 +135,6 @@ public class ViewEventActivity extends ActionBarActivity {
         timeRemaining.setText("Time Until Event: calculating...");
         Animation TitleFade = AnimationUtils.loadAnimation(this, R.anim.fade_in2);
         timeRemaining.startAnimation(TitleFade);
-
 
 
         Runnable runnable = new Runnable() {
@@ -167,16 +171,14 @@ public class ViewEventActivity extends ActionBarActivity {
                             newMinutes = TimeUnit.MILLISECONDS.toMinutes(diff) % 60;
                             newSeconds = TimeUnit.MILLISECONDS.toSeconds(diff) % 60;
 
-                            if(newSeconds < 0) {
-                                if(eventEndTime.before(now)){
+                            if (newSeconds < 0) {
+                                if (eventEndTime.before(now)) {
                                     timeRemaining.setText("Event completed");
-                                }
-                                else{
+                                } else {
                                     timeRemaining.setText("Event started");
                                 }
                                 running = false;
-                            }
-                            else {
+                            } else {
                                 displayTimeLeftUntilEvent(newYears, newMonths, newDays, newHours,
                                         newMinutes, newSeconds, timeRemaining, currentDate);
                             }
@@ -195,25 +197,24 @@ public class ViewEventActivity extends ActionBarActivity {
     private void displayTimeLeftUntilEvent(long newYears, long newMonths, long newDays, long newHours,
                                            long newMinutes, long newSeconds, TextView timeRemaining,
                                            Date date1) {
-            if (newYears > 0) {
-                if (newYears == 1) {
-                    timeRemaining.setText("Time Until Event: " + newYears + " year");
-                } else {
-                    timeRemaining.setText("Time Until Event: " + newYears + " years");
-                }
-            } else if (newMonths > 0 && newYears == 0) {
-                if (newMonths == 1) {
-                    timeRemaining.setText("Time Until Event: " + newMonths + " month ");
-                } else {
-                    timeRemaining.setText("Time Until Event: " + newMonths + " months");
-                }
+        if (newYears > 0) {
+            if (newYears == 1) {
+                timeRemaining.setText("Time Until Event: " + newYears + " year");
             } else {
-                timeRemaining.setText("Time Until Event: " + ": " + newDays + "d " + +newHours +
-                        "h " + newMinutes + "m " + newSeconds + "s");
+                timeRemaining.setText("Time Until Event: " + newYears + " years");
             }
-            date1.setTime(date1.getTime() + 1000L);
+        } else if (newMonths > 0 && newYears == 0) {
+            if (newMonths == 1) {
+                timeRemaining.setText("Time Until Event: " + newMonths + " month ");
+            } else {
+                timeRemaining.setText("Time Until Event: " + newMonths + " months");
+            }
+        } else {
+            timeRemaining.setText("Time Until Event: " + ": " + newDays + "d " + +newHours +
+                    "h " + newMinutes + "m " + newSeconds + "s");
         }
-
+        date1.setTime(date1.getTime() + 1000L);
+    }
 
 
     @Override

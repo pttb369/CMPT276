@@ -27,6 +27,9 @@ import java.util.List;
 import java.util.Locale;
 
 
+/**
+ *  Shows a UI for user to create the event
+ */
 public class CreateEventActivity extends ActionBarActivity {
     public static final int REQUEST_CODE = 666;
 

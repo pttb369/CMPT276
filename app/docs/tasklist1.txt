@@ -1,0 +1,18 @@
+Scrum master: Lance Hannestad
+
+David Li: created EventListAdapter, ListEventsActivity, and Event.
+
+Lance Hannestad: created CreateEventMapActivity, ViewEventMapActivity, GPSTracker, MapActions.
+
+Gener Iglesias: created WelcomeScreenActivity and CreateEventActivity.
+
+Nathan Dhami: created ViewEventActivity.
+
+Tasks: We divided the tasks up into developing the event lister (main page), event viewer the event creator, and the map. These turned into the main activities of our projects.
+
+Event Lister: David
+Event Viewer: Nathan
+Event Creator: Gener
+Map: Lance
+
+Everyone helped each other out on, but these were our main focuses.
