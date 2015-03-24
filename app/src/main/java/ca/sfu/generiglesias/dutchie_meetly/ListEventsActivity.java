@@ -5,8 +5,12 @@ import android.content.Intent;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.style.TypefaceSpan;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -47,11 +51,18 @@ public class ListEventsActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list_events);
 
+        setActionBarName();
         populateEventList();
         sortEventList();
         populateEventListView();
         registerClickCallback();
         setCurrentCity();
+    }
+
+    private void setActionBarName() {
+        ActionBar actionBar = getSupportActionBar();
+        String appName = (String)getResources().getText(R.string.app_name);
+        actionBar.setTitle(appName);
     }
 
     private void createNewEvent(){
