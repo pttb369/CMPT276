@@ -7,11 +7,11 @@ import android.location.Geocoder;
 import android.location.Location;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
-import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -25,7 +25,6 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
@@ -48,7 +47,6 @@ public class ListEventsActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list_events);
 
-        createEventButton();
         populateEventList();
         sortEventList();
         populateEventListView();
@@ -56,15 +54,9 @@ public class ListEventsActivity extends ActionBarActivity {
         setCurrentCity();
     }
 
-    private void createEventButton(){
-        Button CreateEventBtn = (Button) findViewById(R.id.event_create);
-        CreateEventBtn.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View v){
-                startActivityForResult(new Intent(ListEventsActivity.this, CreateEventActivity.class),
-                        INFO_KEY);
-            }
-        });
+    private void createNewEvent(){
+        startActivityForResult(new Intent(ListEventsActivity.this, CreateEventActivity.class),
+                INFO_KEY);
     }
 
     private void populateEventList() {
@@ -99,48 +91,25 @@ public class ListEventsActivity extends ActionBarActivity {
     }
 
     private void sortEventList() {
+        Collections.sort(events, new Comparator<Event>() {
 
-        //if(!events.isEmpty()) {
+            @Override
+            public int compare(Event lhs, Event rhs) {
+                int[] lhsDate = splitString(lhs.getEventDate(), "-");
+                int[] rhsDate = splitString(rhs.getEventDate(), "-");
+                int[] lhsStartTime = splitString(lhs.getEventStartTime(), ":");
+                int[] rhsStartTime = splitString(rhs.getEventStartTime(), ":");
 
-            Collections.sort(events, new Comparator<Event>() {
 
-                @Override
-                public int compare(Event lhs, Event rhs) {
-                    int[] lhsDate = splitString(lhs.getEventDate(), "-");
-                    int[] rhsDate = splitString(rhs.getEventDate(), "-");
-                    int[] lhsStartTime = splitString(lhs.getEventStartTime(), ":");
-                    int[] rhsStartTime = splitString(rhs.getEventStartTime(), ":");
-                    int valueForSorting = 0;
-                    int lhsHour, lhsMinute, rhsHour, rhsMinute;
+                Calendar lhsCal = Calendar.getInstance();
+                Calendar rhsCal = Calendar.getInstance();
+                lhsCal.set(lhsDate[2], lhsDate[1], lhsDate[0], lhsStartTime[0], lhsStartTime[1]);
 
-                    Calendar lhsCal = Calendar.getInstance();
-                    Calendar rhsCal = Calendar.getInstance();
-                    lhsCal.set(lhsDate[2], lhsDate[1], lhsDate[0], lhsStartTime[0], lhsStartTime[1]);
-                    lhsHour = lhsCal.get(Calendar.HOUR);
-                    lhsMinute = lhsCal.get(Calendar.MINUTE);
+                rhsCal.set(rhsDate[2], rhsDate[1], rhsDate[0], rhsStartTime[0], lhsStartTime[1]);
 
-                    rhsCal.set(rhsDate[2], rhsDate[1], rhsDate[0], rhsStartTime[0], lhsStartTime[1]);
-                    rhsHour = rhsCal.get(Calendar.HOUR);
-                    rhsMinute = rhsCal.get(Calendar.MINUTE);
-
-                    if (lhsCal.before(rhsCal)) {
-                        valueForSorting = -1;
-                    } else if (lhsCal.after(rhsCal)) {
-                        valueForSorting = 1;
-                    } else if (lhsCal.equals(rhsCal)) {
-                        if(lhsHour < rhsHour && lhsMinute < rhsMinute) {
-                            valueForSorting = -1;
-                        } else if (lhsHour > rhsHour && lhsMinute > rhsMinute) {
-                            valueForSorting = 1;
-                        } else if (lhsHour == rhsHour && lhsMinute == rhsMinute) {
-                            valueForSorting = 0;
-                        }
-                    }
-
-                    return valueForSorting;
-                }
-            });
-        //}
+                return lhsCal.compareTo(rhsCal);
+            }
+        });
     }
 
     private int[] splitString(String characters, String delimiter) {
@@ -249,5 +218,27 @@ public class ListEventsActivity extends ActionBarActivity {
 
             }
         }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_list_events, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.new_event) {
+            createNewEvent();
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 }
