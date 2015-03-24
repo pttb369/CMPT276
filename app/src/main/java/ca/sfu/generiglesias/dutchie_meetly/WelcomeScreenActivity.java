@@ -13,9 +13,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 /**
- * Created by Gener on 2015-03-07.
+ * Meetly launch screen
  */
-
 public class WelcomeScreenActivity extends ActionBarActivity {
 
     @Override

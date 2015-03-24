@@ -1,0 +1,11 @@
+1. What did we observe during the iteration? What was noteworthy?
+
+Not everyone was able to meet up during this iteration. Dealing with merge conflicts in general.
+
+2. What suggestions do we have for next time? How can we be a smarter,happier, more productive team?
+
+We should have prototyped communication between activities. For the next iteration we will prototype the uncertain features, and we will also meet up during breaks to work on the assignment together.
+
+3.What did we do well that we want to keep doing?
+
+Continue communication well and keep in contact of what were doing. Coding as a group also benefitted because we could get suggestions on the spot.

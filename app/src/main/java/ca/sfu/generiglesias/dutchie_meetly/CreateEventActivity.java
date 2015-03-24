@@ -27,6 +27,9 @@ import java.util.List;
 import java.util.Locale;
 
 
+/**
+ *  Shows a UI for user to create the event
+ */
 public class CreateEventActivity extends ActionBarActivity {
     public static final int REQUEST_CODE = 666;
 
@@ -35,8 +38,9 @@ public class CreateEventActivity extends ActionBarActivity {
     private TimePickerDialog startTimePickerDialog, endTimePickerDialog;
     private EditText eventTitle, eventDescription, eventLocation, eventDuration, eventDate, eventStartTime, eventEndTime;
     private int startHour, startMinute, endHour, endMinute;
-    private Calendar duration;
+    private Calendar duration, StartTime, EndTime;
     private double lat, lng;
+    private int month, day, years;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +48,8 @@ public class CreateEventActivity extends ActionBarActivity {
         setContentView(R.layout.activity_create_event);
 
         dateFormatter = new SimpleDateFormat("dd-MM-yyyy", Locale.CANADA);
+        StartTime = Calendar.getInstance();
+        EndTime = Calendar.getInstance();
 
         getViewItemsById();
         setDate();
@@ -140,6 +146,11 @@ public class CreateEventActivity extends ActionBarActivity {
                 String endTime = eventEndTime.getText().toString();
                 String durationTime = eventDuration.getText().toString();
 
+                StartTime.set(years, month, day, startHour, startMinute);
+                EndTime.set(years, month, day, endHour, endMinute);
+
+                System.out.println(month);
+
                 boolean validDetails = (!currentEventName.isEmpty()
                         && !cityName.isEmpty()
                         && !currentEventDescription.isEmpty()
@@ -197,6 +208,9 @@ public class CreateEventActivity extends ActionBarActivity {
         datePickerDialog = new DatePickerDialog(this,
                 new android.app.DatePickerDialog.OnDateSetListener() {
                     public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                        day = dayOfMonth;
+                        month = monthOfYear + 1;
+                        years = year;
                         Calendar newDate = Calendar.getInstance();
                         newDate.set(year, monthOfYear, dayOfMonth);
                         eventDate.setText(dateFormatter.format(newDate.getTime()));
@@ -221,7 +235,6 @@ public class CreateEventActivity extends ActionBarActivity {
                         String endTime = eventEndTime.getText().toString();
                         startHour = hourOfDay;
                         startMinute = minute;
-
 
                         if(!startTime.isEmpty() && !endTime.isEmpty()) {
                             setupDuration();

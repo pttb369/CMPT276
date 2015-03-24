@@ -30,6 +30,9 @@ import java.util.Locale;
 
 import ca.sfu.generiglesias.dutchie_meetly.maplogic.GPSTracker;
 
+/**
+ * User can see a list of their created events
+ */
 public class ListEventsActivity extends ActionBarActivity {
     public static final int INFO_KEY = 342;
     private static final String TAG = "ListEventsActivity";
@@ -58,6 +61,7 @@ public class ListEventsActivity extends ActionBarActivity {
 
     private void populateEventList() {
 
+        //http://www.eracer.de/2012/07/09/android-objectinputstream-and-objectoutputstream-snippet/
         try {
             fileInputStream = openFileInput("eventListData");
             objectRead = new ObjectInputStream(fileInputStream);
