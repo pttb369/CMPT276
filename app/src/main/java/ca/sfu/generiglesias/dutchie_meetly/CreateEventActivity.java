@@ -1,13 +1,10 @@
 package ca.sfu.generiglesias.dutchie_meetly;
 
-import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.location.Address;
 import android.location.Geocoder;
-import android.os.Build;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.text.InputType;
@@ -21,7 +18,6 @@ import android.widget.Toast;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
@@ -30,7 +26,7 @@ import java.util.Locale;
 /**
  *  Shows a UI for user to create the event
  */
-public class CreateEventActivity extends ActionBarActivity {
+public abstract class CreateEventActivity extends ActionBarActivity implements MeetlyServer{
     public static final int REQUEST_CODE = 666;
 
     private SimpleDateFormat dateFormatter;
@@ -41,6 +37,7 @@ public class CreateEventActivity extends ActionBarActivity {
     private Calendar duration, StartTime, EndTime;
     private double lat, lng;
     private int month, day, years;
+    MeetlyServer server;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -171,7 +168,11 @@ public class CreateEventActivity extends ActionBarActivity {
                     returnIntent.putExtra("latitude", lat);
                     returnIntent.putExtra("longitude", lng);
                     setResult(RESULT_OK, returnIntent);
-
+                    try {
+                        server.publishEvent("Test", 0, currentEventName, StartTime, EndTime, lat, lng);
+                    } catch (FailedPublicationException e) {
+                        e.printStackTrace();
+                    }
                     finish();
                 } else {
                     Toast.makeText(getApplicationContext(), "Not all details set", Toast.LENGTH_SHORT)
