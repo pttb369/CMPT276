@@ -11,18 +11,11 @@
         android:layout_height="wrap_content"
         android:id="@+id/event_menu_bar">
 
-            <Button
-                android:id="@+id/event_create"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/event_button_create"/>
-
             <TextView
                 android:id="@+id/currentLocation"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
-                android:layout_alignBottom="@+id/event_create"
                 android:textAppearance="@style/TextAppearance.Medium"/>
 
     </RelativeLayout>
