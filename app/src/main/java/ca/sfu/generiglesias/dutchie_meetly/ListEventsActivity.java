@@ -248,8 +248,15 @@ public class ListEventsActivity extends ActionBarActivity {
         if (id == R.id.new_event) {
             createNewEvent();
             return true;
+        } else if (id == R.id.login_event)
+        {
+            startActivityForResult(new Intent(ListEventsActivity.this, LoginActivity.class),
+                    INFO_KEY);
+            return true;
         }
 
         return super.onOptionsItemSelected(item);
     }
+
+
 }
