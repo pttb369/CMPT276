@@ -174,7 +174,7 @@ public class CreateEventActivity extends ActionBarActivity implements MeetlyServ
                     }
                     finish();
                 } else {
-                    Toast.makeText(getApplicationContext(), "Not all details set", Toast.LENGTH_SHORT)
+                    Toast.makeText(getApplicationContext(), R.string.check_details, Toast.LENGTH_SHORT)
                             .show();
                 }
             }

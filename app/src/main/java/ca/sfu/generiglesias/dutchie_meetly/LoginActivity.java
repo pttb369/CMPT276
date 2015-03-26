@@ -98,7 +98,7 @@ public class LoginActivity extends Activity implements MeetlyServer{
         if (cancel || loginFlag == 1) {
             // There was an error; don't attempt login and focus the first
             // form field with an error.
-            Toast toast = Toast.makeText(getApplicationContext(), "INVALID username or password",
+            Toast toast = Toast.makeText(getApplicationContext(), R.string.error_invalid_username_password,
                     Toast.LENGTH_LONG);
             toast.show();
         } else {
