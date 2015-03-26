@@ -50,6 +50,10 @@ public class ViewEventActivity extends ActionBarActivity {
         calculateTimeLeftUntilEvent();
 
         setupButtons();
+//
+//        Log.i("LATLNG", "WHYY IS THIS NOT WORKING?!?!");
+//        Log.i("LATLNG", "" + getIntent().getDoubleExtra("latitude", -12324));
+//        Log.i("LATLNG", "" + getIntent().getDoubleExtra("longitude", -12324));
     }
 
     private void setupButtons() {
@@ -218,6 +222,20 @@ public class ViewEventActivity extends ActionBarActivity {
     }
 
 
+    public void editEvent() {
+        startActivity(new Intent(ViewEventActivity.this, EditEventActivity.class));
+
+        Intent intent = new Intent(this, EditEventActivity.class);
+        intent.putExtra("event_name", eventName);
+        intent.putExtra("event_date", date);
+        intent.putExtra("event_location", location);
+        intent.putExtra("event_description", description);
+        intent.putExtra("event_start_time", startTime);
+        intent.putExtra("event_duration", duration);
+        intent.putExtra("event_end_time", endTime);
+        startActivity(intent);
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -233,7 +251,8 @@ public class ViewEventActivity extends ActionBarActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.edit_event) {
+            editEvent();
             return true;
         }
 
