@@ -2,6 +2,7 @@ package ca.sfu.generiglesias.dutchie_meetly;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
@@ -57,6 +58,17 @@ public class ListEventsActivity extends ActionBarActivity {
         populateEventListView();
         registerClickCallback();
         setCurrentCity();
+        setCurrentUsername();
+    }
+
+    private void setCurrentUsername() {
+        SharedPreferences getUsernamePref = getSharedPreferences("UserName", MODE_PRIVATE);
+        String userName = getUsernamePref.getString("getUsername", "");
+
+        System.out.println(userName);
+
+        TextView currentUsername = (TextView) findViewById(R.id.usernameView);
+        currentUsername.setText(userName);
     }
 
     private void setActionBarName() {
@@ -224,9 +236,7 @@ public class ListEventsActivity extends ActionBarActivity {
                     e.printStackTrace();
                 }
 
-
                 populateEventListView();
-
             }
         }
     }
