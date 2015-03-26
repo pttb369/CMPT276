@@ -36,4 +36,8 @@
     <string name="title_activity_test">test</string>
     <string name="hello_world">Hello world!</string>
     <string name="check_details">Not all details set</string>
+    <string name="wifi">Wifi p2p settings</string>
+    <string name="title_activity_edit_event">EditEventActivity</string>
+    <string name="edit_event_title">Edit Event</string>
+    <string name="unknown_location">Unknown Location</string>
 </resources>
