@@ -37,7 +37,6 @@ public class CreateEventActivity extends ActionBarActivity implements MeetlyServ
     private Calendar duration, StartTime, EndTime;
     private double lat, lng;
     private int month, day, years;
-    MeetlyServer server;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -169,7 +168,7 @@ public class CreateEventActivity extends ActionBarActivity implements MeetlyServ
                     returnIntent.putExtra("longitude", lng);
                     setResult(RESULT_OK, returnIntent);
                     try {
-                        server.publishEvent("Test", 0, currentEventName, StartTime, EndTime, lat, lng);
+                        publishEvent("Test", 0, currentEventName, StartTime, EndTime, lat, lng);
                     } catch (FailedPublicationException e) {
                         e.printStackTrace();
                     }

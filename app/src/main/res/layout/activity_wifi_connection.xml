@@ -19,7 +19,7 @@
         android:layout_height="wrap_content"
         android:text="connect"
         android:id="@+id/button_wifi_connect"
-        android:layout_below="@+id/textView"
+        android:layout_below="@+id/usernameView"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="29dp" />
 
