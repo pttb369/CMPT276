@@ -26,7 +26,7 @@ import java.util.Locale;
 /**
  *  Shows a UI for user to create the event
  */
-public abstract class CreateEventActivity extends ActionBarActivity implements MeetlyServer{
+public class CreateEventActivity extends ActionBarActivity implements MeetlyServer{
     public static final int REQUEST_CODE = 666;
 
     private SimpleDateFormat dateFormatter;
@@ -306,5 +306,20 @@ public abstract class CreateEventActivity extends ActionBarActivity implements M
                     duration.get(Calendar.MINUTE) + " Minutes");
             Log.i("Event Duration", eventDuration.getText().toString());
         }
+    }
+
+    @Override
+    public int login(String username, String password) throws FailedLoginException {
+        return 0;
+    }
+
+    @Override
+    public int publishEvent(String username, int userToken, String title, Calendar startTime, Calendar endTime, double latitude, double longitude) throws FailedPublicationException {
+        return 0;
+    }
+
+    @Override
+    public void modifyEvent(int eventID, int userToken, String title, Calendar startTime, Calendar endTime, double latitude, double longitude) throws FailedPublicationException {
+
     }
 }

@@ -9,4 +9,9 @@
         android:orderInCategory="100"
         app:showAsAction="ifRoom"/>
 
+    <item android:id="@+id/login_event"
+        android:title="@string/login_title"
+        android:orderInCategory="100"
+        app:showAsAction="ifRoom"/>
+
 </menu>
