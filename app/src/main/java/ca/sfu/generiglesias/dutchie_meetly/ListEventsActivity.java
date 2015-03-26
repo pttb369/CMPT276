@@ -1,6 +1,8 @@
 package ca.sfu.generiglesias.dutchie_meetly;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.location.Address;
@@ -9,9 +11,6 @@ import android.location.Location;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
-import android.text.Spannable;
-import android.text.SpannableString;
-import android.text.style.TypefaceSpan;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -19,7 +18,6 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
-
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -46,6 +44,10 @@ public class ListEventsActivity extends ActionBarActivity {
     private ObjectOutputStream objectWrite;
     private ObjectInputStream objectRead;
     private List<Event> events = new ArrayList<Event>();
+    public static TextView currentUsername;
+    private Menu menu;
+    private String userN, userName;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,12 +65,12 @@ public class ListEventsActivity extends ActionBarActivity {
 
     private void setCurrentUsername() {
         SharedPreferences getUsernamePref = getSharedPreferences("UserName", MODE_PRIVATE);
-        String userName = getUsernamePref.getString("getUsername", "");
+        userName = getUsernamePref.getString("getUsername", "");
 
-        System.out.println(userName);
+        currentUsername = (TextView) findViewById(R.id.usernameView);
+        currentUsername.setText("User: " + userName);
 
-        TextView currentUsername = (TextView) findViewById(R.id.usernameView);
-        currentUsername.setText(userName);
+        userN = userName;
     }
 
     private void setActionBarName() {
@@ -238,6 +240,12 @@ public class ListEventsActivity extends ActionBarActivity {
 
                 populateEventListView();
             }
+
+            if (resultCode == 1)
+            {
+                setCurrentUsername();
+                invalidateOptionsMenu();
+            }
         }
     }
 
@@ -263,10 +271,60 @@ public class ListEventsActivity extends ActionBarActivity {
             startActivityForResult(new Intent(ListEventsActivity.this, LoginActivity.class),
                     INFO_KEY);
             return true;
+        } else if (id == R.id.logout_event)
+        {
+            AlertDialog.Builder builder1 = new AlertDialog.Builder(this);
+            builder1.setMessage("Are you sure you want to Logout?.");
+            builder1.setCancelable(true);
+            builder1.setPositiveButton("No",
+                    new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            dialog.cancel();
+                        }
+                    });
+            builder1.setNegativeButton("Yes",
+                    new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            SharedPreferences UserNamePref = getSharedPreferences("UserName", MODE_PRIVATE);
+                            SharedPreferences.Editor editor = UserNamePref.edit();
+                            editor.putString("getUsername", "");
+                            editor.commit();
+                            userName = "";
+                            currentUsername.setText("User: " + userName);
+                            userN = userName;
+                            invalidateOptionsMenu();
+                            dialog.cancel();
+                        }
+                    });
+
+            AlertDialog alert11 = builder1.create();
+            alert11.show();
+
+            return true;
         }
 
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu)
+    {
+
+        MenuItem login = menu.findItem(R.id.login_event);
+        MenuItem logout = menu.findItem(R.id.logout_event);
+
+        if(userN.isEmpty())
+        {
+            logout.setVisible(false);
+            login.setVisible(true);
+
+        }else
+        {
+            login.setVisible(false);
+            logout.setVisible(true);
+        }
+
+        return true;
+    }
 
 }
