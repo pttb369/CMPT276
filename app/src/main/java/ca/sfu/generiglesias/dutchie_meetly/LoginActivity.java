@@ -1,22 +1,14 @@
 package ca.sfu.generiglesias.dutchie_meetly;
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
-import android.annotation.TargetApi;
 import android.app.Activity;
+import android.content.Intent;
 import android.content.SharedPreferences;
-import android.os.AsyncTask;
-
-import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.Calendar;
@@ -75,31 +67,28 @@ public class LoginActivity extends Activity implements MeetlyServer{
         String username = mUsernameView.getText().toString();
         String password = mPasswordView.getText().toString();
 
-        View focusView = null;
         cancel = false;
 
 
         // Check for a valid password, if the user entered one.
         if (!TextUtils.isEmpty(password) && !isPasswordValid(password)) {
             mPasswordView.setError(getString(R.string.error_invalid_password));
-            focusView = mPasswordView;
             cancel = true;
         }
 
         // Check for a valid email address.
         if (TextUtils.isEmpty(username)) {
             mUsernameView.setError(getString(R.string.error_field_required));
-            focusView = mUsernameView;
             cancel = true;
         }
 
         // Check if password field is empty
         if (TextUtils.isEmpty(password)) {
             mPasswordView.setError(getString(R.string.error_empty_password));
-            focusView = mUsernameView;
             cancel = true;
         }
 
+        // Uses the login function from the interface class
         try {
             loginFlag = login(username, password);
         } catch (FailedLoginException e) {
@@ -115,6 +104,9 @@ public class LoginActivity extends Activity implements MeetlyServer{
         } else {
             editor.putString("getUsername", username);
             editor.commit();
+            ListEventsActivity.currentUsername.setText(username);
+            Intent in = new Intent();
+            setResult(1, in);
             finish();
         }
     }
@@ -130,12 +122,14 @@ public class LoginActivity extends Activity implements MeetlyServer{
     }
 
     @Override
-    public int publishEvent(String username, int userToken, String title, Calendar startTime, Calendar endTime, double latitude, double longitude) throws FailedPublicationException {
+    public int publishEvent(String username, int userToken, String title, Calendar startTime,
+        Calendar endTime, double latitude, double longitude) throws FailedPublicationException {
         return 0;
     }
 
     @Override
-    public void modifyEvent(int eventID, int userToken, String title, Calendar startTime, Calendar endTime, double latitude, double longitude) throws FailedPublicationException {
+    public void modifyEvent(int eventID, int userToken, String title, Calendar startTime,
+        Calendar endTime, double latitude, double longitude) throws FailedPublicationException {
 
     }
 }
