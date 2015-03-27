@@ -252,6 +252,9 @@ public class ViewEventActivity extends ActionBarActivity {
         if (id == R.id.edit_event) {
             editEvent();
             return true;
+        } else if (id == R.id.share_event)
+        {
+            return true;
         }
 
         return super.onOptionsItemSelected(item);

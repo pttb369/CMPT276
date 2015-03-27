@@ -49,4 +49,5 @@
     <string name="yes_title">Yes</string>
     <string name="no_title">No</string>
     <string name="error_duration">Start time cannot occur after end time. Choose a new time.</string>
+    <string name="share_title">Share</string>
 </resources>
