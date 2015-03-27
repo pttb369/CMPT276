@@ -11,6 +11,7 @@ import android.text.InputType;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TimePicker;
@@ -44,17 +45,34 @@ public class EditEventActivity extends ActionBarActivity {
     private final int MINUTE_INDEX = 1;
     private final int MINUTES_IN_HOUR = 60;
 
+    private DBAdapter myDb;
+
     public static final int REQUEST_CODE = 666;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_event);
+        openDB();
 
         setupEditableFields();
         setCurrentEventValues();
 
         setupListeners();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        closeDB();
+    }
+
+    private void openDB() {
+        myDb = new DBAdapter(this);
+        myDb.open();
+    }
+    private void closeDB() {
+        myDb.close();
     }
 
     public void setupEditableFields() {
@@ -88,7 +106,7 @@ public class EditEventActivity extends ActionBarActivity {
         eventDescription.setText(getIntent().getStringExtra("event_description"));
         eventStartTime.setText(getIntent().getStringExtra("event_start_time"));
         eventEndTime.setText(getIntent().getStringExtra("event_end_time"));
-        //eventDuration.setText(getIntent().getStringExtra("event_duration"));
+        eventDuration.setText(getIntent().getStringExtra("event_duration"));
     }
 
     private void setupListeners() {
@@ -115,10 +133,6 @@ public class EditEventActivity extends ActionBarActivity {
             public void onClick(View v) {
                 setNewTime(eventStartTime);
                 timePickerDialog.show();
-//                int[] time = splitString(eventStartTime.getText().toString(), DELIMITER);
-//                startHour = time[0];
-//                startMinute = time[1];
-                //checkEventTimeInput();
             }
         });
     }
@@ -129,10 +143,6 @@ public class EditEventActivity extends ActionBarActivity {
             public void onClick(View v) {
                 setNewTime(eventEndTime);
                 timePickerDialog.show();
-//                int[] time = splitString(eventEndTime.getText().toString(), DELIMITER);
-//                endHour = time[0];
-//                endMinute = time[1];
-                //checkEventTimeInput();
             }
         });
     }
@@ -181,12 +191,10 @@ public class EditEventActivity extends ActionBarActivity {
         int minutes = TimeCalendar.get(Calendar.MINUTE);
 
         timePickerDialog = new TimePickerDialog(this,
-                            eventSetTimeListener(eventTime),
-                            hours,
-                            minutes,
-                            true);
-
-
+                                    eventSetTimeListener(eventTime),
+                                    hours,
+                                    minutes,
+                                    true);
     }
 
     private TimePickerDialog.OnTimeSetListener eventSetTimeListener(final EditText eventTime) {
@@ -199,53 +207,6 @@ public class EditEventActivity extends ActionBarActivity {
             }
         };
     }
-
-//    private void setStartTime(){
-//        Calendar TimeCalendar = Calendar.getInstance();
-//        int hour = TimeCalendar.get(Calendar.HOUR_OF_DAY);
-//        int minutes = TimeCalendar.get(Calendar.MINUTE);
-//
-//        startTimePickerDialog = new TimePickerDialog(this,
-//                new TimePickerDialog.OnTimeSetListener() {
-//
-//                    public void onTimeSet(TimePicker view, int hourOfDay,int minute) {
-//                        String output = String.format("%02d:%02d", hourOfDay, minute);
-//                        eventStartTime.setText(output);
-//
-//                        String startTime = eventStartTime.getText().toString();
-//                        String endTime = eventEndTime.getText().toString();
-//                        startHour = hourOfDay;
-//                        startMinute = minute;
-//
-//                        if(!startTime.isEmpty() && !endTime.isEmpty()) {
-//                            setupDuration();
-//                        }
-//                    }
-//
-//                }, hour, minutes, true);
-//    }
-//
-//    private void setEndTime(){
-//        Calendar TimeCalendar = Calendar.getInstance();
-//        int hour = TimeCalendar.get(Calendar.HOUR_OF_DAY);
-//        int minutes = TimeCalendar.get(Calendar.MINUTE);
-//
-//        endTimePickerDialog = new TimePickerDialog(this,
-//                new TimePickerDialog.OnTimeSetListener() {
-//                    public void onTimeSet(TimePicker view, int hourOfDay,int minute) {
-//                        String output = String.format("%02d:%02d", hourOfDay, minute);
-//                        eventEndTime.setText(output);
-//                        String startTime = eventStartTime.getText().toString();
-//                        String endTime = eventEndTime.getText().toString();
-//                        endHour = hourOfDay;
-//                        endMinute = minute;
-//
-//                        if(!startTime.isEmpty()&& !endTime.isEmpty()) {
-//                            setupDuration();
-//                        }
-//                    }
-//                }, hour, minutes, true);
-//    }
 
     private void checkEventTimeInput() {
         String startTime = eventStartTime.getText().toString();
@@ -315,6 +276,78 @@ public class EditEventActivity extends ActionBarActivity {
         }
 
         return eventLocation;
+    }
+
+    private void setupEditEventButton() {
+        Button editEventButton = (Button) findViewById(R.id.editEventButton);
+        editEventButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                String currentEventName = eventTitle.getText().toString();
+                String currentEventDate = eventDate.getText().toString();
+                String cityName = eventLocation.getText().toString();
+                String currentEventDescription = eventDescription.getText().toString();
+                String startTime = eventStartTime.getText().toString();
+                String endTime = eventEndTime.getText().toString();
+                String durationTime = eventDuration.getText().toString();
+
+//                int[] splitStartTime = splitString(eventStartTime.getText().toString(), DELIMITER);
+//                int startHour = splitStartTime[HOUR_INDEX];
+//                int startMinute = splitStartTime[MINUTE_INDEX];
+//
+//                int[] splitEndTime = splitString(eventEndTime.getText().toString(), DELIMITER);
+//                int endHour = splitEndTime[HOUR_INDEX];
+//                int endMinute = splitEndTime[MINUTE_INDEX];
+//
+//                Calendar calStartTime = set(years, month, day, startHour, startMinute);
+//                EndTime.set(years, month, day, endHour, endMinute);
+
+                System.out.println(month);
+
+                boolean validDetails = (!currentEventName.isEmpty()
+                        && !cityName.isEmpty()
+                        && !currentEventDescription.isEmpty()
+                        && !currentEventDate.isEmpty()
+                        && !startTime.isEmpty()
+                        && !endTime.isEmpty())
+                        && !durationTime.isEmpty();
+
+                if (validDetails) {
+                    Intent returnIntent = new Intent();
+                    returnIntent.putExtra("name", currentEventName);
+                    returnIntent.putExtra("date", currentEventDate);
+                    returnIntent.putExtra("cityName", cityName);
+                    returnIntent.putExtra("description", currentEventDescription);
+                    returnIntent.putExtra("startTime", startTime);
+                    returnIntent.putExtra("duration", durationTime);
+                    returnIntent.putExtra("endTime", endTime);
+                    returnIntent.putExtra("latitude", lat);
+                    returnIntent.putExtra("longitude", lng);
+                    setResult(RESULT_OK, returnIntent);
+
+                    myDb.insertRow(currentEventName,
+                            currentEventDate,
+                            cityName,
+                            currentEventDescription,
+                            startTime,
+                            endTime,
+                            durationTime,
+                            lat,
+                            lng);
+
+//                    try {
+//                        publishEvent("Test", 0, currentEventName, StartTime, EndTime, lat, lng);
+//                    } catch (MeetlyServer.FailedPublicationException e) {
+//                        e.printStackTrace();
+//                    }
+                    finish();
+                } else {
+                    Toast.makeText(getApplicationContext(), R.string.check_details, Toast.LENGTH_SHORT)
+                            .show();
+                }
+            }
+        });
     }
 
     @Override

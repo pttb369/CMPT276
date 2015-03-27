@@ -11,6 +11,7 @@ import android.location.Location;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -193,6 +194,7 @@ public class ListEventsActivity extends ActionBarActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View viewClicked,
                                     int position, long id) {
+
                 Event clickedEvent = events.get(position);
                 Intent launchNewActivity = new Intent(getApplicationContext(), ViewEventActivity.class);
                 long k = clickedEvent.getEventId();
@@ -239,6 +241,7 @@ public class ListEventsActivity extends ActionBarActivity {
             if (resultCode == RESULT_OK) {
 
                 this.events.add(new Event(
+                        data.getLongExtra("eventId", 0),
                         data.getStringExtra("name"),
                         data.getStringExtra("date"),
                         data.getStringExtra("cityName"),
