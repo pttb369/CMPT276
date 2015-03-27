@@ -174,7 +174,20 @@ public class CreateEventActivity extends ActionBarActivity implements MeetlyServ
                         && !durationTime.isEmpty();
 
                 if (validDetails) {
+
+                    final long insertedId = myDb.insertRow(
+                            currentEventName,
+                            currentEventDate,
+                            cityName,
+                            currentEventDescription,
+                            startTime,
+                            endTime,
+                            durationTime,
+                            lat,
+                            lng);
+
                     Intent returnIntent = new Intent();
+                    returnIntent.putExtra("eventId", insertedId);
                     returnIntent.putExtra("name", currentEventName);
                     returnIntent.putExtra("date", currentEventDate);
                     returnIntent.putExtra("cityName", cityName);
@@ -186,15 +199,7 @@ public class CreateEventActivity extends ActionBarActivity implements MeetlyServ
                     returnIntent.putExtra("longitude", lng);
                     setResult(RESULT_OK, returnIntent);
 
-                    myDb.insertRow(currentEventName,
-                            currentEventDate,
-                            cityName,
-                            currentEventDescription,
-                            startTime,
-                            endTime,
-                            durationTime,
-                            lat,
-                            lng);
+
 
                     try {
                         publishEvent("Test", 0, currentEventName, StartTime, EndTime, lat, lng);

@@ -145,10 +145,10 @@
             android:enabled="false"/>
 
         <Button
-            android:id="@+id/createEventButton"
+            android:id="@+id/editEventButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/event_button_create"
+            android:text="@string/edit_event_title"
             android:layout_below="@id/showDuration"
             android:layout_centerHorizontal="true" />
 
