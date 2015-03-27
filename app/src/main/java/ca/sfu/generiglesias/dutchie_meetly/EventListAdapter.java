@@ -50,6 +50,10 @@ public class EventListAdapter extends ArrayAdapter<Event> {
         date.setText(currentEvent.getEventDate());
         date.setTextColor(Color.BLACK);
 
+        TextView sharedStatus = (TextView) itemView.findViewById(R.id.event_sharedstatus);
+        sharedStatus.setText(currentEvent.getSharedFlag());
+        sharedStatus.setTextColor(Color.BLACK);
+
 
         return itemView;
         //return super.getView(position, convertView, parent);

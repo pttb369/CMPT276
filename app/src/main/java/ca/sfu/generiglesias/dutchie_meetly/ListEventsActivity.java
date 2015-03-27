@@ -132,6 +132,7 @@ public class ListEventsActivity extends ActionBarActivity {
                 int iconId = R.drawable.communityimage;
                 double latitude = cursor.getDouble(DBAdapter.COL_LATITUDE);
                 double longitude = cursor.getDouble(DBAdapter.COL_LONGITUDE);
+                String sharedFlag = cursor.getString(DBAdapter.COL_SHAREDFLAG);
 
                 events.add(new Event
                             (eventId,
@@ -144,7 +145,8 @@ public class ListEventsActivity extends ActionBarActivity {
                             eventDuration,
                             iconId,
                             latitude,
-                            longitude));
+                            longitude,
+                            sharedFlag));
             } while(cursor.moveToNext());
         }
         cursor.close();
@@ -246,9 +248,10 @@ public class ListEventsActivity extends ActionBarActivity {
                         data.getStringExtra("startTime"),
                         data.getStringExtra("endTime"),
                         data.getStringExtra("duration"),
-                        R.drawable.ic_launcher,
+                        R.drawable.communityimage,
                         data.getDoubleExtra("latitude", Double.NaN),
-                        data.getDoubleExtra("longitude", Double.NaN)
+                        data.getDoubleExtra("longitude", Double.NaN),
+                        data.getStringExtra("sharedFlag")
                 ));
 
 //                try {

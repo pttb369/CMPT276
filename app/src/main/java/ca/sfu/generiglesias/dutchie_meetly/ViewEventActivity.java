@@ -1,10 +1,13 @@
 package ca.sfu.generiglesias.dutchie_meetly;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.net.wifi.p2p.WifiP2pConfig;
 import android.net.wifi.p2p.WifiP2pDevice;
 import android.net.wifi.p2p.WifiP2pDeviceList;
 import android.net.wifi.p2p.WifiP2pManager;
@@ -63,7 +66,8 @@ public class ViewEventActivity extends ActionBarActivity {
     private WifiP2pManager.PeerListListener peerListListener;
     private boolean isWifiP2pEnabled = false;
     private WifiP2pDevice device;
-
+    WifiP2pConfig config;
+    private String userName;
     private DBAdapter myDb;
 
     @Override
@@ -395,6 +399,38 @@ public class ViewEventActivity extends ActionBarActivity {
         {
             setupDiscoverPeersListener();
             setupPeerListListener();
+
+            SharedPreferences getUsernamePref = getSharedPreferences("UserName", MODE_PRIVATE);
+            userName = getUsernamePref.getString("getUsername", "");
+
+            if(!userName.isEmpty())
+            {
+                Toast.makeText(getApplicationContext(), "'Planned' event shared",
+                        Toast.LENGTH_SHORT).show();
+
+                //Since we don't have a live server
+                /********************************************
+                 *                                          *
+                 *                                          *
+                 *                                          *
+                 *                                          *
+                 *                                          *
+                 *                                          *
+                 *           put server logic here          *
+                 *                                          *
+                 *                                          *
+                 *                                          *
+                 *                                          *
+                 *                                          *
+                 *                                          *
+                 ********************************************/
+
+            } else{
+                Toast.makeText(getApplicationContext(), "'Spontaneous' event shared",
+                        Toast.LENGTH_SHORT).show();
+
+                //Put wifi/bluetooth logic here
+            }
 
             return true;
         }

@@ -53,8 +53,13 @@ public class EditEventActivity extends ActionBarActivity {
 
         setupEditableFields();
         setCurrentEventValues();
-
         setupListeners();
+        setupEditEventButton();
+    }
+
+    private void setupEditEventButton() {
+
+        finish();
     }
 
     public void setupEditableFields() {

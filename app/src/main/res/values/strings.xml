@@ -50,4 +50,5 @@
     <string name="no_title">No</string>
     <string name="error_duration">Start time cannot occur after end time. Choose a new time.</string>
     <string name="share_title">Share</string>
+    <string name="shared_status_title">Shared status</string>
 </resources>
