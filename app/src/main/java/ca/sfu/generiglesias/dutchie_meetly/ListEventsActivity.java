@@ -1,7 +1,6 @@
 package ca.sfu.generiglesias.dutchie_meetly;
 
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -20,7 +19,6 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -197,15 +195,7 @@ public class ListEventsActivity extends ActionBarActivity {
                                     int position, long id) {
                 Event clickedEvent = events.get(position);
                 Intent launchNewActivity = new Intent(getApplicationContext(), ViewEventActivity.class);
-                launchNewActivity.putExtra("EventName", clickedEvent.getEventName());
-                launchNewActivity.putExtra("Location", clickedEvent.getCityName());
-                launchNewActivity.putExtra("Date", clickedEvent.getEventDate());
-                launchNewActivity.putExtra("Description", clickedEvent.getEventDescription());
-                launchNewActivity.putExtra("Duration", clickedEvent.getEventDuration());
-                launchNewActivity.putExtra("latitude", clickedEvent.getLatitude());
-                launchNewActivity.putExtra("longitude", clickedEvent.getLongitude());
-                launchNewActivity.putExtra("startTime", clickedEvent.getEventStartTime());
-                launchNewActivity.putExtra("endTime", clickedEvent.getEventEndTime());
+                launchNewActivity.putExtra("event_id", clickedEvent.getEventId());
                 startActivity(launchNewActivity);
             }
         });
@@ -247,21 +237,18 @@ public class ListEventsActivity extends ActionBarActivity {
         if (requestCode == INFO_KEY) {
             if (resultCode == RESULT_OK) {
 
-//                this.events.add(new Event(
-//                        data.getStringExtra("name"),
-//                        data.getStringExtra("date"),
-//                        data.getStringExtra("cityName"),
-//                        data.getStringExtra("description"),
-//                        data.getStringExtra("startTime"),
-//                        data.getStringExtra("endTime"),
-//                        data.getStringExtra("duration"),
-//                        R.drawable.ic_launcher,
-//                        data.getDoubleExtra("latitude", Double.NaN),
-//                        data.getDoubleExtra("longitude", Double.NaN)
-//                ));
-                openDB();
-                populateEventList();
-                sortEventList();
+                this.events.add(new Event(
+                        data.getStringExtra("name"),
+                        data.getStringExtra("date"),
+                        data.getStringExtra("cityName"),
+                        data.getStringExtra("description"),
+                        data.getStringExtra("startTime"),
+                        data.getStringExtra("endTime"),
+                        data.getStringExtra("duration"),
+                        R.drawable.ic_launcher,
+                        data.getDoubleExtra("latitude", Double.NaN),
+                        data.getDoubleExtra("longitude", Double.NaN)
+                ));
 
 //                try {
 //                    fileOutputStream = openFileOutput("eventListData", Context.MODE_PRIVATE);
@@ -274,6 +261,7 @@ public class ListEventsActivity extends ActionBarActivity {
 //                    e.printStackTrace();
 //                }
 
+                sortEventList();
                 populateEventListView();
             }
 
