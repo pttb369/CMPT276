@@ -11,6 +11,7 @@ import android.location.Location;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -60,7 +61,6 @@ public class ListEventsActivity extends ActionBarActivity {
         populateEventList();
         sortEventList();
         populateEventListView();
-        registerClickCallback();
         setCurrentCity();
         setCurrentUsername();
     }
@@ -103,7 +103,7 @@ public class ListEventsActivity extends ActionBarActivity {
     }
 
     private void populateEventList() {
-        getAllEvents();
+        getAllEventsFromDatabase();
         //http://www.eracer.de/2012/07/09/android-objectinputstream-and-objectoutputstream-snippet/
 //        try {
 //            fileInputStream = openFileInput("eventListData");
@@ -115,7 +115,7 @@ public class ListEventsActivity extends ActionBarActivity {
 //        }
     }
 
-    private void getAllEvents() {
+    private void getAllEventsFromDatabase() {
         Cursor cursor = myDb.getAllRows(); //function to retrieve all values from a table- written in MyDb.java file
 
         if (cursor.moveToFirst()) {
@@ -187,6 +187,7 @@ public class ListEventsActivity extends ActionBarActivity {
         ListView list = (ListView) findViewById(R.id.event_list_view);
         list.setAdapter(adapter);
 
+        registerClickCallback();
     }
 
     private void registerClickCallback() {
@@ -195,6 +196,7 @@ public class ListEventsActivity extends ActionBarActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View viewClicked,
                                     int position, long id) {
+
                 Event clickedEvent = events.get(position);
                 Intent launchNewActivity = new Intent(getApplicationContext(), ViewEventActivity.class);
                 long k = clickedEvent.getEventId();
@@ -241,6 +243,7 @@ public class ListEventsActivity extends ActionBarActivity {
             if (resultCode == RESULT_OK) {
 
                 this.events.add(new Event(
+                        data.getLongExtra("eventId", 0),
                         data.getStringExtra("name"),
                         data.getStringExtra("date"),
                         data.getStringExtra("cityName"),
@@ -253,17 +256,6 @@ public class ListEventsActivity extends ActionBarActivity {
                         data.getDoubleExtra("longitude", Double.NaN),
                         data.getStringExtra("sharedFlag")
                 ));
-
-//                try {
-//                    fileOutputStream = openFileOutput("eventListData", Context.MODE_PRIVATE);
-//                    objectWrite = new ObjectOutputStream(fileOutputStream );
-//                    objectWrite.writeObject(events);
-//                    objectWrite.close();
-//                } catch (FileNotFoundException e) {
-//                    e.printStackTrace();
-//                }catch (IOException e) {
-//                    e.printStackTrace();
-//                }
 
                 sortEventList();
                 populateEventListView();
