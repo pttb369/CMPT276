@@ -71,11 +71,11 @@ public class ListEventsActivity extends ActionBarActivity {
         closeDB();
     }
 
+
     private void openDB() {
         myDb = new DBAdapter(getApplicationContext());
         myDb.open();
     }
-
     private void closeDB() {
         myDb.close();
     }
