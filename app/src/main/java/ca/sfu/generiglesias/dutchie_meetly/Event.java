@@ -7,7 +7,7 @@ import java.io.Serializable;
  * the android system and can be accessed publicly.
  */
 public class Event implements Serializable{
-    private int eventId;
+    private long eventId;
     private String eventName;
     private String eventDate;
     private String cityName;
@@ -43,7 +43,7 @@ public class Event implements Serializable{
         this.latitude = latitude;
     }
 
-    public Event(int eventId,
+    public Event(long eventId,
                  String eventName,
                  String eventDate,
                  String eventLocation,
@@ -65,6 +65,10 @@ public class Event implements Serializable{
             latitude,
             longitude);
         this.eventId = eventId;
+    }
+
+    public long getEventId() {
+        return eventId;
     }
 
     public void setLatitude(double latitude) {
