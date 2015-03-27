@@ -1,5 +1,6 @@
 package ca.sfu.generiglesias.dutchie_meetly;
 
+import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.content.IntentFilter;
