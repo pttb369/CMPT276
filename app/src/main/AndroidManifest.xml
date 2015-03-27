@@ -89,14 +89,14 @@
                 android:value="ca.sfu.generiglesias.dutchie_meetly.CreateEventActivity" />
         </activity>
 
-        <activity
-            android:name=".WifiDirectConnectionActivity"
-            android:label="Wifi">
-        <intent-filter>
-            <action android:name="android.intent.action.MAIN" />
-            <category android:name="android.intent.category.LAUNCHER" />
-        </intent-filter>
-        </activity>
+        <!--<activity-->
+            <!--android:name=".WifiDirectConnectionActivity"-->
+            <!--android:label="Wifi">-->
+        <!--<intent-filter>-->
+            <!--<action android:name="android.intent.action.MAIN" />-->
+            <!--<category android:name="android.intent.category.LAUNCHER" />-->
+        <!--</intent-filter>-->
+        <!--</activity>-->
 
     </application>
 

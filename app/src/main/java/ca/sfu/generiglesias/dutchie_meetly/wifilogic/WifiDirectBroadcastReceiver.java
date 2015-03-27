@@ -5,7 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.wifi.p2p.WifiP2pManager;
 
-import ca.sfu.generiglesias.dutchie_meetly.WifiDirectConnectionActivity;
+import ca.sfu.generiglesias.dutchie_meetly.ViewEventActivity;
 
 /**
  * Created by Nate on 26/03/2015.
@@ -14,11 +14,11 @@ public class WifiDirectBroadcastReceiver extends BroadcastReceiver {
 
     private WifiP2pManager wifiManager;
     private WifiP2pManager.Channel channel;
-    private WifiDirectConnectionActivity wifiActivity;
+    private ViewEventActivity wifiActivity;
     private WifiP2pManager.PeerListListener peerList;
 
     public WifiDirectBroadcastReceiver(WifiP2pManager wifiManager, WifiP2pManager.Channel channel,
-                                        WifiDirectConnectionActivity wifiActivity) {
+                                       ViewEventActivity wifiActivity) {
 
         this.wifiManager = wifiManager;
         this.channel = channel;
