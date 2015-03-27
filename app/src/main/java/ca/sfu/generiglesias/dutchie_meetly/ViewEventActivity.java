@@ -1,10 +1,8 @@
 package ca.sfu.generiglesias.dutchie_meetly;
 
-import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.content.IntentFilter;
-import android.content.SharedPreferences;
 import android.net.wifi.p2p.WifiP2pDevice;
 import android.net.wifi.p2p.WifiP2pDeviceList;
 import android.net.wifi.p2p.WifiP2pManager;
@@ -106,7 +104,7 @@ public class ViewEventActivity extends ActionBarActivity {
     @Override
     protected void onPause() {
         super.onPause();
-        unregisterReceiver(receiver);
+        //unregisterReceiver(receiver);
     }
 
 
