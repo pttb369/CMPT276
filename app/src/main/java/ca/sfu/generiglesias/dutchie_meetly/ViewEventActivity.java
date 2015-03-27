@@ -1,7 +1,12 @@
 package ca.sfu.generiglesias.dutchie_meetly;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.net.wifi.p2p.WifiP2pDevice;
+import android.net.wifi.p2p.WifiP2pDeviceList;
+import android.net.wifi.p2p.WifiP2pManager;
 import android.os.Handler;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
@@ -13,13 +18,18 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.TimeUnit;
+
+import ca.sfu.generiglesias.dutchie_meetly.wifilogic.WifiDirectBroadcastReceiver;
 
 
 /**
@@ -41,6 +51,16 @@ public class ViewEventActivity extends ActionBarActivity {
     private Date eventDate = new Date();
     private Handler handler;
     private boolean running = true;
+    // Wifi tools
+    private TextView serverMessage;
+    private WifiP2pManager wifiManager;
+    private WifiP2pManager.Channel channel;
+    private WifiDirectBroadcastReceiver receiver;
+    private IntentFilter filter;
+    private List<WifiP2pDevice> peers = new ArrayList();
+    private WifiP2pManager.PeerListListener peerListListener;
+    private boolean isWifiP2pEnabled = false;
+    private WifiP2pDevice device;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,12 +68,95 @@ public class ViewEventActivity extends ActionBarActivity {
         setContentView(R.layout.activity_view_event);
         extractAndInsertEventDetails();
         calculateTimeLeftUntilEvent();
-
         setupButtons();
+
+        // wifi initialization
+        wifiManager = (WifiP2pManager) getSystemService(Context.WIFI_P2P_SERVICE);
+        channel = wifiManager.initialize(this, getMainLooper(), null);
+        receiver = new WifiDirectBroadcastReceiver(wifiManager, channel, this);
+        initializeIntentFilter();
+//        setupDiscoverPeersListener();
+        setupPeerListListener();
 //
 //        Log.i("LATLNG", "WHYY IS THIS NOT WORKING?!?!");
 //        Log.i("LATLNG", "" + getIntent().getDoubleExtra("latitude", -12324));
 //        Log.i("LATLNG", "" + getIntent().getDoubleExtra("longitude", -12324));
+    }
+
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        registerReceiver(receiver, filter);
+    }
+
+    /* unregister the broadcast receiver */
+    @Override
+    protected void onPause() {
+        super.onPause();
+        unregisterReceiver(receiver);
+    }
+
+
+    private void initializeIntentFilter(){
+        filter = new IntentFilter();
+        filter.addAction(WifiP2pManager.WIFI_P2P_STATE_CHANGED_ACTION);
+        filter.addAction(WifiP2pManager.WIFI_P2P_PEERS_CHANGED_ACTION);
+        filter.addAction(WifiP2pManager.WIFI_P2P_CONNECTION_CHANGED_ACTION);
+        filter.addAction(WifiP2pManager.WIFI_P2P_THIS_DEVICE_CHANGED_ACTION);
+    }
+
+    public void displayAllPeers(){
+        for(int i =0; i < peers.size();i++){
+            Log.i("ViewEvent",peers.get(i).deviceName);
+        }
+    }
+
+
+
+    public void setWifiP2pStatus(boolean isWifiP2pEnabled){
+        this.isWifiP2pEnabled = isWifiP2pEnabled;
+    }
+
+
+    public void setupDiscoverPeersListener(){
+        wifiManager.discoverPeers(channel, new WifiP2pManager.ActionListener() {
+            @Override
+            public void onSuccess() {
+                Toast.makeText(getApplicationContext(), "Peers Discovered", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onFailure(int reasonCode) {
+                Toast.makeText(getApplicationContext(),"Cannot discover",Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    public void setupPeerListListener() {
+
+        peerListListener = new WifiP2pManager.PeerListListener() {
+            @Override
+            public void onPeersAvailable(WifiP2pDeviceList peerList) {
+
+
+                // Out with the old, in with the new.
+                peers.clear();
+                peers.addAll(peerList.getDeviceList());
+
+                // If an AdapterView is backed by this data, notify it
+                // of the change.  For instance, if you have a ListView of available
+                // peers, trigger an update.
+                if (peers.size() == 0) {
+                    Toast.makeText(getApplicationContext(), "No devices found", Toast.LENGTH_LONG);
+                    return;
+                }
+                else{
+                    displayAllPeers();
+                }
+
+            }
+        };
     }
 
     private void setupButtons() {
@@ -251,6 +354,12 @@ public class ViewEventActivity extends ActionBarActivity {
         //noinspection SimplifiableIfStatement
         if (id == R.id.edit_event) {
             editEvent();
+            return true;
+        } else if (id == R.id.share_event)
+        {
+            setupDiscoverPeersListener();
+            setupPeerListListener();
+
             return true;
         }
 

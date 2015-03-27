@@ -11,7 +11,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/textView_server_message"
         android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true" />
+        android:layout_alignParentStart="true" />
 
     <Button
         style="?android:attr/buttonStyleSmall"
@@ -35,11 +35,11 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceSmall"
-        android:text="Enabled: "
+        android:text="New Text"
         android:id="@+id/textView"
-        android:layout_marginTop="26dp"
-        android:layout_below="@+id/button_wifi_discover"
-        android:layout_alignParentStart="true" />
+        android:layout_below="@+id/button_wifi_connect"
+        android:layout_centerHorizontal="true" />
+
+
 
 </RelativeLayout>

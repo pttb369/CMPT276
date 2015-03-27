@@ -1,14 +1,13 @@
 package ca.sfu.generiglesias.dutchie_meetly;
 
 import java.io.Serializable;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 /**
  * Represents an event. This will be stored on
  * the android system and can be accessed publicly.
  */
 public class Event implements Serializable{
+    private int eventId;
     private String eventName;
     private String eventDate;
     private String cityName;
@@ -42,6 +41,30 @@ public class Event implements Serializable{
         this.eventIconId = eventIconId;
         this.longitude = longitude;
         this.latitude = latitude;
+    }
+
+    public Event(int eventId,
+                 String eventName,
+                 String eventDate,
+                 String eventLocation,
+                 String eventDescription,
+                 String eventStartTime,
+                 String eventEndTime,
+                 String eventDuration,
+                 int eventIconId,
+                 double latitude,
+                 double longitude) {
+        this(eventName,
+            eventDate,
+            eventLocation,
+            eventDescription,
+            eventStartTime,
+            eventEndTime,
+            eventDuration,
+            eventIconId,
+            latitude,
+            longitude);
+        this.eventId = eventId;
     }
 
     public void setLatitude(double latitude) {
