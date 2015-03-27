@@ -36,6 +36,16 @@
     <string name="title_activity_test">test</string>
     <string name="hello_world">Hello world!</string>
     <string name="check_details">Tous les détails fixent pas</string>
+    <string name="event_status_completed">événement terminé</string>
+    <string name="event_status_started">événement a commencé</string>
+    <string name="event_time_until">Durée Jusqu\'à l\'événement: le calcul ... "</string>
+    <string name="user_title">Utilisateur: </string>
+    <string name="unknown_location_title">Lieu inconnu</string>
+    <string name="logout_prompt_title">Êtes-vous sûr de vouloir déconnecter?</string>
+    <string name="yes_title">Oui</string>
+    <string name="no_title">Non</string>
+    <string name="error_duration">Lancer temps ne peut pas se produire après l\'heure de fin.
+        Choisissez une nouvelle fois.</string>
 
     <!-- Strings related to login -->
     <string name="prompt_username">Nom d\'utilisateur</string>

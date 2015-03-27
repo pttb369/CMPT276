@@ -291,8 +291,7 @@ public class CreateEventActivity extends ActionBarActivity implements MeetlyServ
         {
             eventStartTime.setText("");
             eventDuration.setText("");
-            Toast.makeText(getApplicationContext(), "Start time cannot occur after end time. Choose" +
-                            " a new time.",
+            Toast.makeText(getApplicationContext(), getResources().getString(R.string.error_duration),
                     Toast.LENGTH_SHORT).show();
         }else {
             duration.set(Calendar.HOUR_OF_DAY, endHour);
