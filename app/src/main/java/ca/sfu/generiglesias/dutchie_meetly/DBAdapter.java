@@ -33,6 +33,8 @@ public class DBAdapter {
     public static final String KEY_EVENTDURATION = "duration";
     public static final String KEY_LATITUDE = "latitude";
     public static final String KEY_LONGITUDE = "longitude";
+    // shared flag
+    public static final String KEY_SHAREDFLAG = "sharedFlag";
 
     //Table column indexes
     public static final int COL_EVENTNAME = 1;
@@ -44,6 +46,7 @@ public class DBAdapter {
     public static final int COL_EVENTDURATION = 7;
     public static final int COL_LATITUDE = 8;
     public static final int COL_LONGITUDE = 9;
+    public static final int COL_SHAREDFLAG = 10;
 
 
     //LOGIN
@@ -65,7 +68,8 @@ public class DBAdapter {
             KEY_EVENTENDTIME,
             KEY_EVENTDURATION,
             KEY_LATITUDE,
-            KEY_LONGITUDE
+            KEY_LONGITUDE,
+            KEY_SHAREDFLAG
     };
 
     public static final String DATABASE_NAME = "MyDb";
@@ -94,6 +98,9 @@ public class DBAdapter {
                     + KEY_EVENTSTARTTIME + " text not null,"
                     + KEY_EVENTENDTIME + " text not null,"
                     + KEY_EVENTDURATION + " text not null,"
+                    + KEY_LATITUDE + " float not null,"
+                    + KEY_LONGITUDE + " float not null,"
+                    + KEY_SHAREDFLAG + " text not null"
                     + KEY_LATITUDE + " real not null,"
                     + KEY_LONGITUDE + " real not null"
                     + ");";
@@ -133,7 +140,8 @@ public class DBAdapter {
                           String event_end_time,
                           String event_duration,
                           double latitude,
-                          double longitude) {
+                          double longitude,
+                          String sharedFlag) {
 
         ContentValues initialValues = new ContentValues();
         initialValues.put(KEY_EVENTNAME, event_name);
@@ -145,6 +153,7 @@ public class DBAdapter {
         initialValues.put(KEY_EVENTDURATION, event_duration);
         initialValues.put(KEY_LATITUDE, latitude);
         initialValues.put(KEY_LONGITUDE, longitude);
+        initialValues.put(KEY_SHAREDFLAG, sharedFlag);
 
         // Insert it into the database.
         return db.insert(DATABASE_TABLE, null, initialValues);
@@ -199,7 +208,8 @@ public class DBAdapter {
                              String event_end_time,
                              String event_duration,
                              double latitude,
-                             double longitude){
+                             double longitude,
+                             String sharedFlag){
         String where = KEY_ROWID + "=" + rowId;
 
         ContentValues newValues = new ContentValues();
@@ -212,6 +222,7 @@ public class DBAdapter {
         newValues.put(KEY_EVENTDURATION, event_duration);
         newValues.put(KEY_LATITUDE, latitude);
         newValues.put(KEY_LONGITUDE, longitude);
+        newValues.put(KEY_SHAREDFLAG, sharedFlag);
 
         // Insert it into the database.
         return db.update(DATABASE_TABLE, newValues, where, null) != 0;

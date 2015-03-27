@@ -57,8 +57,8 @@ public class EditEventActivity extends ActionBarActivity {
 
         setupEditableFields();
         setCurrentEventValues();
-
         setupListeners();
+        setupEditEventButton();
     }
 
     @Override
@@ -324,6 +324,7 @@ public class EditEventActivity extends ActionBarActivity {
                     returnIntent.putExtra("endTime", endTime);
                     returnIntent.putExtra("latitude", lat);
                     returnIntent.putExtra("longitude", lng);
+                    returnIntent.putExtra("sharedFlag", "Unshared");
                     setResult(RESULT_OK, returnIntent);
 
                     myDb.insertRow(currentEventName,
@@ -334,7 +335,8 @@ public class EditEventActivity extends ActionBarActivity {
                             endTime,
                             durationTime,
                             lat,
-                            lng);
+                            lng,
+                            "Unshared");
 
 //                    try {
 //                        publishEvent("Test", 0, currentEventName, StartTime, EndTime, lat, lng);

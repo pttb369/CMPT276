@@ -40,4 +40,12 @@
         android:layout_alignParentBottom="true"
         android:layout_alignEnd="@+id/event_date" />
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/shared_status_title"
+        android:id="@+id/event_sharedstatus"
+        android:layout_alignBottom="@+id/event_icon"
+        android:layout_alignStart="@+id/event_name" />
+
 </RelativeLayout>
