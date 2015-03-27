@@ -195,7 +195,8 @@ public class ListEventsActivity extends ActionBarActivity {
                                     int position, long id) {
                 Event clickedEvent = events.get(position);
                 Intent launchNewActivity = new Intent(getApplicationContext(), ViewEventActivity.class);
-                launchNewActivity.putExtra("event_id", clickedEvent.getEventId());
+                long k = clickedEvent.getEventId();
+                launchNewActivity.putExtra("event_id", k);
                 startActivity(launchNewActivity);
             }
         });

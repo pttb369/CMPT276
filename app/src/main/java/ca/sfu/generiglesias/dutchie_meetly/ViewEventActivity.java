@@ -76,10 +76,8 @@ public class ViewEventActivity extends ActionBarActivity {
         calculateTimeLeftUntilEvent();
 
         setupButtons();
-//
-//        Log.i("LATLNG", "WHYY IS THIS NOT WORKING?!?!");
-//        Log.i("LATLNG", "" + getIntent().getDoubleExtra("latitude", -12324));
-//        Log.i("LATLNG", "" + getIntent().getDoubleExtra("longitude", -12324));
+
+        initializeIntentFilter();
     }
 
     @Override
