@@ -259,6 +259,7 @@ public class ListEventsActivity extends ActionBarActivity {
 //                        data.getDoubleExtra("latitude", Double.NaN),
 //                        data.getDoubleExtra("longitude", Double.NaN)
 //                ));
+                openDB();
                 populateEventList();
                 sortEventList();
 

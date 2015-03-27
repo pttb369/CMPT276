@@ -106,9 +106,9 @@ public class ViewEventActivity extends ActionBarActivity {
         filter.addAction(WifiP2pManager.WIFI_P2P_THIS_DEVICE_CHANGED_ACTION);
     }
 
-    public void checkAllPeers(){
+    public void displayAllPeers(){
         for(int i =0; i < peers.size();i++){
-            System.out.println("Peer " + (i+1) + peers.get(i).deviceName);
+            Log.i("ViewEvent",peers.get(i).deviceName);
         }
     }
 
@@ -150,6 +150,9 @@ public class ViewEventActivity extends ActionBarActivity {
                 if (peers.size() == 0) {
                     Toast.makeText(getApplicationContext(), "No devices found", Toast.LENGTH_LONG);
                     return;
+                }
+                else{
+                    displayAllPeers();
                 }
 
             }
@@ -356,7 +359,7 @@ public class ViewEventActivity extends ActionBarActivity {
         {
             setupDiscoverPeersListener();
             setupPeerListListener();
-            checkAllPeers();
+
             return true;
         }
 
