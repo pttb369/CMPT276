@@ -223,7 +223,7 @@ public class ViewEventActivity extends ActionBarActivity {
 
 
     public void editEvent() {
-        startActivity(new Intent(ViewEventActivity.this, EditEventActivity.class));
+        //startActivity(new Intent(ViewEventActivity.this, EditEventActivity.class));
 
         Intent intent = new Intent(this, EditEventActivity.class);
         intent.putExtra("event_name", eventName);
