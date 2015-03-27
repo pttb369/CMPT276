@@ -69,6 +69,7 @@ public class ViewEventActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_event);
+
         openDB();
 
 
@@ -390,8 +391,7 @@ public class ViewEventActivity extends ActionBarActivity {
         if (id == R.id.edit_event) {
             editEvent();
             return true;
-        } else if (id == R.id.share_event)
-        {
+        } else if (id == R.id.share_event) {
             setupDiscoverPeersListener();
             setupPeerListListener();
 
