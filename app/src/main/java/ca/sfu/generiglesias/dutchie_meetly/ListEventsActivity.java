@@ -218,7 +218,7 @@ public class ListEventsActivity extends ActionBarActivity {
 
     //http://stackoverflow.com/questions/20325427/get-current-location-city-name-android
     private String getCurrentCity() {
-        String cityName = getResources().getString(R.string.unknown_location);
+        String cityName = getResources().getString(R.string.unknown_location_title);
 
         Geocoder gcd = new Geocoder(getApplicationContext(), Locale.getDefault());
         GPSTracker gpsTracker = new GPSTracker(getApplicationContext());
