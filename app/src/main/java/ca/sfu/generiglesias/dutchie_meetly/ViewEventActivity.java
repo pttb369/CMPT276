@@ -72,11 +72,16 @@ public class ViewEventActivity extends ActionBarActivity {
         setContentView(R.layout.activity_view_event);
         openDB();
 
+
         extractAndInsertEventDetails();
         calculateTimeLeftUntilEvent();
 
         setupButtons();
 
+        // wifi setup
+        wifiManager = (WifiP2pManager) getSystemService(Context.WIFI_P2P_SERVICE);
+        channel = wifiManager.initialize(this, getMainLooper(), null);
+        receiver = new WifiDirectBroadcastReceiver(wifiManager, channel, this);
         initializeIntentFilter();
     }
 
