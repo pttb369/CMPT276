@@ -38,10 +38,14 @@ public class CreateEventActivity extends ActionBarActivity implements MeetlyServ
     private double lat, lng;
     private int month, day, years;
 
+    private DBAdapter myDb;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_event);
+
+        openDB();
 
         dateFormatter = new SimpleDateFormat("dd-MM-yyyy", Locale.CANADA);
         StartTime = Calendar.getInstance();
@@ -54,6 +58,20 @@ public class CreateEventActivity extends ActionBarActivity implements MeetlyServ
 
         setupButtons();
 
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        closeDB();
+    }
+
+    private void openDB() {
+        myDb = new DBAdapter(this);
+        myDb.open();
+    }
+    private void closeDB() {
+        myDb.close();
     }
 
     private void getViewItemsById() {
@@ -167,6 +185,17 @@ public class CreateEventActivity extends ActionBarActivity implements MeetlyServ
                     returnIntent.putExtra("latitude", lat);
                     returnIntent.putExtra("longitude", lng);
                     setResult(RESULT_OK, returnIntent);
+
+                    myDb.insertRow(currentEventName,
+                            currentEventDate,
+                            cityName,
+                            currentEventDescription,
+                            startTime,
+                            endTime,
+                            durationTime,
+                            lat,
+                            lng);
+
                     try {
                         publishEvent("Test", 0, currentEventName, StartTime, EndTime, lat, lng);
                     } catch (FailedPublicationException e) {

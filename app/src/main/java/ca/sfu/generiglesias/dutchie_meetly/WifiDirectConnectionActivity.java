@@ -2,6 +2,7 @@
 //
 //import android.content.Context;
 //import android.content.IntentFilter;
+//import android.net.wifi.p2p.WifiP2pDevice;
 //import android.net.wifi.p2p.WifiP2pDeviceList;
 //import android.net.wifi.p2p.WifiP2pManager;
 //import android.support.v7.app.ActionBarActivity;
@@ -9,7 +10,6 @@
 //import android.view.Menu;
 //import android.view.MenuItem;
 //import android.view.View;
-//import android.view.Window;
 //import android.widget.Button;
 //import android.widget.TextView;
 //import android.widget.Toast;
@@ -17,7 +17,6 @@
 //import java.util.ArrayList;
 //import java.util.List;
 //
-//import ca.sfu.generiglesias.dutchie_meetly.R;
 //import ca.sfu.generiglesias.dutchie_meetly.wifilogic.WifiDirectBroadcastReceiver;
 //
 //
@@ -28,8 +27,10 @@
 //    private WifiP2pManager.Channel channel;
 //    private WifiDirectBroadcastReceiver receiver;
 //    private IntentFilter filter;
-//    private List peers = new ArrayList();
+//    private List<WifiP2pDevice> peers = new ArrayList();
 //    private WifiP2pManager.PeerListListener peerListListener;
+//    private boolean isWifiP2pEnabled = false;
+//    private WifiP2pDevice device;
 //
 //    @Override
 //    protected void onCreate(Bundle savedInstanceState) {
@@ -39,14 +40,14 @@
 //        channel = wifiManager.initialize(this, getMainLooper(), null);
 //        receiver = new WifiDirectBroadcastReceiver(wifiManager, channel, this);
 //        initializeIntentFilter();
-//
+//        setupDiscoverPeersListener();
+//        setupPeerListListener();
 //    }
 //
 //    /* register the broadcast receiver with the intent values to be matched */
 //    @Override
 //    protected void onResume() {
 //        super.onResume();
-//        setupWifiActionListener();
 //        registerReceiver(receiver, filter);
 //    }
 //
@@ -66,7 +67,13 @@
 //        filter.addAction(WifiP2pManager.WIFI_P2P_THIS_DEVICE_CHANGED_ACTION);
 //    }
 //
-//    public void setupWifiActionListener(){
+//    public void checkAllPeers(){
+//        for(int i =0; i < peers.size();i++){
+//            System.out.println("Peer " + (i+1) + peers.get(i).deviceName);
+//        }
+//    }
+//
+//    public void setupDiscoverPeersListener(){
 //
 //        Button discoverPeersButton = (Button) findViewById(R.id.button_wifi_discover);
 //
@@ -74,9 +81,25 @@
 //            @Override
 //            public void onClick(View v) {
 //                discoverPeersListener();
+//
+//                TextView wifiStatus = (TextView) findViewById(R.id.textView_server_message);
+//
+//                checkAllPeers();
+//
+//                if(isWifiP2pEnabled == true)
+//                    wifiStatus.setText("Wifi Enabled");
+//
+//                else
+//                    wifiStatus.setText("Wifi Disabled");
 //            }
 //        });
 //
+//    }
+//
+//
+//
+//    public void setWifiP2pStatus(boolean isWifiP2pEnabled){
+//        this.isWifiP2pEnabled = isWifiP2pEnabled;
 //    }
 //
 //
@@ -84,38 +107,38 @@
 //        wifiManager.discoverPeers(channel, new WifiP2pManager.ActionListener() {
 //            @Override
 //            public void onSuccess() {
-//                Toast.makeText(getBaseContext(),"Peers Discovered",Toast.LENGTH_LONG);
+//                Toast.makeText(getBaseContext(),"Peers Discovered", Toast.LENGTH_SHORT).show();
 //            }
 //
 //            @Override
 //            public void onFailure(int reasonCode) {
-//                Toast.makeText(getApplicationContext(),"Cannot discover",Toast.LENGTH_LONG);
+//                Toast.makeText(getApplicationContext(),"Cannot discover",Toast.LENGTH_SHORT).show();
 //            }
 //        });
 //    }
 //
-////    public void peerListListener(){
-////
-////        peerListListener = new WifiP2pManager.PeerListListener() {
-////            @Override
-////            public void onPeersAvailable(WifiP2pDeviceList peerList) {
-////
-////                // Out with the old, in with the new.
-////                peers.clear();
-////                peers.addAll(peerList.getDeviceList());
-////
-////                // If an AdapterView is backed by this data, notify it
-////                // of the change.  For instance, if you have a ListView of available
-////                // peers, trigger an update.
-////                ((WiFiPeerListAdapter) getListAdapter()).notifyDataSetChanged();
-////                if (peers.size() == 0) {
-////                    Toast.makeText(getApplicationContext(),"No devices found",Toast.LENGTH_LONG);
-////                    return;
-////                }
-////
-////            }
-////        };
-////    }
+//    public void setupPeerListListener(){
+//
+//        peerListListener = new WifiP2pManager.PeerListListener() {
+//            @Override
+//            public void onPeersAvailable(WifiP2pDeviceList peerList) {
+//
+//
+//                // Out with the old, in with the new.
+//                peers.clear();
+//                peers.addAll(peerList.getDeviceList());
+//
+//                // If an AdapterView is backed by this data, notify it
+//                // of the change.  For instance, if you have a ListView of available
+//                // peers, trigger an update.
+//                if (peers.size() == 0) {
+//                    Toast.makeText(getApplicationContext(),"No devices found",Toast.LENGTH_LONG);
+//                    return;
+//                }
+//
+//            }
+//        };
+//    }
 //
 //
 //
