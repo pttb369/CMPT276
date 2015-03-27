@@ -173,9 +173,9 @@ public class CreateEventActivity extends ActionBarActivity implements MeetlyServ
                         && !endTime.isEmpty())
                         && !durationTime.isEmpty();
 
-
                 if (validDetails) {
-                    myDb.insertRow(currentEventName,
+                    final long insertedId = myDb.insertRow(
+                            currentEventName,
                             currentEventDate,
                             cityName,
                             currentEventDescription,
@@ -187,6 +187,7 @@ public class CreateEventActivity extends ActionBarActivity implements MeetlyServ
                             "Unshared");
 
                     Intent returnIntent = new Intent();
+                    returnIntent.putExtra("eventId", insertedId);
                     returnIntent.putExtra("name", currentEventName);
                     returnIntent.putExtra("date", currentEventDate);
                     returnIntent.putExtra("cityName", cityName);

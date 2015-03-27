@@ -1,6 +1,5 @@
 package ca.sfu.generiglesias.dutchie_meetly;
 
-import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -115,7 +114,7 @@ public class ViewEventActivity extends ActionBarActivity {
     @Override
     protected void onPause() {
         super.onPause();
-        unregisterReceiver(receiver);
+        //unregisterReceiver(receiver);
     }
 
 

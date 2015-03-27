@@ -31,7 +31,6 @@ public class DBAdapter {
     public static final String KEY_EVENTSTARTTIME = "start_time";
     public static final String KEY_EVENTENDTIME = "end_time";
     public static final String KEY_EVENTDURATION = "duration";
-//    public static final String KEY_EVENTICONID = "icon_id";
     public static final String KEY_LATITUDE = "latitude";
     public static final String KEY_LONGITUDE = "longitude";
     // shared flag
@@ -45,10 +44,19 @@ public class DBAdapter {
     public static final int COL_EVENTSTARTTIME = 5;
     public static final int COL_EVENTENDTIME = 6;
     public static final int COL_EVENTDURATION = 7;
-//    public static final int COL_EVENTICONID = 8;
     public static final int COL_LATITUDE = 8;
     public static final int COL_LONGITUDE = 9;
     public static final int COL_SHAREDFLAG = 10;
+
+
+    //LOGIN
+    public static final String KEY_LOGIN_ID = "login_id";
+    public static final String KEY_LOGIN_USERNAME = "username";
+    public static final String KEY_LOGIN_PASSWORD = "password";
+
+    public static final int COL_LOGIN_ID = 0;
+    public static final int COL_LOGIN_USERNAME = 1;
+    public static final int COL_LOGIN_PASSWORD = 2;
 
     public static final String[] ALL_KEYS = new String[] {
             KEY_ROWID,
@@ -66,10 +74,20 @@ public class DBAdapter {
 
     public static final String DATABASE_NAME = "MyDb";
     public static final String DATABASE_TABLE = "events";
+    public static final String LOGIN_TABLE = "login";
     // Track DB version if a new version of your app changes the format.
     public static final int DATABASE_VERSION = 2;
 
     private static final String DATABASE_CREATE_SQL =
+
+//            "CREATE TABLE " + LOGIN_TABLE
+//                    + " ("
+//                    + KEY_LOGIN_ID + " integer primary key auto increment, "
+//                    + KEY_LOGIN_USERNAME + " text not null, "
+//                    + KEY_LOGIN_PASSWORD + " text not null, "
+//                    + ");"
+//                    + "\n" +
+
             "CREATE TABLE " + DATABASE_TABLE
                     + " ("
                     + KEY_ROWID + " integer primary key autoincrement, "
@@ -83,6 +101,8 @@ public class DBAdapter {
                     + KEY_LATITUDE + " float not null,"
                     + KEY_LONGITUDE + " float not null,"
                     + KEY_SHAREDFLAG + " text not null"
+                    + KEY_LATITUDE + " real not null,"
+                    + KEY_LONGITUDE + " real not null"
                     + ");";
 
     // Context of application who uses us.
