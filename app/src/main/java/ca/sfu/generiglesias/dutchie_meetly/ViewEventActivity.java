@@ -11,6 +11,7 @@ import android.net.wifi.p2p.WifiP2pManager;
 import android.os.Handler;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -121,7 +122,7 @@ public class ViewEventActivity extends ActionBarActivity {
 
     public void displayAllPeers(){
         for(int i =0; i < peers.size();i++){
-            Log.i("ViewEvent",peers.get(i).deviceName);
+            Log.i("ViewEvent", peers.get(i).deviceName);
         }
     }
 
@@ -141,7 +142,7 @@ public class ViewEventActivity extends ActionBarActivity {
 
             @Override
             public void onFailure(int reasonCode) {
-                Toast.makeText(getApplicationContext(),"Cannot discover",Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), "Cannot discover", Toast.LENGTH_SHORT).show();
             }
         });
     }
