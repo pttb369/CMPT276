@@ -9,7 +9,6 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.Window;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -17,7 +16,6 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.List;
 
-import ca.sfu.generiglesias.dutchie_meetly.R;
 import ca.sfu.generiglesias.dutchie_meetly.wifilogic.WifiDirectBroadcastReceiver;
 
 
@@ -30,6 +28,7 @@ public class WifiDirectConnectionActivity extends ActionBarActivity {
     private IntentFilter filter;
     private List peers = new ArrayList();
     private WifiP2pManager.PeerListListener peerListListener;
+    private boolean isWifiP2pEnabled = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,6 +38,8 @@ public class WifiDirectConnectionActivity extends ActionBarActivity {
         channel = wifiManager.initialize(this, getMainLooper(), null);
         receiver = new WifiDirectBroadcastReceiver(wifiManager, channel, this);
         initializeIntentFilter();
+        setupDiscoverPeersListener();
+
 
     }
 
@@ -46,7 +47,6 @@ public class WifiDirectConnectionActivity extends ActionBarActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        setupWifiActionListener();
         registerReceiver(receiver, filter);
     }
 
@@ -66,7 +66,7 @@ public class WifiDirectConnectionActivity extends ActionBarActivity {
         filter.addAction(WifiP2pManager.WIFI_P2P_THIS_DEVICE_CHANGED_ACTION);
     }
 
-    public void setupWifiActionListener(){
+    public void setupDiscoverPeersListener(){
 
         Button discoverPeersButton = (Button) findViewById(R.id.button_wifi_discover);
 
@@ -74,9 +74,23 @@ public class WifiDirectConnectionActivity extends ActionBarActivity {
             @Override
             public void onClick(View v) {
                 discoverPeersListener();
+
+                TextView wifiStatus = (TextView) findViewById(R.id.textView_server_message);
+
+                if(isWifiP2pEnabled == true)
+                    wifiStatus.setText("Wifi Enabled");
+
+                else
+                    wifiStatus.setText("Wifi Disabled");
             }
         });
 
+    }
+
+
+
+    public void setWifiP2pStatus(boolean isWifiP2pEnabled){
+        this.isWifiP2pEnabled = isWifiP2pEnabled;
     }
 
 
@@ -84,12 +98,12 @@ public class WifiDirectConnectionActivity extends ActionBarActivity {
         wifiManager.discoverPeers(channel, new WifiP2pManager.ActionListener() {
             @Override
             public void onSuccess() {
-                Toast.makeText(getBaseContext(),"Peers Discovered",Toast.LENGTH_LONG);
+                Toast.makeText(getBaseContext(),"Peers Discovered", Toast.LENGTH_SHORT).show();
             }
 
             @Override
             public void onFailure(int reasonCode) {
-                Toast.makeText(getApplicationContext(),"Cannot discover",Toast.LENGTH_LONG);
+                Toast.makeText(getApplicationContext(),"Cannot discover",Toast.LENGTH_SHORT).show();
             }
         });
     }
