@@ -40,4 +40,14 @@
     <string name="title_activity_edit_event">EditEventActivity</string>
     <string name="edit_event_title">Edit Event</string>
     <string name="unknown_location">Unknown Location</string>
+    <string name="event_status_completed">Event completed</string>
+    <string name="event_status_started">Event started</string>
+    <string name="event_time_until">Time Until Event: calculating...</string>
+    <string name="user_title">User: </string>
+    <string name="unknown_location_title">Unknown Location</string>
+    <string name="logout_prompt_title">Are you sure you want to Logout?</string>
+    <string name="yes_title">Yes</string>
+    <string name="no_title">No</string>
+    <string name="error_duration">Start time cannot occur after end time. Choose a new time.</string>
+    <string name="share_title">Share</string>
 </resources>

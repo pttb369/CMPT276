@@ -87,7 +87,7 @@ public class ListEventsActivity extends ActionBarActivity {
         userName = getUsernamePref.getString("getUsername", "");
 
         currentUsername = (TextView) findViewById(R.id.usernameView);
-        currentUsername.setText("User: " + userName);
+        currentUsername.setText(getResources().getString(R.string.user_title) + userName);
 
         userN = userName;
     }
@@ -119,37 +119,6 @@ public class ListEventsActivity extends ActionBarActivity {
 
     private void getAllEvents() {
         Cursor cursor = myDb.getAllRows(); //function to retrieve all values from a table- written in MyDb.java file
-
-
-//        if (cursor .moveToFirst()) {
-//            while (cursor.isAfterLast() == false) {
-//                int eventId = cursor.getInt(DBAdapter.COL_ROWID);
-//                String eventName = cursor.getString(DBAdapter.COL_EVENTNAME);
-//                String eventDate = cursor.getString(DBAdapter.COL_EVENTDATE);
-//                String eventLocation = cursor.getString(DBAdapter.COL_LOCATION);
-//                String eventDescription = cursor.getString(DBAdapter.COL_EVENTDESCRIPTION);
-//                String eventStartTme = cursor.getString(DBAdapter.COL_EVENTSTARTTIME);
-//                String eventEndTime = cursor.getString(DBAdapter.COL_EVENTENDTIME);
-//                String eventDuration = cursor.getString(DBAdapter.COL_EVENTDURATION);
-//                int iconId = R.drawable.communityimage;
-//                double latitude = cursor.getDouble(DBAdapter.COL_LATITUDE);
-//                double longitude = cursor.getDouble(DBAdapter.COL_LONGITUDE);
-//
-//                events.add(new Event
-//                            (eventId,
-//                            eventName,
-//                            eventDate,
-//                            eventLocation,
-//                            eventDescription,
-//                            eventStartTme,
-//                            eventEndTime,
-//                            eventDuration,
-//                            iconId,
-//                            latitude,
-//                            longitude));
-//                cursor.moveToNext();
-//            }
-//        }
 
         if (cursor.moveToFirst()) {
             do {
@@ -247,6 +216,7 @@ public class ListEventsActivity extends ActionBarActivity {
         currentLocation.setText(getCurrentCity());
     }
 
+    //http://stackoverflow.com/questions/20325427/get-current-location-city-name-android
     private String getCurrentCity() {
         String cityName = getResources().getString(R.string.unknown_location);
 
@@ -339,15 +309,15 @@ public class ListEventsActivity extends ActionBarActivity {
         } else if (id == R.id.logout_event)
         {
             AlertDialog.Builder builder1 = new AlertDialog.Builder(this);
-            builder1.setMessage("Are you sure you want to Logout?.");
+            builder1.setMessage(getResources().getString(R.string.logout_prompt_title));
             builder1.setCancelable(true);
-            builder1.setPositiveButton("No",
+            builder1.setPositiveButton(getResources().getString(R.string.no_title),
                     new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
                             dialog.cancel();
                         }
                     });
-            builder1.setNegativeButton("Yes",
+            builder1.setNegativeButton(getResources().getString(R.string.yes_title),
                     new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
                             SharedPreferences UserNamePref = getSharedPreferences("UserName", MODE_PRIVATE);
