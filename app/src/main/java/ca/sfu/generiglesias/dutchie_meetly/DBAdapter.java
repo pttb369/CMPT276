@@ -101,8 +101,6 @@ public class DBAdapter {
                     + KEY_LATITUDE + " float not null,"
                     + KEY_LONGITUDE + " float not null,"
                     + KEY_SHAREDFLAG + " text not null"
-                    + KEY_LATITUDE + " real not null,"
-                    + KEY_LONGITUDE + " real not null"
                     + ");";
 
     // Context of application who uses us.
