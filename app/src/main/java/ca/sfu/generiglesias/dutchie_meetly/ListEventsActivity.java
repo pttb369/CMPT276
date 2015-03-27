@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.Cursor;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
@@ -48,11 +49,14 @@ public class ListEventsActivity extends ActionBarActivity {
     private Menu menu;
     private String userN, userName;
 
+    private DBAdapter myDb;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list_events);
+
+        openDB();
 
         setActionBarName();
         populateEventList();
@@ -61,6 +65,21 @@ public class ListEventsActivity extends ActionBarActivity {
         registerClickCallback();
         setCurrentCity();
         setCurrentUsername();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        closeDB();
+    }
+
+
+    private void openDB() {
+        myDb = new DBAdapter(getApplicationContext());
+        myDb.open();
+    }
+    private void closeDB() {
+        myDb.close();
     }
 
     private void setCurrentUsername() {
@@ -80,39 +99,57 @@ public class ListEventsActivity extends ActionBarActivity {
     }
 
     private void createNewEvent(){
-        startActivityForResult(new Intent(ListEventsActivity.this, CreateEventActivity.class),
+        startActivityForResult(
+                new Intent(ListEventsActivity.this, CreateEventActivity.class),
                 INFO_KEY);
     }
 
     private void populateEventList() {
-
+        getAllEvents();
         //http://www.eracer.de/2012/07/09/android-objectinputstream-and-objectoutputstream-snippet/
-        try {
-            fileInputStream = openFileInput("eventListData");
-            objectRead = new ObjectInputStream(fileInputStream);
-            events = (ArrayList)objectRead.readObject();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        }
+//        try {
+//            fileInputStream = openFileInput("eventListData");
+//            objectRead = new ObjectInputStream(fileInputStream);
+//            //events = (ArrayList)objectRead.readObject();
+//
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+    }
 
-        /*for(int i = 1; i < 2; i++) {
-            events.add(new Event(
-                    "Event " + i,
-                    "123",
-                    "City " + i,
-                    "Description " + i,
-                    "10:00",
-                    "13:00",
-                    "3 Hours 0 minutes",
-                    R.drawable.ic_launcher,
-                    49.187559,
-                    -122.84954500000003
-            ));
-        }*/
+    private void getAllEvents() {
+        Cursor cursor = myDb.getAllRows(); //function to retrieve all values from a table- written in MyDb.java file
+
+        if (cursor.moveToFirst()) {
+            do {
+                // Process the data:
+                int eventId = cursor.getInt(DBAdapter.COL_ROWID);
+                String eventName = cursor.getString(DBAdapter.COL_EVENTNAME);
+                String eventDate = cursor.getString(DBAdapter.COL_EVENTDATE);
+                String eventLocation = cursor.getString(DBAdapter.COL_LOCATION);
+                String eventDescription = cursor.getString(DBAdapter.COL_EVENTDESCRIPTION);
+                String eventStartTme = cursor.getString(DBAdapter.COL_EVENTSTARTTIME);
+                String eventEndTime = cursor.getString(DBAdapter.COL_EVENTENDTIME);
+                String eventDuration = cursor.getString(DBAdapter.COL_EVENTDURATION);
+                int iconId = R.drawable.communityimage;
+                double latitude = cursor.getDouble(DBAdapter.COL_LATITUDE);
+                double longitude = cursor.getDouble(DBAdapter.COL_LONGITUDE);
+
+                events.add(new Event
+                            (eventId,
+                            eventName,
+                            eventDate,
+                            eventLocation,
+                            eventDescription,
+                            eventStartTme,
+                            eventEndTime,
+                            eventDuration,
+                            iconId,
+                            latitude,
+                            longitude));
+            } while(cursor.moveToNext());
+        }
+        cursor.close();
     }
 
     private void sortEventList() {
@@ -125,11 +162,9 @@ public class ListEventsActivity extends ActionBarActivity {
                 int[] lhsStartTime = splitString(lhs.getEventStartTime(), ":");
                 int[] rhsStartTime = splitString(rhs.getEventStartTime(), ":");
 
-
                 Calendar lhsCal = Calendar.getInstance();
                 Calendar rhsCal = Calendar.getInstance();
                 lhsCal.set(lhsDate[2], lhsDate[1], lhsDate[0], lhsStartTime[0], lhsStartTime[1]);
-
                 rhsCal.set(rhsDate[2], rhsDate[1], rhsDate[0], rhsStartTime[0], lhsStartTime[1]);
 
                 return lhsCal.compareTo(rhsCal);
@@ -212,31 +247,31 @@ public class ListEventsActivity extends ActionBarActivity {
         if (requestCode == INFO_KEY) {
             if (resultCode == RESULT_OK) {
 
-                this.events.add(new Event(
-                        data.getStringExtra("name"),
-                        data.getStringExtra("date"),
-                        data.getStringExtra("cityName"),
-                        data.getStringExtra("description"),
-                        data.getStringExtra("startTime"),
-                        data.getStringExtra("endTime"),
-                        data.getStringExtra("duration"),
-                        R.drawable.ic_launcher,
-                        data.getDoubleExtra("latitude", Double.NaN),
-                        data.getDoubleExtra("longitude", Double.NaN)
-                ));
-
+//                this.events.add(new Event(
+//                        data.getStringExtra("name"),
+//                        data.getStringExtra("date"),
+//                        data.getStringExtra("cityName"),
+//                        data.getStringExtra("description"),
+//                        data.getStringExtra("startTime"),
+//                        data.getStringExtra("endTime"),
+//                        data.getStringExtra("duration"),
+//                        R.drawable.ic_launcher,
+//                        data.getDoubleExtra("latitude", Double.NaN),
+//                        data.getDoubleExtra("longitude", Double.NaN)
+//                ));
+                populateEventList();
                 sortEventList();
 
-                try {
-                    fileOutputStream = openFileOutput("eventListData", Context.MODE_PRIVATE);
-                    objectWrite = new ObjectOutputStream(fileOutputStream );
-                    objectWrite.writeObject(events);
-                    objectWrite.close();
-                } catch (FileNotFoundException e) {
-                    e.printStackTrace();
-                }catch (IOException e) {
-                    e.printStackTrace();
-                }
+//                try {
+//                    fileOutputStream = openFileOutput("eventListData", Context.MODE_PRIVATE);
+//                    objectWrite = new ObjectOutputStream(fileOutputStream );
+//                    objectWrite.writeObject(events);
+//                    objectWrite.close();
+//                } catch (FileNotFoundException e) {
+//                    e.printStackTrace();
+//                }catch (IOException e) {
+//                    e.printStackTrace();
+//                }
 
                 populateEventListView();
             }
