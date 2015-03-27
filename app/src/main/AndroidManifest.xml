@@ -64,7 +64,8 @@
         </activity>
         <activity
             android:name=".ViewEventActivity"
-            android:label="@string/title_activity_view_event" >
+            android:label="@string/title_activity_view_event"
+            android:theme="@style/AppTheme" >
         </activity>
         <activity
             android:name=".ViewEventMapActivity"
@@ -78,6 +79,14 @@
             android:name=".LoginActivity"
             android:label="@string/title_activity_login"
             android:windowSoftInputMode="adjustResize|stateVisible" >
+        </activity>
+        <activity
+            android:name=".EditEventActivity"
+            android:label="@string/title_activity_edit_event"
+            android:parentActivityName=".CreateEventActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="ca.sfu.generiglesias.dutchie_meetly.CreateEventActivity" />
         </activity>
 
         <activity

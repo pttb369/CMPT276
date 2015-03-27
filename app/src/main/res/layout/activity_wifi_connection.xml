@@ -32,5 +32,14 @@
         android:layout_alignParentStart="true"
         android:layout_marginTop="33dp" />
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="Enabled: "
+        android:id="@+id/textView"
+        android:layout_marginTop="26dp"
+        android:layout_below="@+id/button_wifi_discover"
+        android:layout_alignParentStart="true" />
 
 </RelativeLayout>

@@ -68,7 +68,7 @@ public class ListEventsActivity extends ActionBarActivity {
         userName = getUsernamePref.getString("getUsername", "");
 
         currentUsername = (TextView) findViewById(R.id.usernameView);
-        currentUsername.setText("User: " + userName);
+        currentUsername.setText(getResources().getString(R.string.user_title) + userName);
 
         userN = userName;
     }
@@ -183,7 +183,7 @@ public class ListEventsActivity extends ActionBarActivity {
 
     //http://stackoverflow.com/questions/20325427/get-current-location-city-name-android
     private String getCurrentCity() {
-        String cityName = "Unknown Location";
+        String cityName = getResources().getString(R.string.unknown_location_title);
 
         Geocoder gcd = new Geocoder(getApplicationContext(), Locale.getDefault());
         GPSTracker gpsTracker = new GPSTracker(getApplicationContext());
@@ -274,15 +274,15 @@ public class ListEventsActivity extends ActionBarActivity {
         } else if (id == R.id.logout_event)
         {
             AlertDialog.Builder builder1 = new AlertDialog.Builder(this);
-            builder1.setMessage("Are you sure you want to Logout?.");
+            builder1.setMessage(getResources().getString(R.string.logout_prompt_title));
             builder1.setCancelable(true);
-            builder1.setPositiveButton("No",
+            builder1.setPositiveButton(getResources().getString(R.string.no_title),
                     new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
                             dialog.cancel();
                         }
                     });
-            builder1.setNegativeButton("Yes",
+            builder1.setNegativeButton(getResources().getString(R.string.yes_title),
                     new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
                             SharedPreferences UserNamePref = getSharedPreferences("UserName", MODE_PRIVATE);

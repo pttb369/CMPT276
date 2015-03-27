@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Dutchie-Meetly</string>
+    <string name="welcome_title">Meetly</string>
+    <string name="action_settings">Paramètres</string>
+    <string name="title_activity_list_events">ListEvents</string>
+    <string name="title_activity_map">Carte</string>
+    <string name="title_activity_create_event">CreateEventActivity</string>
+    <string name="title_activity_welcome_screen">Meetly</string>
+    <string name="skip_button">Sauter</string>
+    <string name="title_hint">Entrez Titre de l\'événement</string>
+    <string name="description_hint">Entrez Description de l\'événement</string>
+    <string name="create_event_title">Créer un événement</string>
+    <string name="title_activity_view_event">ViewEventActivity</string>
+    <string name="event_view_name">Nom de l\'événement</string>
+    <string name="event_view_date">Date du calendrier: </string>
+    <string name="event_view_location">Lieu de l\'événement: </string>
+    <string name="event_view_description">Description de l\'événement: </string>
+    <string name="event_view_start_time">Événement Heure de début: </string>
+    <string name="event_view_end_time">Événement Heure de fin: </string>
+    <string name="event_view_duration">Durée de l\'événement: </string>
+    <string name="event_view_timeperiod">Période: </string>
+    <string name="event_view_see_map">Voir la carte</string>
+    <string name="event_view_time_remaining">Jours avant l\'événement</string>
+    <string name="title_activity_view_event_maps">Carte</string>
+    <string name="login_title">Login</string>
+    <string name="logout_title">Logout</string>
+    <string name="event_button_create">Créer un événement</string>
+    <string name="event_button_done">Fini</string>
+    <string name="event_button_find_me">Trouvez-moi</string>
+    <string name="event_button_find_event">Trouver un évènement</string>
+    <string name="event_item_duration">00 Heure et 00 Minutes</string>
+    <string name="event_item_date">dd-MM-yyyy</string>
+    <string name="action_new_event">Nouvel événement</string>
+    <string name="title_activity_test">test</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="check_details">Tous les détails fixent pas</string>
+    <string name="event_status_completed">événement terminé</string>
+    <string name="event_status_started">événement a commencé</string>
+    <string name="event_time_until">Durée Jusqu\'à l\'événement: le calcul ... "</string>
+    <string name="user_title">Utilisateur: </string>
+    <string name="unknown_location_title">Lieu inconnu</string>
+    <string name="logout_prompt_title">Êtes-vous sûr de vouloir déconnecter?</string>
+    <string name="yes_title">Oui</string>
+    <string name="no_title">Non</string>
+    <string name="error_duration">Lancer temps ne peut pas se produire après l\'heure de fin.
+        Choisissez une nouvelle fois.</string>
+    <string name="share_title">Part</string>
+
+    <!-- Strings related to login -->
+    <string name="prompt_username">Nom d\'utilisateur</string>
+    <string name="prompt_password">Mot de passe</string>
+    <string name="action_login">Login</string>
+    <string name="action_sign_in_short">Login</string>
+
+    <string name="error_invalid_email">Ce nom d\'utilisateur est invalide</string>
+    <string name="error_invalid_password">Ce mot de passe est trop court</string>
+    <string name="error_empty_password">Mot de passe requis</string>
+    <string name="error_incorrect_password">Ce mot de passe est incorrect</string>
+    <string name="error_field_required">Nom d\'utilisateur est nécessaire</string>
+    <string name="error_invalid_username_password">Nom d\'utilisateur ou mot de passe invalide</string>
+</resources>

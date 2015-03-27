@@ -50,10 +50,10 @@ public class ViewEventActivity extends ActionBarActivity {
         calculateTimeLeftUntilEvent();
 
         setupButtons();
-
-        Log.i("LATLNG", "WHYY IS THIS NOT WORKING?!?!");
-        Log.i("LATLNG", "" + getIntent().getDoubleExtra("latitude", -12324));
-        Log.i("LATLNG", "" + getIntent().getDoubleExtra("longitude", -12324));
+//
+//        Log.i("LATLNG", "WHYY IS THIS NOT WORKING?!?!");
+//        Log.i("LATLNG", "" + getIntent().getDoubleExtra("latitude", -12324));
+//        Log.i("LATLNG", "" + getIntent().getDoubleExtra("longitude", -12324));
     }
 
     private void setupButtons() {
@@ -94,19 +94,19 @@ public class ViewEventActivity extends ActionBarActivity {
         view_eventName.setText(eventName);
 
         TextView view_eventDate = (TextView) findViewById(R.id.event_view_id_date);
-        view_eventDate.setText("Date:         " + date);
+        view_eventDate.setText(getResources().getString(R.string.event_view_date) + " " + date);
 
         TextView view_eventDescription = (TextView) findViewById(R.id.event_view_id_description);
-        view_eventDescription.setText("Description:" + description);
+        view_eventDescription.setText(getResources().getString(R.string.event_view_description) + " " + description);
 
         TextView view_eventLocation = (TextView) findViewById(R.id.event_view_id_location);
-        view_eventLocation.setText("Location:  " + location);
+        view_eventLocation.setText(getResources().getString(R.string.event_view_location) + " " + location);
 
         TextView view_eventDuration = (TextView) findViewById(R.id.event_view_id_duration);
-        view_eventDuration.setText("Duration:  " + duration);
+        view_eventDuration.setText(getResources().getString(R.string.event_view_duration) + " " + duration);
 
         TextView view_eventTimePeriod = (TextView) findViewById(R.id.event_view_id_timeperiod);
-        view_eventTimePeriod.setText("Time Period:  " + startTime + "- " + endTime);
+        view_eventTimePeriod.setText(getResources().getString(R.string.event_view_timeperiod) + startTime + "- " + endTime);
     }
 
     void calculateTimeLeftUntilEvent() {
@@ -137,7 +137,7 @@ public class ViewEventActivity extends ActionBarActivity {
         eventCal.setTime(eventDate);
 
         final TextView timeRemaining = (TextView) findViewById(R.id.event_view_id_time_remaining);
-        timeRemaining.setText("Time Until Event: calculating...");
+        timeRemaining.setText(getResources().getString(R.string.event_time_until));
         Animation TitleFade = AnimationUtils.loadAnimation(this, R.anim.fade_in2);
         timeRemaining.startAnimation(TitleFade);
 
@@ -178,9 +178,9 @@ public class ViewEventActivity extends ActionBarActivity {
 
                             if (newSeconds < 0) {
                                 if (eventEndTime.before(now)) {
-                                    timeRemaining.setText("Event completed");
+                                    timeRemaining.setText(getResources().getString(R.string.event_status_completed));
                                 } else {
-                                    timeRemaining.setText("Event started");
+                                    timeRemaining.setText(getResources().getString(R.string.event_status_started));
                                 }
                                 running = false;
                             } else {
@@ -194,9 +194,7 @@ public class ViewEventActivity extends ActionBarActivity {
                 }
             }
         };
-
         new Thread(runnable).start();
-
     }
 
     private void displayTimeLeftUntilEvent(long newYears, long newMonths, long newDays, long newHours,
@@ -222,6 +220,20 @@ public class ViewEventActivity extends ActionBarActivity {
     }
 
 
+    public void editEvent() {
+        //startActivity(new Intent(ViewEventActivity.this, EditEventActivity.class));
+
+        Intent intent = new Intent(this, EditEventActivity.class);
+        intent.putExtra("event_name", eventName);
+        intent.putExtra("event_date", date);
+        intent.putExtra("event_location", location);
+        intent.putExtra("event_description", description);
+        intent.putExtra("event_start_time", startTime);
+        intent.putExtra("event_duration", duration);
+        intent.putExtra("event_end_time", endTime);
+        startActivity(intent);
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -237,7 +249,11 @@ public class ViewEventActivity extends ActionBarActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.edit_event) {
+            editEvent();
+            return true;
+        } else if (id == R.id.share_event)
+        {
             return true;
         }
 
