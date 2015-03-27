@@ -1,7 +1,11 @@
 package ca.sfu.generiglesias.dutchie_meetly;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.net.wifi.p2p.WifiP2pManager;
 import android.os.Handler;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
@@ -20,6 +24,8 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 import java.util.concurrent.TimeUnit;
+
+import ca.sfu.generiglesias.dutchie_meetly.wifilogic.WifiDirectBroadcastReceiver;
 
 
 /**
@@ -41,6 +47,10 @@ public class ViewEventActivity extends ActionBarActivity {
     private Date eventDate = new Date();
     private Handler handler;
     private boolean running = true;
+    WifiP2pManager mManager;
+    WifiP2pManager.Channel mChannel;
+    BroadcastReceiver mReceiver;
+    IntentFilter mIntentFilter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,11 +60,35 @@ public class ViewEventActivity extends ActionBarActivity {
         calculateTimeLeftUntilEvent();
 
         setupButtons();
+
+        mManager = (WifiP2pManager) getSystemService(Context.WIFI_P2P_SERVICE);
+        mChannel = mManager.initialize(this, getMainLooper(), null);
+        mReceiver = new WifiDirectBroadcastReceiver(mManager, mChannel, this);
+
+        mIntentFilter = new IntentFilter();
+        mIntentFilter.addAction(WifiP2pManager.WIFI_P2P_STATE_CHANGED_ACTION);
+        mIntentFilter.addAction(WifiP2pManager.WIFI_P2P_PEERS_CHANGED_ACTION);
+        mIntentFilter.addAction(WifiP2pManager.WIFI_P2P_CONNECTION_CHANGED_ACTION);
+        mIntentFilter.addAction(WifiP2pManager.WIFI_P2P_THIS_DEVICE_CHANGED_ACTION);
 //
 //        Log.i("LATLNG", "WHYY IS THIS NOT WORKING?!?!");
 //        Log.i("LATLNG", "" + getIntent().getDoubleExtra("latitude", -12324));
 //        Log.i("LATLNG", "" + getIntent().getDoubleExtra("longitude", -12324));
     }
+
+    /* register the broadcast receiver with the intent values to be matched */
+    @Override
+    protected void onResume() {
+        super.onResume();
+        registerReceiver(mReceiver, mIntentFilter);
+    }
+    /* unregister the broadcast receiver */
+    @Override
+    protected void onPause() {
+        super.onPause();
+        unregisterReceiver(mReceiver);
+    }
+
 
     private void setupButtons() {
         Button btnMap = (Button) findViewById(R.id.button_viewmap);
@@ -254,6 +288,17 @@ public class ViewEventActivity extends ActionBarActivity {
             return true;
         } else if (id == R.id.share_event)
         {
+            mManager.discoverPeers(mChannel, new WifiP2pManager.ActionListener() {
+                @Override
+                public void onSuccess() {
+
+                }
+
+                @Override
+                public void onFailure(int reasonCode) {
+
+                }
+            });
             return true;
         }
 
