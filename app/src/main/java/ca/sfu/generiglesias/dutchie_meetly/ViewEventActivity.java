@@ -75,11 +75,7 @@ public class ViewEventActivity extends ActionBarActivity {
         setContentView(R.layout.activity_view_event);
 
         openDB();
-
-
-        extractAndInsertEventDetails();
-        calculateTimeLeftUntilEvent();
-
+        setupEventDisplayInfo();
         setupButtons();
 
         // wifi setup
@@ -87,6 +83,11 @@ public class ViewEventActivity extends ActionBarActivity {
         channel = wifiManager.initialize(this, getMainLooper(), null);
         receiver = new WifiDirectBroadcastReceiver(wifiManager, channel, this);
         initializeIntentFilter();
+    }
+
+    private void setupEventDisplayInfo() {
+        extractAndInsertEventDetails();
+        calculateTimeLeftUntilEvent();
     }
 
     @Override
@@ -109,6 +110,7 @@ public class ViewEventActivity extends ActionBarActivity {
     protected void onResume() {
         super.onResume();
 //        registerReceiver(receiver, filter);
+        setupEventDisplayInfo();
     }
 
     /* unregister the broadcast receiver */

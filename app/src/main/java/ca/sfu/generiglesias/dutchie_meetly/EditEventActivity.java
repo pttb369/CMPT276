@@ -279,17 +279,6 @@ public class EditEventActivity extends ActionBarActivity {
                 String endTime = eventEndTime.getText().toString();
                 String durationTime = eventDuration.getText().toString();
 
-//                int[] splitStartTime = splitString(eventStartTime.getText().toString(), DELIMITER);
-//                int startHour = splitStartTime[HOUR_INDEX];
-//                int startMinute = splitStartTime[MINUTE_INDEX];
-//
-//                int[] splitEndTime = splitString(eventEndTime.getText().toString(), DELIMITER);
-//                int endHour = splitEndTime[HOUR_INDEX];
-//                int endMinute = splitEndTime[MINUTE_INDEX];
-//
-//                Calendar calStartTime = set(years, month, day, startHour, startMinute);
-//                EndTime.set(years, month, day, endHour, endMinute);
-
                 boolean validDetails = !currentEventName.isEmpty()
                         && !cityName.isEmpty()
                         && !currentEventDescription.isEmpty()
@@ -301,17 +290,22 @@ public class EditEventActivity extends ActionBarActivity {
                 if (validDetails) {
                     long event_id = getIntent().getLongExtra("event_id", 0);
 
+                    long lat = myDb.getRow(event_id).getLong(DBAdapter.COL_LATITUDE);
+                    long lng = myDb.getRow(event_id).getLong(DBAdapter.COL_LONGITUDE);
                     myDb.updateRow(event_id,
-                            eventTitle.toString(),
-                            eventDate.toString(),
-                            eventLocation.toString(),
-                            eventDescription.toString(),
-                            eventStartTime.toString(),
-                            eventEndTime.toString(),
-                            eventDuration.toString(),
-                            myDb.getRow(event_id).getColumnIndex(DBAdapter.KEY_LATITUDE),
-                            myDb.getRow(event_id).getColumnIndex(DBAdapter.KEY_LONGITUDE),
+                            eventTitle.getText().toString(),
+                            eventDate.getText().toString(),
+                            eventLocation.getText().toString(),
+                            eventDescription.getText().toString(),
+                            eventStartTime.getText().toString(),
+                            eventEndTime.getText().toString(),
+                            eventDuration.getText().toString(),
+                            lat,
+                            lng,
                             "Unshared");
+
+                    String name = myDb.getRow(event_id).getString(DBAdapter.COL_EVENTNAME);
+
                     finish();
                 } else {
                     Toast.makeText(getApplicationContext(), R.string.check_details, Toast.LENGTH_SHORT)
