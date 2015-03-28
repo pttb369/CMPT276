@@ -22,9 +22,6 @@ public class BluetoothReader {
     public static void read(Context context) {
         File dir = new File(DIR_PATH);
 
-        SharedPreferences getUsernamePref = context.getSharedPreferences("UserName", context.MODE_PRIVATE);
-        String event_author = getUsernamePref.getString("getUsername", "");
-
         if (dir.isDirectory()) {
             for (File file: dir.listFiles(makeFileFilter())) {
                 DBAdapter database = new DBAdapter(context);
@@ -43,13 +40,14 @@ public class BluetoothReader {
                     double eventLat = Double.parseDouble(scanner.nextLine());
                     double eventLng = Double.parseDouble(scanner.nextLine());
                     String sharedFlag = scanner.nextLine();
+                    String author = scanner.nextLine();
                     scanner.close();
 
                     file.delete();
 
                     database.insertRow(eventName, eventDate, eventLocation,
                             eventDescription, eventStartTime, eventEndTime,
-                            eventDuration, eventLat, eventLng, sharedFlag, event_author);
+                            eventDuration, eventLat, eventLng, sharedFlag, author);
 
                 } catch (FileNotFoundException e) {
                     e.printStackTrace();

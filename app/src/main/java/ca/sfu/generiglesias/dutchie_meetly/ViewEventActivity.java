@@ -90,10 +90,11 @@ public class ViewEventActivity extends ActionBarActivity {
 
     private File makeFile() {
         File file = new File(BluetoothReader.DIR_PATH +
-                BluetoothReader.FILE_NAME + BluetoothReader.FILE_TYPE);
+                BluetoothReader.FILE_NAME + "/meetlydata/" + BluetoothReader.FILE_TYPE);
 
         try {
             long event_id = getIntent().getLongExtra("event_id", 0);
+
             String name = myDb.getRow(event_id).getString(DBAdapter.COL_EVENTNAME);
             String date = myDb.getRow(event_id).getString(DBAdapter.COL_EVENTDATE);
             String location = myDb.getRow(event_id).getString(DBAdapter.COL_LOCATION);
@@ -103,6 +104,11 @@ public class ViewEventActivity extends ActionBarActivity {
             String duration = myDb.getRow(event_id).getString(DBAdapter.COL_EVENTDURATION);
             long lat = myDb.getRow(event_id).getLong(DBAdapter.COL_LATITUDE);
             long lng = myDb.getRow(event_id).getLong(DBAdapter.COL_LONGITUDE);
+            String author = myDb.getRow(event_id).getString(DBAdapter.COL_EVENTAUTHOR);
+
+            myDb.updateRow(event_id,name, date, location, description, startTime, endTime, duration,
+                    lat, lng, "Spontaneous Event", author);
+
             String sharedFlag = myDb.getRow(event_id).getString(DBAdapter.COL_SHAREDFLAG);
 
             FileWriter writer = new FileWriter(file);
@@ -116,6 +122,7 @@ public class ViewEventActivity extends ActionBarActivity {
             writer.append(lat+"\n");
             writer.append(lng+"\n");
             writer.append(sharedFlag+"\n");
+            writer.append(author+"\n");
             writer.flush();
             writer.close();
         } catch (IOException e) {
@@ -135,15 +142,19 @@ public class ViewEventActivity extends ActionBarActivity {
 
         PackageManager packageManager = getPackageManager();
         List<ResolveInfo> applications = packageManager.queryIntentActivities(intent, 0);
-
+        boolean found = false;
         String packageName = null;
         String className = null;
         for (ResolveInfo info: applications) {
             packageName = info.activityInfo.packageName;
             if (packageName.equals("com.android.bluetooth")) {
                 className = info.activityInfo.name;
+                found = true;
                 break;
             }
+        }
+        if (!found) {
+            Toast.makeText(this, "OH NO", Toast.LENGTH_SHORT).show();
         }
         intent.setClassName(packageName, className);
         startActivity(intent);
@@ -493,8 +504,8 @@ public class ViewEventActivity extends ActionBarActivity {
             editEvent();
             return true;
         } else if (id == R.id.share_event) {
-            setupDiscoverPeersListener();
-            setupPeerListListener();
+//            setupDiscoverPeersListener();
+//            setupPeerListListener();
 
             SharedPreferences getUsernamePref = getSharedPreferences("UserName", MODE_PRIVATE);
             userName = getUsernamePref.getString("getUsername", "");
@@ -522,9 +533,6 @@ public class ViewEventActivity extends ActionBarActivity {
                  ********************************************/
 
             } else{
-                Toast.makeText(getApplicationContext(), "'Spontaneous' event shared",
-                        Toast.LENGTH_SHORT).show();
-
                 shareEventBluetooth();
             }
 
