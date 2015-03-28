@@ -347,4 +347,8 @@ public class ListEventsActivity extends ActionBarActivity {
         return true;
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+    }
 }

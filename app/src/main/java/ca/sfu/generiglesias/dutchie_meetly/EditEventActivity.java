@@ -8,8 +8,6 @@ import android.location.Geocoder;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.text.InputType;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -58,7 +56,9 @@ public class EditEventActivity extends ActionBarActivity {
         setupEditableFields();
         setCurrentEventValues();
         setupListeners();
-        setupEditEventButton();
+
+        Button editEventButton = (Button) findViewById(R.id.editEventButton);
+        editEventButton.setOnClickListener(makeEditOnClickListener());
     }
 
     @Override
@@ -218,7 +218,6 @@ public class EditEventActivity extends ActionBarActivity {
     }
 
     protected void setupDuration() {
-
         int[] startTime = splitString(eventStartTime.getText().toString(), DELIMITER);
         int startHour = startTime[HOUR_INDEX];
         int startMinute = startTime[MINUTE_INDEX];
@@ -251,17 +250,6 @@ public class EditEventActivity extends ActionBarActivity {
         }
     }
 
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == 666) {
-            if (resultCode == RESULT_OK) {
-                lat = data.getDoubleExtra("latitude", 0);
-                lng = data.getDoubleExtra("longitude", 0);
-                eventLocation.setText(getLocation(lat, lng));
-            }
-        }
-    }
-
     private String getLocation(double lat, double lng) {
         String eventLocation = getResources().getString(R.string.unknown_location);
         Geocoder gcd = new Geocoder(getApplicationContext(), Locale.getDefault());
@@ -278,9 +266,8 @@ public class EditEventActivity extends ActionBarActivity {
         return eventLocation;
     }
 
-    private void setupEditEventButton() {
-        Button editEventButton = (Button) findViewById(R.id.editEventButton);
-        editEventButton.setOnClickListener(new View.OnClickListener() {
+    private View.OnClickListener makeEditOnClickListener() {
+        return new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
@@ -303,79 +290,34 @@ public class EditEventActivity extends ActionBarActivity {
 //                Calendar calStartTime = set(years, month, day, startHour, startMinute);
 //                EndTime.set(years, month, day, endHour, endMinute);
 
-                System.out.println(month);
-
-                boolean validDetails = (!currentEventName.isEmpty()
+                boolean validDetails = !currentEventName.isEmpty()
                         && !cityName.isEmpty()
                         && !currentEventDescription.isEmpty()
                         && !currentEventDate.isEmpty()
                         && !startTime.isEmpty()
-                        && !endTime.isEmpty())
+                        && !endTime.isEmpty()
                         && !durationTime.isEmpty();
 
                 if (validDetails) {
-                    Intent returnIntent = new Intent();
-                    returnIntent.putExtra("name", currentEventName);
-                    returnIntent.putExtra("date", currentEventDate);
-                    returnIntent.putExtra("cityName", cityName);
-                    returnIntent.putExtra("description", currentEventDescription);
-                    returnIntent.putExtra("startTime", startTime);
-                    returnIntent.putExtra("duration", durationTime);
-                    returnIntent.putExtra("endTime", endTime);
-                    returnIntent.putExtra("latitude", lat);
-                    returnIntent.putExtra("longitude", lng);
-                    returnIntent.putExtra("sharedFlag", "Unshared");
-                    setResult(RESULT_OK, returnIntent);
+                    long event_id = getIntent().getLongExtra("event_id", 0);
 
-                    myDb.insertRow(currentEventName,
-                            currentEventDate,
-                            cityName,
-                            currentEventDescription,
-                            startTime,
-                            endTime,
-                            durationTime,
-                            lat,
-                            lng,
+                    myDb.updateRow(event_id,
+                            eventTitle.toString(),
+                            eventDate.toString(),
+                            eventLocation.toString(),
+                            eventDescription.toString(),
+                            eventStartTime.toString(),
+                            eventEndTime.toString(),
+                            eventDuration.toString(),
+                            myDb.getRow(event_id).getColumnIndex(DBAdapter.KEY_LATITUDE),
+                            myDb.getRow(event_id).getColumnIndex(DBAdapter.KEY_LONGITUDE),
                             "Unshared");
-
-//                    try {
-//                        publishEvent("Test", 0, currentEventName, StartTime, EndTime, lat, lng);
-//                    } catch (MeetlyServer.FailedPublicationException e) {
-//                        e.printStackTrace();
-//                    }
                     finish();
                 } else {
                     Toast.makeText(getApplicationContext(), R.string.check_details, Toast.LENGTH_SHORT)
                             .show();
                 }
             }
-        });
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_edit_event, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    public void onBackPressed() {
-        finish();
+        };
     }
 }

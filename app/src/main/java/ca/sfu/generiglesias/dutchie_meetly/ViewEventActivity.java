@@ -108,7 +108,7 @@ public class ViewEventActivity extends ActionBarActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        registerReceiver(receiver, filter);
+//        registerReceiver(receiver, filter);
     }
 
     /* unregister the broadcast receiver */
@@ -374,6 +374,7 @@ public class ViewEventActivity extends ActionBarActivity {
         intent.putExtra("event_start_time", startTime);
         intent.putExtra("event_duration", duration);
         intent.putExtra("event_end_time", endTime);
+        intent.putExtra("event_id", getIntent().getLongExtra("event_id", 0));
         startActivity(intent);
     }
 
