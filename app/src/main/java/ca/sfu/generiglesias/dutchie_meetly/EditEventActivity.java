@@ -59,7 +59,9 @@ public class EditEventActivity extends ActionBarActivity {
         setupEditableFields();
         setCurrentEventValues();
         setupListeners();
-        setupEditEventButton();
+
+        Button editEventButton = (Button) findViewById(R.id.editEventButton);
+        editEventButton.setOnClickListener(makeEditOnClickListener());
     }
 
     @Override
@@ -299,6 +301,9 @@ public class EditEventActivity extends ActionBarActivity {
                         && !startTime.isEmpty()
                         && !endTime.isEmpty()
                         && !durationTime.isEmpty();
+
+                SharedPreferences getUsernamePref = getSharedPreferences("UserName", MODE_PRIVATE);
+                String event_author = getUsernamePref.getString("getUsername", "");
 
                 if (validDetails) {
                     long event_id = getIntent().getLongExtra("event_id", 0);

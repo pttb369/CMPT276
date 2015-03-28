@@ -51,9 +51,6 @@
     <string name="error_duration">Start time cannot occur after end time. Choose a new time.</string>
     <string name="share_title">Share</string>
     <string name="shared_status_title">Shared status</string>
-<<<<<<< HEAD
     <string name="event_author_title">Author</string>
-=======
     <string name ="title_activity_bluetooth_test">Bluetooth Test</string>
->>>>>>> 5434c911f46ec80fc129ab059121b8d214dd76ab
 </resources>
