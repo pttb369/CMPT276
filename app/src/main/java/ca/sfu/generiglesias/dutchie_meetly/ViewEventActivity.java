@@ -1,11 +1,15 @@
 package ca.sfu.generiglesias.dutchie_meetly;
 
+import android.bluetooth.BluetoothAdapter;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
 import android.database.Cursor;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.net.wifi.p2p.WifiP2pConfig;
 import android.net.wifi.p2p.WifiP2pDevice;
 import android.net.wifi.p2p.WifiP2pDeviceList;
@@ -23,6 +27,11 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -32,6 +41,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
+import ca.sfu.generiglesias.dutchie_meetly.bluetoothlogic.BluetoothReader;
 import ca.sfu.generiglesias.dutchie_meetly.wifilogic.WifiDirectBroadcastReceiver;
 
 /**
@@ -69,6 +79,80 @@ public class ViewEventActivity extends ActionBarActivity {
     WifiP2pConfig config;
     private String userName, currentUser;
     private DBAdapter myDb;
+
+    private static final int BLUETOOTH_RESULT = 82;
+
+    private void shareEventBluetooth() {
+        BluetoothAdapter adapter = BluetoothAdapter.getDefaultAdapter();
+
+        if (adapter == null) {
+            Toast.makeText(this, "Bluetooth not supported on this device", Toast.LENGTH_SHORT).show();
+        } else if (!adapter.isEnabled()) {
+            Intent enableBluetooth = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+            startActivityForResult(enableBluetooth, BLUETOOTH_RESULT);
+        }
+
+        sendToBluetooth();
+    }
+
+    private void sendToBluetooth() {
+        File file = new File(BluetoothReader.DIR_PATH +
+                BluetoothReader.FILE_NAME + BluetoothReader.FILE_TYPE);
+
+        try {
+            long event_id = getIntent().getLongExtra("event_id", 0);
+            String name = myDb.getRow(event_id).getString(DBAdapter.COL_EVENTNAME);
+            String date = myDb.getRow(event_id).getString(DBAdapter.COL_EVENTDATE);
+            String location = myDb.getRow(event_id).getString(DBAdapter.COL_LOCATION);
+            String description = myDb.getRow(event_id).getString(DBAdapter.COL_EVENTDESCRIPTION);
+            String startTime = myDb.getRow(event_id).getString(DBAdapter.COL_EVENTSTARTTIME);
+            String endTime = myDb.getRow(event_id).getString(DBAdapter.COL_EVENTENDTIME);
+            String duration = myDb.getRow(event_id).getString(DBAdapter.COL_EVENTDURATION);
+            long lat = myDb.getRow(event_id).getLong(DBAdapter.COL_LATITUDE);
+            long lng = myDb.getRow(event_id).getLong(DBAdapter.COL_LONGITUDE);
+            String sharedFlag = myDb.getRow(event_id).getString(DBAdapter.COL_SHAREDFLAG);
+
+            FileWriter writer = new FileWriter(file);
+            writer.append(name+"\n");
+            writer.append(date+"\n");
+            writer.append(location+"\n");
+            writer.append(description+"\n");
+            writer.append(startTime+"\n");
+            writer.append(endTime+"\n");
+            writer.append(duration+"\n");
+            writer.append(lat+"\n");
+            writer.append(lng+"\n");
+            writer.append(sharedFlag+"\n");
+            writer.flush();
+            writer.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        Intent intent = new Intent();
+        intent.setAction(Intent.ACTION_SEND);
+        intent.setType("text/plain");
+        intent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(file));
+
+        PackageManager packageManager = getPackageManager();
+        List<ResolveInfo> applications = packageManager.queryIntentActivities(intent, 0);
+
+        String packageName = null;
+        String className = null;
+        boolean found = false;
+
+        for (ResolveInfo info: applications) {
+            packageName = info.activityInfo.packageName;
+            if (packageName.equals("com.android.bluetooth")) {
+                className = info.activityInfo.name;
+                found = true;
+                break;
+            }
+        }
+
+        intent.setClassName(packageName, className);
+        startActivity(intent);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -453,7 +537,7 @@ public class ViewEventActivity extends ActionBarActivity {
                 Toast.makeText(getApplicationContext(), "'Spontaneous' event shared",
                         Toast.LENGTH_SHORT).show();
 
-                //Put wifi/bluetooth logic here
+                shareEventBluetooth();
             }
 
             return true;
