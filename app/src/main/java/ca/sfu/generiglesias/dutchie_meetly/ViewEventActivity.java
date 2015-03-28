@@ -83,19 +83,12 @@ public class ViewEventActivity extends ActionBarActivity {
     private static final int BLUETOOTH_RESULT = 82;
 
     private void shareEventBluetooth() {
-        BluetoothAdapter adapter = BluetoothAdapter.getDefaultAdapter();
-
-        if (adapter == null) {
-            Toast.makeText(this, "Bluetooth not supported on this device", Toast.LENGTH_SHORT).show();
-        } else if (!adapter.isEnabled()) {
-            Intent enableBluetooth = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-            startActivityForResult(enableBluetooth, BLUETOOTH_RESULT);
-        }
-
-        sendToBluetooth();
+        File file = makeFile();
+        sendFileViaBluetooth(file);
+        file.delete();
     }
 
-    private void sendToBluetooth() {
+    private File makeFile() {
         File file = new File(BluetoothReader.DIR_PATH +
                 BluetoothReader.FILE_NAME + BluetoothReader.FILE_TYPE);
 
@@ -129,6 +122,12 @@ public class ViewEventActivity extends ActionBarActivity {
             e.printStackTrace();
         }
 
+        return file;
+    }
+
+    private void sendFileViaBluetooth(File file) {
+        /* Followed the following tutorial to make this method:
+           http://www.javacodegeeks.com/2013/09/bluetooth-data-transfer-with-android.html */
         Intent intent = new Intent();
         intent.setAction(Intent.ACTION_SEND);
         intent.setType("text/plain");
@@ -139,17 +138,13 @@ public class ViewEventActivity extends ActionBarActivity {
 
         String packageName = null;
         String className = null;
-        boolean found = false;
-
         for (ResolveInfo info: applications) {
             packageName = info.activityInfo.packageName;
             if (packageName.equals("com.android.bluetooth")) {
                 className = info.activityInfo.name;
-                found = true;
                 break;
             }
         }
-
         intent.setClassName(packageName, className);
         startActivity(intent);
     }
