@@ -19,6 +19,7 @@ public class Event implements Serializable{
     private double latitude;
     private double longitude;
     private String sharedFlag;
+    private String eventAuthor;
 
     public Event(String eventName,
                  String eventDate,
@@ -30,7 +31,8 @@ public class Event implements Serializable{
                  int eventIconId,
                  double latitude,
                  double longitude,
-                 String sharedFlag) {
+                 String sharedFlag,
+                 String eventAuthor) {
 
         this.eventName = eventName;
         this.eventDate = eventDate;
@@ -43,6 +45,7 @@ public class Event implements Serializable{
         this.longitude = longitude;
         this.latitude = latitude;
         this.sharedFlag = sharedFlag;
+        this.eventAuthor = eventAuthor;
     }
 
     public Event(long eventId,
@@ -56,7 +59,8 @@ public class Event implements Serializable{
                  int eventIconId,
                  double latitude,
                  double longitude,
-                 String sharedFlag) {
+                 String sharedFlag,
+                 String eventAuthor) {
         this(eventName,
             eventDate,
             eventLocation,
@@ -67,7 +71,8 @@ public class Event implements Serializable{
             eventIconId,
             latitude,
             longitude,
-            sharedFlag);
+            sharedFlag,
+            eventAuthor);
         this.eventId = eventId;
     }
 
@@ -124,4 +129,6 @@ public class Event implements Serializable{
     }
 
     public String getSharedFlag() {return sharedFlag; }
+
+    public String getEventAuthor() {return eventAuthor; }
 }

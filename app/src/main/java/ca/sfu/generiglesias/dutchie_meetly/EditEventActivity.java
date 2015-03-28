@@ -3,6 +3,7 @@ package ca.sfu.generiglesias.dutchie_meetly;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.location.Address;
 import android.location.Geocoder;
 import android.support.v7.app.ActionBarActivity;
@@ -303,8 +304,6 @@ public class EditEventActivity extends ActionBarActivity {
 //                Calendar calStartTime = set(years, month, day, startHour, startMinute);
 //                EndTime.set(years, month, day, endHour, endMinute);
 
-                System.out.println(month);
-
                 boolean validDetails = (!currentEventName.isEmpty()
                         && !cityName.isEmpty()
                         && !currentEventDescription.isEmpty()
@@ -327,6 +326,9 @@ public class EditEventActivity extends ActionBarActivity {
                     returnIntent.putExtra("sharedFlag", "Unshared");
                     setResult(RESULT_OK, returnIntent);
 
+                    SharedPreferences getUsernamePref = getSharedPreferences("UserName", MODE_PRIVATE);
+                    String event_author = getUsernamePref.getString("getUsername", "");
+
                     myDb.insertRow(currentEventName,
                             currentEventDate,
                             cityName,
@@ -336,7 +338,8 @@ public class EditEventActivity extends ActionBarActivity {
                             durationTime,
                             lat,
                             lng,
-                            "Unshared");
+                            "Unshared",
+                            event_author);
 
 //                    try {
 //                        publishEvent("Test", 0, currentEventName, StartTime, EndTime, lat, lng);

@@ -1,0 +1,13 @@
+Scrum Master: David Li
+
+Lance Hannestad: made bluetooth sharing, and debugged, and event editing
+
+Gener Iglesias: made login activity and locale translations
+
+Nathan Dhami: made the wifip2p Activity
+
+David Li: made the database adapter and edit activity
+
+For this iteration, everyone helped out with the other tasks as well. However, we were unable to get
+the sharing to work using wifi direct p2p. Also, since we don't have a live server, we were unable
+to store events when logged in.

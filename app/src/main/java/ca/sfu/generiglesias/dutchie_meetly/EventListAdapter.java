@@ -54,7 +54,6 @@ public class EventListAdapter extends ArrayAdapter<Event> {
         sharedStatus.setText(currentEvent.getSharedFlag());
         sharedStatus.setTextColor(Color.BLACK);
 
-
         return itemView;
         //return super.getView(position, convertView, parent);
     }

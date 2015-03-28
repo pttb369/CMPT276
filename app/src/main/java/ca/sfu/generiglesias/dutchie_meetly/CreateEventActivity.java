@@ -3,6 +3,7 @@ package ca.sfu.generiglesias.dutchie_meetly;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.location.Address;
 import android.location.Geocoder;
 import android.support.v7.app.ActionBarActivity;
@@ -37,7 +38,6 @@ public class CreateEventActivity extends ActionBarActivity implements MeetlyServ
     private Calendar duration, StartTime, EndTime;
     private double lat, lng;
     private int month, day, years;
-
     private DBAdapter myDb;
 
     @Override
@@ -152,6 +152,9 @@ public class CreateEventActivity extends ActionBarActivity implements MeetlyServ
             @Override
             public void onClick(View v) {
 
+                SharedPreferences getUsernamePref = getSharedPreferences("UserName", MODE_PRIVATE);
+                String event_author = getUsernamePref.getString("getUsername", "");
+
                 String currentEventName = eventTitle.getText().toString();
                 String currentEventDate = eventDate.getText().toString();
                 String cityName = eventLocation.getText().toString();
@@ -162,8 +165,6 @@ public class CreateEventActivity extends ActionBarActivity implements MeetlyServ
 
                 StartTime.set(years, month, day, startHour, startMinute);
                 EndTime.set(years, month, day, endHour, endMinute);
-
-                System.out.println(month);
 
                 boolean validDetails = (!currentEventName.isEmpty()
                         && !cityName.isEmpty()
@@ -184,7 +185,9 @@ public class CreateEventActivity extends ActionBarActivity implements MeetlyServ
                             durationTime,
                             lat,
                             lng,
-                            "Unshared");
+                            "Unshared",
+                            event_author
+                            );
 
                     Intent returnIntent = new Intent();
                     returnIntent.putExtra("eventId", insertedId);
@@ -198,9 +201,9 @@ public class CreateEventActivity extends ActionBarActivity implements MeetlyServ
                     returnIntent.putExtra("latitude", lat);
                     returnIntent.putExtra("longitude", lng);
                     returnIntent.putExtra("sharedFlag", "Unshared");
+                    returnIntent.putExtra("eventAuthor", event_author);
+
                     setResult(RESULT_OK, returnIntent);
-
-
 
                     try {
                         publishEvent("Test", 0, currentEventName, StartTime, EndTime, lat, lng);

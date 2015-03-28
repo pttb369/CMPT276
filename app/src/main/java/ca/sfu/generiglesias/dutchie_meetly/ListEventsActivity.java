@@ -46,7 +46,7 @@ public class ListEventsActivity extends ActionBarActivity {
     private List<Event> events = new ArrayList<Event>();
     public static TextView currentUsername;
     private Menu menu;
-    private String userN, userName;
+    private String userN, userName, author;
 
     private DBAdapter myDb;
 
@@ -133,6 +133,7 @@ public class ListEventsActivity extends ActionBarActivity {
                 double latitude = cursor.getDouble(DBAdapter.COL_LATITUDE);
                 double longitude = cursor.getDouble(DBAdapter.COL_LONGITUDE);
                 String sharedFlag = cursor.getString(DBAdapter.COL_SHAREDFLAG);
+                String eventAuthor = cursor.getString(DBAdapter.COL_EVENTAUTHOR);
 
                 events.add(new Event
                             (eventId,
@@ -146,7 +147,9 @@ public class ListEventsActivity extends ActionBarActivity {
                             iconId,
                             latitude,
                             longitude,
-                            sharedFlag));
+                            sharedFlag,
+                            eventAuthor
+                                    ));
             } while(cursor.moveToNext());
         }
         cursor.close();
@@ -201,6 +204,7 @@ public class ListEventsActivity extends ActionBarActivity {
                 Intent launchNewActivity = new Intent(getApplicationContext(), ViewEventActivity.class);
                 long k = clickedEvent.getEventId();
                 launchNewActivity.putExtra("event_id", k);
+                launchNewActivity.putExtra("eventAuthor", author);
                 startActivity(launchNewActivity);
             }
         });
@@ -241,7 +245,7 @@ public class ListEventsActivity extends ActionBarActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == INFO_KEY) {
             if (resultCode == RESULT_OK) {
-
+                //author = data.getStringExtra("eventAuthor");
                 this.events.add(new Event(
                         data.getLongExtra("eventId", 0),
                         data.getStringExtra("name"),
@@ -254,9 +258,9 @@ public class ListEventsActivity extends ActionBarActivity {
                         R.drawable.communityimage,
                         data.getDoubleExtra("latitude", Double.NaN),
                         data.getDoubleExtra("longitude", Double.NaN),
-                        data.getStringExtra("sharedFlag")
+                        data.getStringExtra("sharedFlag"),
+                        data.getStringExtra("eventAuthor")
                 ));
-
                 sortEventList();
                 populateEventListView();
             }

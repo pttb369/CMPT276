@@ -45,6 +45,7 @@ public class ViewEventActivity extends ActionBarActivity {
     private String date;
     private String description;
     private String duration;
+    private String event_author;
     private double latitude;
     private double longitude;
 
@@ -66,7 +67,7 @@ public class ViewEventActivity extends ActionBarActivity {
     private boolean isWifiP2pEnabled = false;
     private WifiP2pDevice device;
     WifiP2pConfig config;
-    private String userName;
+    private String userName, currentUser;
     private DBAdapter myDb;
 
     @Override
@@ -75,6 +76,9 @@ public class ViewEventActivity extends ActionBarActivity {
         setContentView(R.layout.activity_view_event);
         openDB();
 
+        SharedPreferences getUsernamePref = getSharedPreferences("UserName", MODE_PRIVATE);
+        currentUser = getUsernamePref.getString("getUsername", "");
+        invalidateOptionsMenu();
 
         extractAndInsertEventDetails();
         calculateTimeLeftUntilEvent();
@@ -107,7 +111,7 @@ public class ViewEventActivity extends ActionBarActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        registerReceiver(receiver, filter);
+        //registerReceiver(receiver, filter);
     }
 
     /* unregister the broadcast receiver */
@@ -204,7 +208,7 @@ public class ViewEventActivity extends ActionBarActivity {
 
     private void extractAndInsertEventDetails() {
 
-//        Intent intent = getIntent();
+//       Intent intent = getIntent();
 //        eventName = intent.getStringExtra("EventName");
 //        location = intent.getStringExtra("Location");
 //        date = intent.getStringExtra("Date");
@@ -214,6 +218,8 @@ public class ViewEventActivity extends ActionBarActivity {
 //        endTime = intent.getStringExtra("endTime");
 
         long event_id = getIntent().getLongExtra("event_id", 0);
+
+        System.out.println(event_author);
         Cursor cursor = myDb.getRow(event_id);
 
         if (cursor.moveToFirst()) {
@@ -227,6 +233,7 @@ public class ViewEventActivity extends ActionBarActivity {
                 duration = cursor.getString(DBAdapter.COL_EVENTDURATION);
                 latitude = cursor.getDouble(DBAdapter.COL_LATITUDE);
                 longitude = cursor.getDouble(DBAdapter.COL_LONGITUDE);
+                event_author = cursor.getString(DBAdapter.COL_EVENTAUTHOR);
 
             } while(cursor.moveToNext());
         }
@@ -249,6 +256,9 @@ public class ViewEventActivity extends ActionBarActivity {
 
         TextView view_eventTimePeriod = (TextView) findViewById(R.id.event_view_id_timeperiod);
         view_eventTimePeriod.setText(getResources().getString(R.string.event_view_timeperiod) + startTime + "- " + endTime);
+
+        TextView view_eventAuthor = (TextView) findViewById(R.id.event_view_id_author);
+        view_eventAuthor.setText("Created By: " + event_author);
     }
 
     void calculateTimeLeftUntilEvent() {
@@ -435,5 +445,23 @@ public class ViewEventActivity extends ActionBarActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu)
+    {
+
+        MenuItem editMenuItem = menu.findItem(R.id.edit_event);
+
+        if(currentUser.equals(event_author))
+        {
+            editMenuItem.setVisible(true);
+
+        }else
+        {
+            editMenuItem.setVisible(false);
+        }
+
+        return true;
     }
 }
