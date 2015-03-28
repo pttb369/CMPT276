@@ -279,9 +279,8 @@ public class EditEventActivity extends ActionBarActivity {
         return eventLocation;
     }
 
-    private void setupEditEventButton() {
-        Button editEventButton = (Button) findViewById(R.id.editEventButton);
-        editEventButton.setOnClickListener(new View.OnClickListener() {
+    private View.OnClickListener makeEditOnClickListener() {
+        return new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
@@ -293,92 +292,40 @@ public class EditEventActivity extends ActionBarActivity {
                 String endTime = eventEndTime.getText().toString();
                 String durationTime = eventDuration.getText().toString();
 
-//                int[] splitStartTime = splitString(eventStartTime.getText().toString(), DELIMITER);
-//                int startHour = splitStartTime[HOUR_INDEX];
-//                int startMinute = splitStartTime[MINUTE_INDEX];
-//
-//                int[] splitEndTime = splitString(eventEndTime.getText().toString(), DELIMITER);
-//                int endHour = splitEndTime[HOUR_INDEX];
-//                int endMinute = splitEndTime[MINUTE_INDEX];
-//
-//                Calendar calStartTime = set(years, month, day, startHour, startMinute);
-//                EndTime.set(years, month, day, endHour, endMinute);
-
-                boolean validDetails = (!currentEventName.isEmpty()
+                boolean validDetails = !currentEventName.isEmpty()
                         && !cityName.isEmpty()
                         && !currentEventDescription.isEmpty()
                         && !currentEventDate.isEmpty()
                         && !startTime.isEmpty()
-                        && !endTime.isEmpty())
+                        && !endTime.isEmpty()
                         && !durationTime.isEmpty();
 
                 if (validDetails) {
-                    Intent returnIntent = new Intent();
-                    returnIntent.putExtra("name", currentEventName);
-                    returnIntent.putExtra("date", currentEventDate);
-                    returnIntent.putExtra("cityName", cityName);
-                    returnIntent.putExtra("description", currentEventDescription);
-                    returnIntent.putExtra("startTime", startTime);
-                    returnIntent.putExtra("duration", durationTime);
-                    returnIntent.putExtra("endTime", endTime);
-                    returnIntent.putExtra("latitude", lat);
-                    returnIntent.putExtra("longitude", lng);
-                    returnIntent.putExtra("sharedFlag", "Unshared");
-                    setResult(RESULT_OK, returnIntent);
+                    long event_id = getIntent().getLongExtra("event_id", 0);
 
-                    SharedPreferences getUsernamePref = getSharedPreferences("UserName", MODE_PRIVATE);
-                    String event_author = getUsernamePref.getString("getUsername", "");
-
-                    myDb.insertRow(currentEventName,
-                            currentEventDate,
-                            cityName,
-                            currentEventDescription,
-                            startTime,
-                            endTime,
-                            durationTime,
+                    long lat = myDb.getRow(event_id).getLong(DBAdapter.COL_LATITUDE);
+                    long lng = myDb.getRow(event_id).getLong(DBAdapter.COL_LONGITUDE);
+                    myDb.updateRow(event_id,
+                            eventTitle.getText().toString(),
+                            eventDate.getText().toString(),
+                            eventLocation.getText().toString(),
+                            eventDescription.getText().toString(),
+                            eventStartTime.getText().toString(),
+                            eventEndTime.getText().toString(),
+                            eventDuration.getText().toString(),
                             lat,
                             lng,
                             "Unshared",
                             event_author);
 
-//                    try {
-//                        publishEvent("Test", 0, currentEventName, StartTime, EndTime, lat, lng);
-//                    } catch (MeetlyServer.FailedPublicationException e) {
-//                        e.printStackTrace();
-//                    }
+                    String name = myDb.getRow(event_id).getString(DBAdapter.COL_EVENTNAME);
+
                     finish();
                 } else {
                     Toast.makeText(getApplicationContext(), R.string.check_details, Toast.LENGTH_SHORT)
                             .show();
                 }
             }
-        });
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_edit_event, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    public void onBackPressed() {
-        finish();
+        };
     }
 }

@@ -58,11 +58,16 @@ public class ListEventsActivity extends ActionBarActivity {
         openDB();
 
         setActionBarName();
-        populateEventList();
-        sortEventList();
-        populateEventListView();
+        setupEventList();
         setCurrentCity();
         setCurrentUsername();
+    }
+
+    private void setupEventList() {
+        events.clear();
+        getAllEventsFromDatabase();
+        sortEventList();
+        populateEventListView();
     }
 
     @Override
@@ -100,19 +105,6 @@ public class ListEventsActivity extends ActionBarActivity {
         startActivityForResult(
                 new Intent(ListEventsActivity.this, CreateEventActivity.class),
                 INFO_KEY);
-    }
-
-    private void populateEventList() {
-        getAllEventsFromDatabase();
-        //http://www.eracer.de/2012/07/09/android-objectinputstream-and-objectoutputstream-snippet/
-//        try {
-//            fileInputStream = openFileInput("eventListData");
-//            objectRead = new ObjectInputStream(fileInputStream);
-//            //events = (ArrayList)objectRead.readObject();
-//
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
     }
 
     private void getAllEventsFromDatabase() {
@@ -331,19 +323,14 @@ public class ListEventsActivity extends ActionBarActivity {
     }
 
     @Override
-    public boolean onPrepareOptionsMenu(Menu menu)
-    {
-
+    public boolean onPrepareOptionsMenu(Menu menu) {
         MenuItem login = menu.findItem(R.id.login_event);
         MenuItem logout = menu.findItem(R.id.logout_event);
 
-        if(userN.isEmpty())
-        {
+        if (userN.isEmpty()) {
             logout.setVisible(false);
             login.setVisible(true);
-
-        }else
-        {
+        } else {
             login.setVisible(false);
             logout.setVisible(true);
         }
@@ -351,4 +338,9 @@ public class ListEventsActivity extends ActionBarActivity {
         return true;
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        setupEventList();
+    }
 }

@@ -74,6 +74,7 @@ public class ViewEventActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_event);
+<<<<<<< HEAD
         openDB();
 
         SharedPreferences getUsernamePref = getSharedPreferences("UserName", MODE_PRIVATE);
@@ -82,7 +83,11 @@ public class ViewEventActivity extends ActionBarActivity {
 
         extractAndInsertEventDetails();
         calculateTimeLeftUntilEvent();
+=======
+>>>>>>> 5434c911f46ec80fc129ab059121b8d214dd76ab
 
+        openDB();
+        setupEventDisplayInfo();
         setupButtons();
 
         // wifi setup
@@ -90,6 +95,11 @@ public class ViewEventActivity extends ActionBarActivity {
         channel = wifiManager.initialize(this, getMainLooper(), null);
         receiver = new WifiDirectBroadcastReceiver(wifiManager, channel, this);
         initializeIntentFilter();
+    }
+
+    private void setupEventDisplayInfo() {
+        extractAndInsertEventDetails();
+        calculateTimeLeftUntilEvent();
     }
 
     @Override
@@ -111,7 +121,12 @@ public class ViewEventActivity extends ActionBarActivity {
     @Override
     protected void onResume() {
         super.onResume();
+<<<<<<< HEAD
         //registerReceiver(receiver, filter);
+=======
+//        registerReceiver(receiver, filter);
+        setupEventDisplayInfo();
+>>>>>>> 5434c911f46ec80fc129ab059121b8d214dd76ab
     }
 
     /* unregister the broadcast receiver */
@@ -383,6 +398,7 @@ public class ViewEventActivity extends ActionBarActivity {
         intent.putExtra("event_start_time", startTime);
         intent.putExtra("event_duration", duration);
         intent.putExtra("event_end_time", endTime);
+        intent.putExtra("event_id", getIntent().getLongExtra("event_id", 0));
         startActivity(intent);
     }
 
@@ -404,8 +420,7 @@ public class ViewEventActivity extends ActionBarActivity {
         if (id == R.id.edit_event) {
             editEvent();
             return true;
-        } else if (id == R.id.share_event)
-        {
+        } else if (id == R.id.share_event) {
             setupDiscoverPeersListener();
             setupPeerListListener();
 
