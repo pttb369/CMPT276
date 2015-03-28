@@ -31,6 +31,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Locale;
 
+import ca.sfu.generiglesias.dutchie_meetly.bluetoothlogic.BluetoothReader;
 import ca.sfu.generiglesias.dutchie_meetly.maplogic.GPSTracker;
 
 /**
@@ -64,6 +65,7 @@ public class ListEventsActivity extends ActionBarActivity {
     }
 
     private void setupEventList() {
+        BluetoothReader.read(getApplicationContext());
         events.clear();
         getAllEventsFromDatabase();
         sortEventList();
