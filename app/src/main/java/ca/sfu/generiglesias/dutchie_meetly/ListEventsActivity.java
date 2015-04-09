@@ -48,6 +48,7 @@ public class ListEventsActivity extends ActionBarActivity {
     public static TextView currentUsername;
     private Menu menu;
     private String userN, userName, author;
+    private int userId;
 
     private DBAdapter myDb;
 
@@ -90,6 +91,7 @@ public class ListEventsActivity extends ActionBarActivity {
     private void setCurrentUsername() {
         SharedPreferences getUsernamePref = getSharedPreferences("UserName", MODE_PRIVATE);
         userName = getUsernamePref.getString("getUsername", "");
+        userId = getUsernamePref.getInt("getUserToken", 0);
 
         currentUsername = (TextView) findViewById(R.id.usernameView);
         currentUsername.setText(getResources().getString(R.string.user_title) + userName);
@@ -306,6 +308,7 @@ public class ListEventsActivity extends ActionBarActivity {
                             SharedPreferences UserNamePref = getSharedPreferences("UserName", MODE_PRIVATE);
                             SharedPreferences.Editor editor = UserNamePref.edit();
                             editor.putString("getUsername", "");
+                            editor.putInt("getUserToken", -999);
                             editor.commit();
                             userName = "";
                             currentUsername.setText("User: " + userName);

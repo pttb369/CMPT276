@@ -512,6 +512,26 @@ public class ViewEventActivity extends ActionBarActivity {
 
             if(!userName.isEmpty())
             {
+                new Thread(new Runnable(){
+                    String myStartTime = startTime;
+                    String myEndTime = endTime;
+
+                    @Override
+                    public void run() {
+                        SharedPreferences getUsernamePref = getSharedPreferences("UserName", MODE_PRIVATE);
+                        int userToken = getUsernamePref.getInt("getUserToken", 0);
+                        Calendar startTime;
+                        Calendar endTime;
+                        MeetlyServer server = new MeetlyServerImpl();
+
+                        Log.i("StartTime: ", myStartTime);
+                        Log.i("EndTime: ", myEndTime);
+                        Log.i("MyUserToken", Integer.toString(userToken));
+                        //server.publishEvent(event_author, userToken, )
+
+                    }
+                }).start();
+
                 Toast.makeText(getApplicationContext(), "'Planned' event shared",
                         Toast.LENGTH_SHORT).show();
 

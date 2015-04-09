@@ -30,6 +30,7 @@ public class LoginActivity extends Activity{
     private boolean cancel;
     private MeetlyServerImpl server;
     int userId;
+    String username, password;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,8 +71,8 @@ public class LoginActivity extends Activity{
         mPasswordView.setError(null);
 
         // Store values at the time of the login attempt.
-        String username = mUsernameView.getText().toString();
-        String password = mPasswordView.getText().toString();
+        username = mUsernameView.getText().toString();
+        password = mPasswordView.getText().toString();
 
         cancel = false;
 
@@ -94,34 +95,44 @@ public class LoginActivity extends Activity{
             cancel = true;
         }
 
-        // Uses the login function from the interface class
-
-        new Thread(new Runnable(){
-            @Override
-            public void run() {
-                try {
-                    int userId = server.login("dutchie", "meetly");
-                    Log.i("userId", Integer.toString(userId));
-                } catch (MeetlyServer.FailedLoginException e) {
-                    e.printStackTrace();
+        if(!cancel)
+        {
+            // Uses the login function from the interface class
+            new Thread(new Runnable(){
+                @Override
+                public void run() {
+                    try {
+                        SharedPreferences UserNamePref = getSharedPreferences("UserName", MODE_PRIVATE);
+                        SharedPreferences.Editor editor = UserNamePref.edit();
+                        userId = server.login(username, password);
+                        Log.i("userId", Integer.toString(userId));
+                        editor.putInt("getUserToken", userId);
+                        editor.commit();
+                    } catch (MeetlyServer.FailedLoginException e) {
+                        e.printStackTrace();
+                    }
                 }
-            }
-        }).start();
+            }).start();
 
-
-        if (cancel || loginFlag == 1) {
-            // There was an error; don't attempt login and focus the first
-            // form field with an error.
-            Toast toast = Toast.makeText(getApplicationContext(), R.string.error_invalid_username_password,
-                    Toast.LENGTH_LONG);
-            toast.show();
-        } else {
             editor.putString("getUsername", username);
             editor.commit();
             ListEventsActivity.currentUsername.setText(username);
             Intent in = new Intent();
             setResult(1, in);
             finish();
+        } else {
+            Toast toast = Toast.makeText(getApplicationContext(), R.string.error_invalid_username_password,
+                    Toast.LENGTH_LONG);
+            toast.show();
+        }
+
+
+        if (cancel || loginFlag == 1) {
+            // There was an error; don't attempt login and focus the first
+            // form field with an error.
+
+        } else {
+
         }
     }
 
