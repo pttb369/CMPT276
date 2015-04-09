@@ -274,9 +274,7 @@ public class ListEventsActivity extends ActionBarActivity {
 //        }
         List<Event> eventsFromCentralServer;
 
-
         MeetlyServer server = new MeetlyServerImpl();
-
 
         eventsFromCentralServer = server.fetchEventsAfter(1);
 
