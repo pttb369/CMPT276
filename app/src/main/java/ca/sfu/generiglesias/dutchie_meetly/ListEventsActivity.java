@@ -267,6 +267,25 @@ public class ListEventsActivity extends ActionBarActivity {
         }
     }
 
+    public void fetchEventsFromCentralServer() throws MeetlyServer.FailedFetchException {
+
+//        for (Event e : MeetlyServer.fetchEventsAfter(1)) {
+//            Log.i("DBTester", "Event " + e.title);
+//        }
+        List<Event> eventsFromCentralServer;
+
+
+        MeetlyServer server = new MeetlyServerImpl();
+
+
+        eventsFromCentralServer = server.fetchEventsAfter(1);
+
+        for(int i =0; i < eventsFromCentralServer.size();i++){
+            Log.i("Central Server Event",eventsFromCentralServer.get(i).getEventName());
+        }
+
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_list_events, menu);
@@ -319,7 +338,15 @@ public class ListEventsActivity extends ActionBarActivity {
             alert11.show();
 
             return true;
+        } else if(id == R.id.fetch_event){
+            try {
+                fetchEventsFromCentralServer();
+            }
+            catch(MeetlyServer.FailedFetchException e){
+                e.printStackTrace();
+            }
         }
+
 
         return super.onOptionsItemSelected(item);
     }

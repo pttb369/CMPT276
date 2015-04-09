@@ -3,6 +3,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="ca.sfu.generiglesias.dutchie_meetly.ListEventsActivity">
 
+
+    <item android:id="@+id/fetch_event"
+        android:icon="@drawable/ic_action_refresh1"
+        android:title="@string/action_fetch_event"
+        android:orderInCategory="100"
+        app:showAsAction="ifRoom"/>
+
     <item android:id="@+id/new_event"
         android:icon="@drawable/ic_action_new"
         android:title="@string/action_new_event"
@@ -18,5 +25,7 @@
         android:title="@string/logout_title"
         android:orderInCategory="100"
         app:showAsAction="ifRoom"/>
+
+
 
 </menu>
