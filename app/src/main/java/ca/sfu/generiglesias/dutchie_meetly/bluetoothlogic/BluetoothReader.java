@@ -1,6 +1,7 @@
 package ca.sfu.generiglesias.dutchie_meetly.bluetoothlogic;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Environment;
 
 import java.io.File;
@@ -39,13 +40,14 @@ public class BluetoothReader {
                     double eventLat = Double.parseDouble(scanner.nextLine());
                     double eventLng = Double.parseDouble(scanner.nextLine());
                     String sharedFlag = scanner.nextLine();
+                    String author = scanner.nextLine();
                     scanner.close();
 
                     file.delete();
 
                     database.insertRow(eventName, eventDate, eventLocation,
                             eventDescription, eventStartTime, eventEndTime,
-                            eventDuration, eventLat, eventLng, sharedFlag);
+                            eventDuration, eventLat, eventLng, sharedFlag, author);
 
                 } catch (FileNotFoundException e) {
                     e.printStackTrace();

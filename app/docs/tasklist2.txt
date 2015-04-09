@@ -11,3 +11,8 @@ David Li: made the database adapter and edit activity
 For this iteration, everyone helped out with the other tasks as well. However, we were unable to get
 the sharing to work using wifi direct p2p. Also, since we don't have a live server, we were unable
 to store events when logged in.
+
+We couldn't get wifi direct p2p to work, so we tried with bluetooth. We're sharing a text file
+containing event information over bluetooth, and then loading it into the receiving app upon next
+using the app. All this is done automatically by the app. To share a spontaneous event over bluetooth
+you must not be logged in.
