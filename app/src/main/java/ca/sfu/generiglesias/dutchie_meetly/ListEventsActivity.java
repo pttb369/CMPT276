@@ -1,6 +1,7 @@
 package ca.sfu.generiglesias.dutchie_meetly;
 
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -17,8 +18,12 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
+import android.widget.NumberPicker;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -48,6 +53,11 @@ public class ListEventsActivity extends ActionBarActivity {
     public static TextView currentUsername;
     private Menu menu;
     private String userN, userName, author;
+<<<<<<< HEAD
+    private int userId;
+=======
+    private int selectedFrequencyVal = 0;
+>>>>>>> 0a6ff449e67ffd89132e9a95016d17823b85263c
 
     private DBAdapter myDb;
 
@@ -90,6 +100,7 @@ public class ListEventsActivity extends ActionBarActivity {
     private void setCurrentUsername() {
         SharedPreferences getUsernamePref = getSharedPreferences("UserName", MODE_PRIVATE);
         userName = getUsernamePref.getString("getUsername", "");
+        userId = getUsernamePref.getInt("getUserToken", 0);
 
         currentUsername = (TextView) findViewById(R.id.usernameView);
         currentUsername.setText(getResources().getString(R.string.user_title) + userName);
@@ -301,13 +312,25 @@ public class ListEventsActivity extends ActionBarActivity {
         if (id == R.id.new_event) {
             createNewEvent();
             return true;
-        } else if (id == R.id.login_event)
-        {
+        } else if(id == R.id.settings) {
+            Toast.makeText(this,"Settings haven selected", Toast.LENGTH_SHORT);
+//            startActivityForResult(
+//                    new Intent(ListEventsActivity.this, UpdateFrequency.class),
+//                    INFO_KEY);
+            final Dialog dialog = new Dialog(this);
+            dialog.setContentView(R.layout.activity_update_frequency);
+            dialog.setTitle("Update Frequency");
+
+
+            createUpdateFrequencyDialog(dialog);
+
+            dialog.show();
+
+        } else if (id == R.id.login_event) {
             startActivityForResult(new Intent(ListEventsActivity.this, LoginActivity.class),
                     INFO_KEY);
             return true;
-        } else if (id == R.id.logout_event)
-        {
+        } else if (id == R.id.logout_event) {
             AlertDialog.Builder builder1 = new AlertDialog.Builder(this);
             builder1.setMessage(getResources().getString(R.string.logout_prompt_title));
             builder1.setCancelable(true);
@@ -323,6 +346,7 @@ public class ListEventsActivity extends ActionBarActivity {
                             SharedPreferences UserNamePref = getSharedPreferences("UserName", MODE_PRIVATE);
                             SharedPreferences.Editor editor = UserNamePref.edit();
                             editor.putString("getUsername", "");
+                            editor.putInt("getUserToken", -999);
                             editor.commit();
                             userName = "";
                             currentUsername.setText("User: " + userName);
@@ -347,6 +371,32 @@ public class ListEventsActivity extends ActionBarActivity {
 
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private void createUpdateFrequencyDialog(final Dialog dialog) {
+        NumberPicker np = (NumberPicker)dialog.findViewById(R.id.number_picker);
+        np.setMinValue(1);// restricted number to minimum value i.e 1
+        np.setMaxValue(31);// restricked number to maximum value i.e. 31
+        np.setWrapSelectorWheel(true);
+
+        np.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
+
+            @Override
+            public void onValueChange(NumberPicker picker, int oldVal, int newVal)
+            {
+                selectedFrequencyVal = newVal;
+                Log.i("Selected Value:", Integer.toString(selectedFrequencyVal));
+            }
+        });
+
+        Button buttonApply = (Button) dialog.findViewById(R.id.apply_button);
+        buttonApply.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // update the frequency time on server with the selected value.
+                dialog.dismiss();
+            }
+        });
     }
 
     @Override

@@ -16,6 +16,12 @@
         android:orderInCategory="100"
         app:showAsAction="ifRoom"/>
 
+    <item android:id="@+id/settings"
+        android:icon="@drawable/ic_action_settings"
+        android:title="Settings"
+        android:orderInCategory="100"
+        app:showAsAction="ifRoom" />
+
     <item android:id="@+id/login_event"
         android:title="@string/login_title"
         android:orderInCategory="100"
