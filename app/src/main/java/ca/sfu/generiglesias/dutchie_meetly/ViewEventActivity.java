@@ -158,7 +158,6 @@ public class ViewEventActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_event);
-<<<<<<< HEAD
         openDB();
 
         SharedPreferences getUsernamePref = getSharedPreferences("UserName", MODE_PRIVATE);
@@ -167,8 +166,6 @@ public class ViewEventActivity extends ActionBarActivity {
 
         extractAndInsertEventDetails();
         calculateTimeLeftUntilEvent();
-=======
->>>>>>> 5434c911f46ec80fc129ab059121b8d214dd76ab
 
         openDB();
         setupEventDisplayInfo();
@@ -205,12 +202,9 @@ public class ViewEventActivity extends ActionBarActivity {
     @Override
     protected void onResume() {
         super.onResume();
-<<<<<<< HEAD
         //registerReceiver(receiver, filter);
-=======
 //        registerReceiver(receiver, filter);
         setupEventDisplayInfo();
->>>>>>> 5434c911f46ec80fc129ab059121b8d214dd76ab
     }
 
     /* unregister the broadcast receiver */
