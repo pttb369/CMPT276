@@ -358,4 +358,9 @@ public class CreateEventActivity extends ActionBarActivity implements MeetlyServ
     public void modifyEvent(int eventID, int userToken, String title, Calendar startTime, Calendar endTime, double latitude, double longitude) throws FailedPublicationException {
 
     }
+
+    @Override
+    public List<Event> fetchEventsAfter(int lastTick) throws FailedFetchException {
+        return null;
+    }
 }

@@ -61,9 +61,36 @@ public interface MeetlyServer {
                             double latitude, double longitude)
             throws FailedPublicationException;
 
+    /**
+     * Retrieves all events after the given update tick
+     * @param lastTick
+     * @return A list of events
+     * @throws FailedFetchException
+     */
+    public java.util.List<Event> fetchEventsAfter(int lastTick)
+            throws FailedFetchException;
+
     class FailedLoginException extends Exception {
-    };
+        public FailedLoginException(Exception e) {
+            super(e);
+        }
+        public FailedLoginException(String message) {
+            super(message);
+        }
+    }
 
     class FailedPublicationException extends Exception {
+        public FailedPublicationException(Exception e) {
+            super(e);
+        }
+        public FailedPublicationException(String message) {
+            super(message);
+        }
+    }
+
+    class FailedFetchException extends Exception {
+        public FailedFetchException(Exception e) {
+            super(e);
+        }
     }
 }

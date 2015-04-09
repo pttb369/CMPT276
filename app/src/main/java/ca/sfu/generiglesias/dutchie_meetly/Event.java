@@ -1,6 +1,7 @@
 package ca.sfu.generiglesias.dutchie_meetly;
 
 import java.io.Serializable;
+import java.util.Calendar;
 
 /**
  * Represents an event. This will be stored on
@@ -8,6 +9,7 @@ import java.io.Serializable;
  */
 public class Event implements Serializable{
     private long eventId;
+    int lastUpdate;
     private String eventName;
     private String eventDate;
     private String cityName;
@@ -74,6 +76,24 @@ public class Event implements Serializable{
             sharedFlag,
             eventAuthor);
         this.eventId = eventId;
+    }
+
+    public Event(
+                 long eventId,
+                 int lastUpdate,
+                 String eventName,
+                 Calendar eventStartTime,
+                 Calendar eventEndTime,
+                 double latitude,
+                 double longitude) {
+
+                this.lastUpdate = lastUpdate;
+                this.eventName = eventName;
+                this.eventStartTime = eventStartTime.toString();
+                this.eventEndTime = eventEndTime.toString();
+                this.latitude = latitude;
+                this.longitude = longitude;
+                this.eventId = eventId;
     }
 
     public long getEventId() {
