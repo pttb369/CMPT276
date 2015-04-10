@@ -53,10 +53,6 @@ public class ListEventsActivity extends ActionBarActivity {
     public static TextView currentUsername;
     private Menu menu;
     private String userN, userName, author;
-<<<<<<< HEAD
-=======
-
->>>>>>> c1865bbe4b30a98b57a2036bbed69987c69a24a1
     private int userId;
     private int selectedFrequencyVal = 0;
 
@@ -404,8 +400,9 @@ public class ListEventsActivity extends ActionBarActivity {
                         try {
                             for (Event e : server.fetchEventsAfter(selectedFrequencyVal)) {
                                 Log.i("DBTester", "Event " + e.getEventName());
+                                Log.i("EventId", e.getEventAuthor());
                                 Log.i("Retrieved Start Time: ", e.getEventStartTime());
-                                Log.i("Retrieved End Time: ", e.getEventStartTime());
+                                Log.i("Retrieved End Time: ", e.getEventEndTime());
                             }
 
                             Log.i("Set Value:", "True");
