@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -12,12 +13,13 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import java.util.Calendar;
+import java.util.List;
 
 
 /**
  * A login screen that offers login via email/password.
  */
-public class LoginActivity extends Activity implements MeetlyServer{
+public class LoginActivity extends Activity{
 
     // UI references.
     private EditText mUsernameView;
@@ -26,6 +28,10 @@ public class LoginActivity extends Activity implements MeetlyServer{
     private View mLoginFormView;
     private int loginFlag;
     private boolean cancel;
+    private MeetlyServerImpl server;
+    int userId;
+    String username, password;
+    boolean loginSuccessful;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,6 +52,8 @@ public class LoginActivity extends Activity implements MeetlyServer{
 
         mLoginFormView = findViewById(R.id.login_form);
         mProgressView = findViewById(R.id.login_progress);
+
+        server = new MeetlyServerImpl();
     }
 
 
@@ -64,8 +72,8 @@ public class LoginActivity extends Activity implements MeetlyServer{
         mPasswordView.setError(null);
 
         // Store values at the time of the login attempt.
-        String username = mUsernameView.getText().toString();
-        String password = mPasswordView.getText().toString();
+        username = mUsernameView.getText().toString();
+        password = mPasswordView.getText().toString();
 
         cancel = false;
 
@@ -89,48 +97,50 @@ public class LoginActivity extends Activity implements MeetlyServer{
         }
 
         // Uses the login function from the interface class
-        try {
-            loginFlag = login(username, password);
-        } catch (FailedLoginException e) {
-            e.printStackTrace();
-        }
+        new Thread(new Runnable(){
+            @Override
+            public void run() {
+                try {
+                    SharedPreferences UserNamePref = getSharedPreferences("UserName", MODE_PRIVATE);
+                    SharedPreferences.Editor editor = UserNamePref.edit();
+                    userId = server.login(username, password);
+                    editor.putInt("getUserToken", userId);
+                    editor.commit();
+                    loginSuccessful = true;
+                } catch (MeetlyServer.FailedLoginException e) {
+                    e.printStackTrace();
+                    loginSuccessful = false;
+                }
+            }
+        }).start();
 
-        if (cancel || loginFlag == 1) {
-            // There was an error; don't attempt login and focus the first
-            // form field with an error.
-            Toast toast = Toast.makeText(getApplicationContext(), R.string.error_invalid_username_password,
-                    Toast.LENGTH_LONG);
-            toast.show();
-        } else {
+        if(!cancel && loginSuccessful)
+        {
             editor.putString("getUsername", username);
             editor.commit();
             ListEventsActivity.currentUsername.setText(username);
             Intent in = new Intent();
             setResult(1, in);
             finish();
+        } else {
+            Toast toast = Toast.makeText(getApplicationContext(), R.string.error_invalid_username_password,
+                    Toast.LENGTH_LONG);
+            toast.show();
+        }
+
+
+        if (cancel || loginFlag == 1) {
+            // There was an error; don't attempt login and focus the first
+            // form field with an error.
+
+        } else {
+
         }
     }
 
     private boolean isPasswordValid(String password) {
         //TODO: Replace this with your own logic
         return password.length() > 4;
-    }
-
-    @Override
-    public int login(String username, String password) throws FailedLoginException {
-        return 0;
-    }
-
-    @Override
-    public int publishEvent(String username, int userToken, String title, Calendar startTime,
-        Calendar endTime, double latitude, double longitude) throws FailedPublicationException {
-        return 0;
-    }
-
-    @Override
-    public void modifyEvent(int eventID, int userToken, String title, Calendar startTime,
-        Calendar endTime, double latitude, double longitude) throws FailedPublicationException {
-
     }
 }
 

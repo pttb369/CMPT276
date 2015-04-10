@@ -79,6 +79,8 @@ public class ViewEventActivity extends ActionBarActivity {
     WifiP2pConfig config;
     private String userName, currentUser;
     private DBAdapter myDb;
+    Calendar calStartTime = Calendar.getInstance();
+    Calendar calEndTime = Calendar.getInstance();
 
     private static final int BLUETOOTH_RESULT = 82;
 
@@ -512,6 +514,35 @@ public class ViewEventActivity extends ActionBarActivity {
 
             if(!userName.isEmpty())
             {
+                new Thread(new Runnable(){
+                    String myEventName = eventName;
+                    String myEventAuthor = event_author;
+                    String myStartTime = startTime;
+                    String myEndTime = endTime;
+                    //Date myDate = eventDate;
+                    //Date myEndDate = eventEndTime;
+                    String myDate = date;
+                    double lat = latitude;
+                    double longi = longitude;
+
+
+
+                    @Override
+                    public void run() {
+                        SharedPreferences getUsernamePref = getSharedPreferences("UserName", MODE_PRIVATE);
+                        int userToken = getUsernamePref.getInt("getUserToken", 0);
+                        MeetlyServer server = new MeetlyServerImpl();
+                        setupCalendars(myDate, myStartTime, myEndTime);
+                        try {
+                            server.publishEvent(myEventAuthor, userToken, myEventName,
+                                    calStartTime, calEndTime, lat, longi);
+                        } catch (MeetlyServer.FailedPublicationException e) {
+                            e.printStackTrace();
+                        }
+
+                    }
+                }).start();
+
                 Toast.makeText(getApplicationContext(), "'Planned' event shared",
                         Toast.LENGTH_SHORT).show();
 
@@ -542,6 +573,15 @@ public class ViewEventActivity extends ActionBarActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    private void setupCalendars(String myDate, String myStartTime, String myEndTime){
+
+        int[] splitDate = splitString(myDate, "-");
+        int[] splitStartTime = splitString(myStartTime, ":");
+        int[] splitEndTime = splitString(myEndTime, ":");
+        calStartTime.set(splitDate[2], splitDate[1], splitDate[0], splitStartTime[0], splitStartTime[1]);
+        calEndTime.set(splitDate[2], splitDate[1], splitDate[0], splitEndTime[0], splitEndTime[1]);
+    }
+
     @Override
     public boolean onPrepareOptionsMenu(Menu menu)
     {
@@ -558,5 +598,15 @@ public class ViewEventActivity extends ActionBarActivity {
         }
 
         return true;
+    }
+
+    private int[] splitString(String characters, String delimiter) {
+        String[] splitedChar = characters.split(delimiter);
+        int[] intArray = new int[splitedChar.length];
+        for(int i = 0; i < splitedChar.length; i++) {
+            intArray[i] = Integer.parseInt(splitedChar[i]);
+        }
+
+        return intArray;
     }
 }

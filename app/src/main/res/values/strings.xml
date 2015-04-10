@@ -33,6 +33,7 @@
     <string name="event_item_duration">00 Hours 00 Minutes</string>
     <string name="event_item_date">dd-MM-yyyy</string>
     <string name="action_new_event">New Event</string>
+    <string name="action_fetch_event">Fetch Event</string>
     <string name="title_activity_test">test</string>
     <string name="hello_world">Hello world!</string>
     <string name="check_details">Not all details set</string>
@@ -53,4 +54,6 @@
     <string name="shared_status_title">Shared status</string>
     <string name="event_author_title">Author</string>
     <string name ="title_activity_bluetooth_test">Bluetooth Test</string>
+    <string name="title_activity_update_frequency">UpdateFrequency</string>
+    <string name="button_apply">Apply</string>
 </resources>
