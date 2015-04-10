@@ -1,5 +1,7 @@
 package ca.sfu.generiglesias.dutchie_meetly;
 
+import android.util.Log;
+
 import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -136,6 +138,7 @@ public class MeetlyServerImpl implements MeetlyServer {
 
                 Calendar startTime  = Calendar.getInstance();
                 startTime.setTimeInMillis(results.getInt(5));
+                Log.i("StartTime: ", Integer.toString(results.getInt(5)));
                 Calendar endTime    = Calendar.getInstance();
                 endTime.setTimeInMillis(results.getInt(6));
 

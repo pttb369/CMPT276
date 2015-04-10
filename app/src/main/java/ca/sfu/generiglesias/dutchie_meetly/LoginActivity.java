@@ -31,6 +31,7 @@ public class LoginActivity extends Activity{
     private MeetlyServerImpl server;
     int userId;
     String username, password;
+    boolean loginSuccessful;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -95,26 +96,26 @@ public class LoginActivity extends Activity{
             cancel = true;
         }
 
-        if(!cancel)
-        {
-            // Uses the login function from the interface class
-            new Thread(new Runnable(){
-                @Override
-                public void run() {
-                    try {
-                        SharedPreferences UserNamePref = getSharedPreferences("UserName", MODE_PRIVATE);
-                        SharedPreferences.Editor editor = UserNamePref.edit();
-                        userId = server.login(username, password);
-                        Log.i("userId", Integer.toString(userId));
-                        editor.putInt("getUserToken", userId);
-                        editor.commit();
-                    } catch (MeetlyServer.FailedLoginException e) {
-                        e.printStackTrace();
-                    }
+        // Uses the login function from the interface class
+        new Thread(new Runnable(){
+            @Override
+            public void run() {
+                try {
+                    SharedPreferences UserNamePref = getSharedPreferences("UserName", MODE_PRIVATE);
+                    SharedPreferences.Editor editor = UserNamePref.edit();
+                    userId = server.login(username, password);
+                    editor.putInt("getUserToken", userId);
+                    editor.commit();
+                    loginSuccessful = true;
+                } catch (MeetlyServer.FailedLoginException e) {
+                    e.printStackTrace();
+                    loginSuccessful = false;
                 }
-            }).start();
+            }
+        }).start();
 
-            //
+        if(!cancel && loginSuccessful)
+        {
             editor.putString("getUsername", username);
             editor.commit();
             ListEventsActivity.currentUsername.setText(username);
