@@ -53,11 +53,9 @@ public class ListEventsActivity extends ActionBarActivity {
     public static TextView currentUsername;
     private Menu menu;
     private String userN, userName, author;
-<<<<<<< HEAD
+
     private int userId;
-=======
     private int selectedFrequencyVal = 0;
->>>>>>> 0a6ff449e67ffd89132e9a95016d17823b85263c
 
     private DBAdapter myDb;
 
@@ -72,6 +70,7 @@ public class ListEventsActivity extends ActionBarActivity {
         setupEventList();
         setCurrentCity();
         setCurrentUsername();
+
     }
 
     private void setupEventList() {
@@ -369,6 +368,25 @@ public class ListEventsActivity extends ActionBarActivity {
             @Override
             public void onClick(View v) {
                 // update the frequency time on server with the selected value.
+                final MeetlyServer server = new MeetlyServerImpl();
+
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
+                            for (Event e : server.fetchEventsAfter(selectedFrequencyVal)) {
+                                Log.i("DBTester", "Event " + e.getEventName());
+                                Log.i("Retrieved Start Time: ", e.getEventStartTime());
+                                Log.i("Retrieved End Time: ", e.getEventStartTime());
+                            }
+
+                            Log.i("Set Value:", "True");
+                        } catch (MeetlyServer.FailedFetchException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }).start();
+
                 dialog.dismiss();
             }
         });
