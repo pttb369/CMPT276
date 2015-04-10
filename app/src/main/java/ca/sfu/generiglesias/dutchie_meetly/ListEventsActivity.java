@@ -53,11 +53,8 @@ public class ListEventsActivity extends ActionBarActivity {
     public static TextView currentUsername;
     private Menu menu;
     private String userN, userName, author;
-<<<<<<< HEAD
     private int userId;
-=======
     private int selectedFrequencyVal = 0;
->>>>>>> 0a6ff449e67ffd89132e9a95016d17823b85263c
 
     private DBAdapter myDb;
 
