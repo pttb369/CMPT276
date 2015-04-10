@@ -114,6 +114,7 @@ public class LoginActivity extends Activity{
                 }
             }).start();
 
+            //
             editor.putString("getUsername", username);
             editor.commit();
             ListEventsActivity.currentUsername.setText(username);

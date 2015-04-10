@@ -45,7 +45,7 @@ import ca.sfu.generiglesias.dutchie_meetly.maplogic.GPSTracker;
 /**
  * User can see a list of their created events
  */
-public class ListEventsActivity extends ActionBarActivity{
+public class ListEventsActivity extends ActionBarActivity {
     public static final int INFO_KEY = 342;
     private static final String TAG = "ListEventsActivity";
     private FileOutputStream fileOutputStream;
@@ -72,7 +72,7 @@ public class ListEventsActivity extends ActionBarActivity{
         setupEventList();
         setCurrentCity();
         setCurrentUsername();
-        scheduleFetchEventTask();
+
     }
 
     private void setupEventList() {
@@ -142,20 +142,20 @@ public class ListEventsActivity extends ActionBarActivity{
                 String eventAuthor = cursor.getString(DBAdapter.COL_EVENTAUTHOR);
 
                 events.add(new Event
-                            (eventId,
-                            eventName,
-                            eventDate,
-                            eventLocation,
-                            eventDescription,
-                            eventStartTme,
-                            eventEndTime,
-                            eventDuration,
-                            iconId,
-                            latitude,
-                            longitude,
-                            sharedFlag,
-                            eventAuthor
-                                    ));
+                        (eventId,
+                                eventName,
+                                eventDate,
+                                eventLocation,
+                                eventDescription,
+                                eventStartTme,
+                                eventEndTime,
+                                eventDuration,
+                                iconId,
+                                latitude,
+                                longitude,
+                                sharedFlag,
+                                eventAuthor
+                        ));
             } while(cursor.moveToNext());
         }
         cursor.close();
@@ -395,6 +395,26 @@ public class ListEventsActivity extends ActionBarActivity{
             @Override
             public void onClick(View v) {
                 // update the frequency time on server with the selected value.
+                final MeetlyServer server = new MeetlyServerImpl();
+
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
+                            for (Event e : server.fetchEventsAfter(selectedFrequencyVal)) {
+                                Log.i("DBTester", "Event " + e.getEventName());
+                                Log.i("EventId", e.getEventAuthor());
+                                Log.i("Retrieved Start Time: ", e.getEventStartTime());
+                                Log.i("Retrieved End Time: ", e.getEventEndTime());
+                            }
+
+                            Log.i("Set Value:", "True");
+                        } catch (MeetlyServer.FailedFetchException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }).start();
+
                 dialog.dismiss();
             }
         });
@@ -422,7 +442,7 @@ public class ListEventsActivity extends ActionBarActivity{
         setupEventList();
     }
 
-     public void scheduleFetchEventTask(){
+    public void scheduleFetchEventTask(){
         TimerTask fetchEvent = new TimerTask() {
             @Override
             public void run() {
