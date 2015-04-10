@@ -72,6 +72,7 @@ public class ListEventsActivity extends ActionBarActivity {
         setupEventList();
         setCurrentCity();
         setCurrentUsername();
+        scheduleFetchEventTask();
 
     }
 
@@ -286,13 +287,14 @@ public class ListEventsActivity extends ActionBarActivity {
 //        }
         List<Event> eventsFromCentralServer;
 
-        MeetlyServer server = new MeetlyServerImpl();
+       final MeetlyServer server = new MeetlyServerImpl();
 
-        eventsFromCentralServer = server.fetchEventsAfter(1);
+        eventsFromCentralServer = server.fetchEventsAfter(selectedFrequencyVal);
 
         for(int i =0; i < eventsFromCentralServer.size();i++){
             Log.i("Central Server Event",eventsFromCentralServer.get(i).getEventName());
         }
+
 
     }
 
@@ -403,7 +405,6 @@ public class ListEventsActivity extends ActionBarActivity {
                         try {
                             for (Event e : server.fetchEventsAfter(selectedFrequencyVal)) {
                                 Log.i("DBTester", "Event " + e.getEventName());
-                                Log.i("EventId", e.getEventAuthor());
                                 Log.i("Retrieved Start Time: ", e.getEventStartTime());
                                 Log.i("Retrieved End Time: ", e.getEventEndTime());
                             }
@@ -443,15 +444,33 @@ public class ListEventsActivity extends ActionBarActivity {
     }
 
     public void scheduleFetchEventTask(){
+
+        final MeetlyServer server = new MeetlyServerImpl();
+        long selectedFrequency = 1;
         TimerTask fetchEvent = new TimerTask() {
             @Override
             public void run() {
-                System.out.println("Fetching event..");
+//                if(selectedFrequencyVal > 0) {
+                    System.out.println("Fetching events..");
+                    try {
+                        for (Event e : server.fetchEventsAfter(selectedFrequencyVal)) {
+                            Log.i("DBTester", "Event " + e.getEventName());
+                            Log.i("Retrieved Start Time: ", e.getEventStartTime());
+                            Log.i("Retrieved End Time: ", e.getEventEndTime());
+                        }
+
+                        Log.i("Set Value:", "True");
+                        Log.i("Set Value:", "True");
+                    } catch (MeetlyServer.FailedFetchException e) {
+                        e.printStackTrace();
+                    }
+//                }
             }
         };
 
+
         Timer timer = new Timer();
         Date now = new Date();
-        timer.scheduleAtFixedRate(fetchEvent,now,1000*10);
+        timer.scheduleAtFixedRate(fetchEvent,now,60000*selectedFrequency);
     }
 }
