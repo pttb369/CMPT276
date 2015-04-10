@@ -513,21 +513,35 @@ public class ViewEventActivity extends ActionBarActivity {
             if(!userName.isEmpty())
             {
                 new Thread(new Runnable(){
+                    String myEventName = eventName;
+                    String myEventAuthor = event_author;
                     String myStartTime = startTime;
                     String myEndTime = endTime;
+                    Date myDate = eventDate;
+                    Date myEndDate = eventEndTime;
+                    double lat = latitude;
+                    double longi = longitude;
 
                     @Override
                     public void run() {
                         SharedPreferences getUsernamePref = getSharedPreferences("UserName", MODE_PRIVATE);
                         int userToken = getUsernamePref.getInt("getUserToken", 0);
-                        Calendar startTime;
-                        Calendar endTime;
+                        Calendar startTime = Calendar.getInstance();
+                        Calendar endTime = Calendar.getInstance();
                         MeetlyServer server = new MeetlyServerImpl();
 
-                        Log.i("StartTime: ", myStartTime);
-                        Log.i("EndTime: ", myEndTime);
-                        Log.i("MyUserToken", Integer.toString(userToken));
-                        //server.publishEvent(event_author, userToken, )
+//                        Log.i("StartTime: ", myStartTime);
+//                        Log.i("EndTime: ", myEndTime);
+//                        Log.i("MyUserToken", Integer.toString(userToken));
+//                        Log.i("Date: ", myDate.toString());
+                        startTime.setTime(myDate);
+                        endTime.setTime(myEndDate);
+                        try {
+                            server.publishEvent(myEventAuthor, userToken, myEventName,
+                                    startTime, endTime, lat, longi);
+                        } catch (MeetlyServer.FailedPublicationException e) {
+                            e.printStackTrace();
+                        }
 
                     }
                 }).start();
