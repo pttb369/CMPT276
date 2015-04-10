@@ -33,8 +33,11 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import ca.sfu.generiglesias.dutchie_meetly.bluetoothlogic.BluetoothReader;
 import ca.sfu.generiglesias.dutchie_meetly.maplogic.GPSTracker;
@@ -42,7 +45,7 @@ import ca.sfu.generiglesias.dutchie_meetly.maplogic.GPSTracker;
 /**
  * User can see a list of their created events
  */
-public class ListEventsActivity extends ActionBarActivity {
+public class ListEventsActivity extends ActionBarActivity{
     public static final int INFO_KEY = 342;
     private static final String TAG = "ListEventsActivity";
     private FileOutputStream fileOutputStream;
@@ -69,6 +72,7 @@ public class ListEventsActivity extends ActionBarActivity {
         setupEventList();
         setCurrentCity();
         setCurrentUsername();
+        scheduleFetchEventTask();
     }
 
     private void setupEventList() {
@@ -416,5 +420,18 @@ public class ListEventsActivity extends ActionBarActivity {
     protected void onResume() {
         super.onResume();
         setupEventList();
+    }
+
+     public void scheduleFetchEventTask(){
+        TimerTask fetchEvent = new TimerTask() {
+            @Override
+            public void run() {
+                System.out.println("Fetching event..");
+            }
+        };
+
+        Timer timer = new Timer();
+        Date now = new Date();
+        timer.scheduleAtFixedRate(fetchEvent,now,1000*10);
     }
 }
