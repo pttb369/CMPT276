@@ -93,6 +93,12 @@ public class ViewEventMapActivity extends FragmentActivity {
         super.onResume();
         setUpMapIfNeeded();
     }
+
+    @Override
+    public void onBackPressed() {
+        finish();
+    }
+
     private void setUpMapIfNeeded() {
         // Do a null check to confirm that we have not already instantiated the map.
         if (map == null) {

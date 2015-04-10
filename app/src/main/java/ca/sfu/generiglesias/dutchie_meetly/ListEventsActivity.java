@@ -53,6 +53,10 @@ public class ListEventsActivity extends ActionBarActivity {
     public static TextView currentUsername;
     private Menu menu;
     private String userN, userName, author;
+<<<<<<< HEAD
+=======
+
+>>>>>>> c1865bbe4b30a98b57a2036bbed69987c69a24a1
     private int userId;
     private int selectedFrequencyVal = 0;
 
@@ -69,6 +73,7 @@ public class ListEventsActivity extends ActionBarActivity {
         setupEventList();
         setCurrentCity();
         setCurrentUsername();
+
     }
 
     private void setupEventList() {
@@ -275,6 +280,23 @@ public class ListEventsActivity extends ActionBarActivity {
         }
     }
 
+    public void fetchEventsFromCentralServer() throws MeetlyServer.FailedFetchException {
+
+//        for (Event e : MeetlyServer.fetchEventsAfter(1)) {
+//            Log.i("DBTester", "Event " + e.title);
+//        }
+        List<Event> eventsFromCentralServer;
+
+        MeetlyServer server = new MeetlyServerImpl();
+
+        eventsFromCentralServer = server.fetchEventsAfter(1);
+
+        for(int i =0; i < eventsFromCentralServer.size();i++){
+            Log.i("Central Server Event",eventsFromCentralServer.get(i).getEventName());
+        }
+
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_list_events, menu);
@@ -340,7 +362,15 @@ public class ListEventsActivity extends ActionBarActivity {
             alert11.show();
 
             return true;
+        } else if(id == R.id.fetch_event){
+            try {
+                fetchEventsFromCentralServer();
+            }
+            catch(MeetlyServer.FailedFetchException e){
+                e.printStackTrace();
+            }
         }
+
 
         return super.onOptionsItemSelected(item);
     }
@@ -366,6 +396,25 @@ public class ListEventsActivity extends ActionBarActivity {
             @Override
             public void onClick(View v) {
                 // update the frequency time on server with the selected value.
+                final MeetlyServer server = new MeetlyServerImpl();
+
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
+                            for (Event e : server.fetchEventsAfter(selectedFrequencyVal)) {
+                                Log.i("DBTester", "Event " + e.getEventName());
+                                Log.i("Retrieved Start Time: ", e.getEventStartTime());
+                                Log.i("Retrieved End Time: ", e.getEventStartTime());
+                            }
+
+                            Log.i("Set Value:", "True");
+                        } catch (MeetlyServer.FailedFetchException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }).start();
+
                 dialog.dismiss();
             }
         });
