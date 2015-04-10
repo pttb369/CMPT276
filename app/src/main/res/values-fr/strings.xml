@@ -60,4 +60,5 @@
     <string name="error_incorrect_password">Ce mot de passe est incorrect</string>
     <string name="error_field_required">Nom d\'utilisateur est nécessaire</string>
     <string name="error_invalid_username_password">Nom d\'utilisateur ou mot de passe invalide</string>
+    <string name="button_apply">Appliquer</string>
 </resources>

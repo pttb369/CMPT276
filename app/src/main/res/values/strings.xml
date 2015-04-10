@@ -53,4 +53,6 @@
     <string name="shared_status_title">Shared status</string>
     <string name="event_author_title">Author</string>
     <string name ="title_activity_bluetooth_test">Bluetooth Test</string>
+    <string name="title_activity_update_frequency">UpdateFrequency</string>
+    <string name="button_apply">Apply</string>
 </resources>
