@@ -33,8 +33,11 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import ca.sfu.generiglesias.dutchie_meetly.bluetoothlogic.BluetoothReader;
 import ca.sfu.generiglesias.dutchie_meetly.maplogic.GPSTracker;
@@ -69,6 +72,7 @@ public class ListEventsActivity extends ActionBarActivity {
         setupEventList();
         setCurrentCity();
         setCurrentUsername();
+        scheduleFetchEventTask();
 
     }
 
@@ -139,20 +143,20 @@ public class ListEventsActivity extends ActionBarActivity {
                 String eventAuthor = cursor.getString(DBAdapter.COL_EVENTAUTHOR);
 
                 events.add(new Event
-                            (eventId,
-                            eventName,
-                            eventDate,
-                            eventLocation,
-                            eventDescription,
-                            eventStartTme,
-                            eventEndTime,
-                            eventDuration,
-                            iconId,
-                            latitude,
-                            longitude,
-                            sharedFlag,
-                            eventAuthor
-                                    ));
+                        (eventId,
+                                eventName,
+                                eventDate,
+                                eventLocation,
+                                eventDescription,
+                                eventStartTme,
+                                eventEndTime,
+                                eventDuration,
+                                iconId,
+                                latitude,
+                                longitude,
+                                sharedFlag,
+                                eventAuthor
+                        ));
             } while(cursor.moveToNext());
         }
         cursor.close();
@@ -283,13 +287,14 @@ public class ListEventsActivity extends ActionBarActivity {
 //        }
         List<Event> eventsFromCentralServer;
 
-        MeetlyServer server = new MeetlyServerImpl();
+       final MeetlyServer server = new MeetlyServerImpl();
 
-        eventsFromCentralServer = server.fetchEventsAfter(1);
+        eventsFromCentralServer = server.fetchEventsAfter(selectedFrequencyVal);
 
         for(int i =0; i < eventsFromCentralServer.size();i++){
             Log.i("Central Server Event",eventsFromCentralServer.get(i).getEventName());
         }
+
 
     }
 
@@ -400,7 +405,6 @@ public class ListEventsActivity extends ActionBarActivity {
                         try {
                             for (Event e : server.fetchEventsAfter(selectedFrequencyVal)) {
                                 Log.i("DBTester", "Event " + e.getEventName());
-                                Log.i("EventId", e.getEventAuthor());
                                 Log.i("Retrieved Start Time: ", e.getEventStartTime());
                                 Log.i("Retrieved End Time: ", e.getEventEndTime());
                             }
@@ -437,5 +441,36 @@ public class ListEventsActivity extends ActionBarActivity {
     protected void onResume() {
         super.onResume();
         setupEventList();
+    }
+
+    public void scheduleFetchEventTask(){
+
+        final MeetlyServer server = new MeetlyServerImpl();
+        long selectedFrequency = 1;
+        TimerTask fetchEvent = new TimerTask() {
+            @Override
+            public void run() {
+//                if(selectedFrequencyVal > 0) {
+                    System.out.println("Fetching events..");
+                    try {
+                        for (Event e : server.fetchEventsAfter(selectedFrequencyVal)) {
+                            Log.i("DBTester", "Event " + e.getEventName());
+                            Log.i("Retrieved Start Time: ", e.getEventStartTime());
+                            Log.i("Retrieved End Time: ", e.getEventEndTime());
+                        }
+
+                        Log.i("Set Value:", "True");
+                        Log.i("Set Value:", "True");
+                    } catch (MeetlyServer.FailedFetchException e) {
+                        e.printStackTrace();
+                    }
+//                }
+            }
+        };
+
+
+        Timer timer = new Timer();
+        Date now = new Date();
+        timer.scheduleAtFixedRate(fetchEvent,now,60000*selectedFrequency);
     }
 }
