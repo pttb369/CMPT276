@@ -519,13 +519,9 @@ public class ViewEventActivity extends ActionBarActivity {
                     String myEventAuthor = event_author;
                     String myStartTime = startTime;
                     String myEndTime = endTime;
-                    //Date myDate = eventDate;
-                    //Date myEndDate = eventEndTime;
                     String myDate = date;
                     double lat = latitude;
                     double longi = longitude;
-
-
 
                     @Override
                     public void run() {
