@@ -473,8 +473,6 @@ public class ViewEventActivity extends ActionBarActivity {
 
 
     public void editEvent() {
-        //startActivity(new Intent(ViewEventActivity.this, EditEventActivity.class));
-
         Intent intent = new Intent(this, EditEventActivity.class);
         intent.putExtra("event_name", eventName);
         intent.putExtra("event_date", date);
@@ -505,69 +503,77 @@ public class ViewEventActivity extends ActionBarActivity {
         if (id == R.id.edit_event) {
             editEvent();
             return true;
-        } else if (id == R.id.share_event) {
+        } else {
+            if (id == R.id.share_event) {
 //            setupDiscoverPeersListener();
 //            setupPeerListListener();
 
-            SharedPreferences getUsernamePref = getSharedPreferences("UserName", MODE_PRIVATE);
-            userName = getUsernamePref.getString("getUsername", "");
+                SharedPreferences getUsernamePref = getSharedPreferences("UserName", MODE_PRIVATE);
+                userName = getUsernamePref.getString("getUsername", "");
 
-            if(!userName.isEmpty())
-            {
-                new Thread(new Runnable(){
-                    String myEventName = eventName;
-                    String myEventAuthor = event_author;
-                    String myStartTime = startTime;
-                    String myEndTime = endTime;
-                    //Date myDate = eventDate;
-                    //Date myEndDate = eventEndTime;
-                    String myDate = date;
-                    double lat = latitude;
-                    double longi = longitude;
+                if (!userName.isEmpty()) {
+
+                    new Thread(new Runnable() {
+                        long event_id = getIntent().getLongExtra("event_id", 0);
+
+                        String myEventName = myDb.getRow(event_id).getString(DBAdapter.COL_EVENTNAME);
+                        String myDate = myDb.getRow(event_id).getString(DBAdapter.COL_EVENTDATE);
+                        String location = myDb.getRow(event_id).getString(DBAdapter.COL_LOCATION);
+                        String description = myDb.getRow(event_id).getString(DBAdapter.COL_EVENTDESCRIPTION);
+                        String myStartTime = myDb.getRow(event_id).getString(DBAdapter.COL_EVENTSTARTTIME);
+                        String myEndTime = myDb.getRow(event_id).getString(DBAdapter.COL_EVENTENDTIME);
+                        String duration = myDb.getRow(event_id).getString(DBAdapter.COL_EVENTDURATION);
+                        long lat = myDb.getRow(event_id).getLong(DBAdapter.COL_LATITUDE);
+                        long longi = myDb.getRow(event_id).getLong(DBAdapter.COL_LONGITUDE);
+                        String myEventAuthor = myDb.getRow(event_id).getString(DBAdapter.COL_EVENTAUTHOR);
+
+                        boolean success = myDb.updateRow(event_id, myEventName,date,location,description,
+                        startTime,endTime,duration,lat,longi,"Shared Public", myEventAuthor);
+
+                        String sharedFlag = myDb.getRow(event_id).getString(DBAdapter.COL_SHAREDFLAG);
 
 
-
-                    @Override
-                    public void run() {
-                        SharedPreferences getUsernamePref = getSharedPreferences("UserName", MODE_PRIVATE);
-                        int userToken = getUsernamePref.getInt("getUserToken", 0);
-                        MeetlyServer server = new MeetlyServerImpl();
-                        setupCalendars(myDate, myStartTime, myEndTime);
-                        try {
-                            server.publishEvent(myEventAuthor, userToken, myEventName,
-                                    calStartTime, calEndTime, lat, longi);
-                        } catch (MeetlyServer.FailedPublicationException e) {
-                            e.printStackTrace();
+                        @Override
+                        public void run() {
+                            SharedPreferences getUsernamePref = getSharedPreferences("UserName", MODE_PRIVATE);
+                            int userToken = getUsernamePref.getInt("getUserToken", 0);
+                            MeetlyServer server = new MeetlyServerImpl();
+                            setupCalendars(myDate, myStartTime, myEndTime);
+                            try {
+                                server.publishEvent(myEventAuthor, userToken, myEventName,
+                                        calStartTime, calEndTime, lat, longi);
+                            } catch (MeetlyServer.FailedPublicationException e) {
+                                e.printStackTrace();
+                            }
                         }
+                    }).start();
 
-                    }
-                }).start();
+                    Toast.makeText(getApplicationContext(), "'Planned' event shared",
+                            Toast.LENGTH_SHORT).show();
 
-                Toast.makeText(getApplicationContext(), "'Planned' event shared",
-                        Toast.LENGTH_SHORT).show();
+                    //Since we don't have a live server
+                    /********************************************
+                     *                                          *
+                     *                                          *
+                     *                                          *
+                     *                                          *
+                     *                                          *
+                     *                                          *
+                     *           put server logic here          *
+                     *                                          *
+                     *                                          *
+                     *                                          *
+                     *                                          *
+                     *                                          *
+                     *                                          *
+                     ********************************************/
 
-                //Since we don't have a live server
-                /********************************************
-                 *                                          *
-                 *                                          *
-                 *                                          *
-                 *                                          *
-                 *                                          *
-                 *                                          *
-                 *           put server logic here          *
-                 *                                          *
-                 *                                          *
-                 *                                          *
-                 *                                          *
-                 *                                          *
-                 *                                          *
-                 ********************************************/
+                } else {
+                    shareEventBluetooth();
+                }
 
-            } else{
-                shareEventBluetooth();
+                return true;
             }
-
-            return true;
         }
 
         return super.onOptionsItemSelected(item);
