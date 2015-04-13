@@ -29,6 +29,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
@@ -57,7 +58,7 @@ public class ListEventsActivity extends ActionBarActivity {
     private Menu menu;
     private String userN, userName, author;
     private int userId;
-    private int selectedFrequencyVal = 0;
+    private int selectedFrequencyVal = 1;
 
     private DBAdapter myDb;
 
@@ -397,7 +398,7 @@ public class ListEventsActivity extends ActionBarActivity {
             @Override
             public void onClick(View v) {
                 // update the frequency time on server with the selected value.
-                final MeetlyServer server = new MeetlyServerImpl();
+                /*final MeetlyServer server = new MeetlyServerImpl();
 
                 new Thread(new Runnable() {
                     @Override
@@ -414,7 +415,9 @@ public class ListEventsActivity extends ActionBarActivity {
                             e.printStackTrace();
                         }
                     }
-                }).start();
+                }).start();*/
+
+                scheduleFetchEventTask();
 
                 dialog.dismiss();
             }
@@ -446,7 +449,7 @@ public class ListEventsActivity extends ActionBarActivity {
     public void scheduleFetchEventTask(){
 
         final MeetlyServer server = new MeetlyServerImpl();
-        long selectedFrequency = 1;
+        final long selectedFrequency = 1;
         TimerTask fetchEvent = new TimerTask() {
             @Override
             public void run() {
@@ -454,13 +457,14 @@ public class ListEventsActivity extends ActionBarActivity {
                     System.out.println("Fetching events..");
                     try {
                         for (Event e : server.fetchEventsAfter(selectedFrequencyVal)) {
-                            Log.i("DBTester", "Event " + e.getEventName());
-                            Log.i("Retrieved Start Time: ", e.getEventStartTime());
-                            Log.i("Retrieved End Time: ", e.getEventEndTime());
-                        }
+                            System.out.println("EventName: " + e.getEventName() +
+                                    " EventStart: " + new SimpleDateFormat("HH:mm")
+                                    .format(e.getCalEventStart().getTime().toString()));
+//                            Log.i("DBTester", "Event " + e.getEventName());
+//                            Log.i("Retrieved Start Time: ", e.getEventStartTime());
+//                            Log.i("Retrieved End Time: ", e.getEventEndTime());
 
-                        Log.i("Set Value:", "True");
-                        Log.i("Set Value:", "True");
+                        }
                     } catch (MeetlyServer.FailedFetchException e) {
                         e.printStackTrace();
                     }
@@ -468,9 +472,10 @@ public class ListEventsActivity extends ActionBarActivity {
             }
         };
 
-
         Timer timer = new Timer();
         Date now = new Date();
-        timer.scheduleAtFixedRate(fetchEvent,now,60000*selectedFrequency);
+        timer.scheduleAtFixedRate(fetchEvent, now, (long) 60000 * selectedFrequencyVal);
+
+
     }
 }

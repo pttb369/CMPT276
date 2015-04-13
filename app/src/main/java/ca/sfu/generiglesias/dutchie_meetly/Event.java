@@ -15,6 +15,8 @@ public class Event implements Serializable{
     private String cityName;
     private String eventDescription;
     private String eventStartTime;
+    private Calendar calEventStart;
+    private Calendar calEventEnd;
     private String eventEndTime;
     private String eventDuration;
     private int eventIconId;
@@ -89,8 +91,8 @@ public class Event implements Serializable{
 
                 this.lastUpdate = lastUpdate;
                 this.eventName = eventName;
-                this.eventStartTime = eventStartTime.toString();
-                this.eventEndTime = eventEndTime.toString();
+                this.calEventStart = eventStartTime;
+                this.calEventEnd = eventEndTime;
                 this.latitude = latitude;
                 this.longitude = longitude;
                 this.eventId = eventId;
@@ -151,4 +153,10 @@ public class Event implements Serializable{
     public String getSharedFlag() {return sharedFlag; }
 
     public String getEventAuthor() {return eventAuthor; }
+
+    public int getLastUpdate() {return lastUpdate; }
+
+    public Calendar getCalEventStart() {return calEventStart; }
+
+    public Calendar getCalEventEnd() {return calEventEnd; }
 }

@@ -533,9 +533,19 @@ public class ViewEventActivity extends ActionBarActivity {
                         int userToken = getUsernamePref.getInt("getUserToken", 0);
                         MeetlyServer server = new MeetlyServerImpl();
                         setupCalendars(myDate, myStartTime, myEndTime);
+                        long startTimeMilli = calStartTime.getTimeInMillis();
+
+                        Calendar cal = Calendar.getInstance();
+
+                        cal.setTimeInMillis(startTimeMilli);
+
+                        System.out.println("Date: " + myDate.toString());
+                        System.out.println("Time: " + calStartTime.getTime().toString());
+                        System.out.println("Milli: " + cal.getTimeInMillis());
+                        System.out.println("Returned Time " + new SimpleDateFormat("HH:mm").format(cal.getTime()));
                         try {
                             server.publishEvent(myEventAuthor, userToken, myEventName,
-                                    calStartTime, calEndTime, lat, longi);
+                                    cal, calEndTime, lat, longi);
                         } catch (MeetlyServer.FailedPublicationException e) {
                             e.printStackTrace();
                         }
@@ -578,6 +588,7 @@ public class ViewEventActivity extends ActionBarActivity {
         int[] splitDate = splitString(myDate, "-");
         int[] splitStartTime = splitString(myStartTime, ":");
         int[] splitEndTime = splitString(myEndTime, ":");
+
         calStartTime.set(splitDate[2], splitDate[1], splitDate[0], splitStartTime[0], splitStartTime[1]);
         calEndTime.set(splitDate[2], splitDate[1], splitDate[0], splitEndTime[0], splitEndTime[1]);
     }

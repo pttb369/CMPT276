@@ -93,4 +93,14 @@ public interface MeetlyServer {
             super(e);
         }
     }
+
+    class MeetlyEvent {
+        public int eventID;
+        public int lastUpdate;
+        public String title;
+        public Calendar startTime;
+        public Calendar endTime;
+        public double latitude;
+        public double longitude;
+    }
 }

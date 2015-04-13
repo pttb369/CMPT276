@@ -132,13 +132,28 @@ public class MeetlyServerImpl implements MeetlyServer {
             ResultSetMetaData meta = results.getMetaData();
             int colCount = meta.getColumnCount();
             while (results.next()) {
-                long eventId    = results.getInt(1);
+
+                MeetlyEvent event = new MeetlyEvent();
+                event.eventID    = results.getInt(1);
+                event.lastUpdate = results.getInt(2);
+                event.title      = results.getString(4);
+
+                event.startTime  = Calendar.getInstance();
+                event.startTime.setTimeInMillis(results.getInt(5));
+                event.endTime    = Calendar.getInstance();
+                event.endTime.setTimeInMillis(results.getInt(6));
+
+                event.latitude   = results.getDouble(7);
+                event.longitude  = results.getDouble(8);
+                events.add(new Event(event.eventID, event.lastUpdate, event.title, event.startTime,
+                        event.endTime, event.latitude, event.longitude));
+
+                /*long eventId    = results.getInt(1);
                 int lastUpdate = results.getInt(2);
                 String title      = results.getString(4);
 
                 Calendar startTime  = Calendar.getInstance();
                 startTime.setTimeInMillis(results.getInt(5));
-                Log.i("StartTime: ", Integer.toString(results.getInt(5)));
                 Calendar endTime    = Calendar.getInstance();
                 endTime.setTimeInMillis(results.getInt(6));
 
@@ -146,7 +161,7 @@ public class MeetlyServerImpl implements MeetlyServer {
                 double longitude  = results.getDouble(8);
 
                 events.add(new Event(eventId, lastUpdate, title, startTime, endTime, latitude,
-                        longitude));
+                        longitude));*/
             }
             return events;
         } catch (ClassNotFoundException cne) {
