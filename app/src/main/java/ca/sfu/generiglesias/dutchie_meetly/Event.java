@@ -1,6 +1,7 @@
 package ca.sfu.generiglesias.dutchie_meetly;
 
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 /**
@@ -89,8 +90,8 @@ public class Event implements Serializable{
 
                 this.lastUpdate = lastUpdate;
                 this.eventName = eventName;
-                this.eventStartTime = eventStartTime.toString();
-                this.eventEndTime = eventEndTime.toString();
+                this.eventStartTime = new SimpleDateFormat("HH:mm").format(eventStartTime.getTime()).toString();
+                this.eventEndTime = new SimpleDateFormat("HH:mm").format(eventEndTime.getTime()).toString();
                 this.latitude = latitude;
                 this.longitude = longitude;
                 this.eventId = eventId;

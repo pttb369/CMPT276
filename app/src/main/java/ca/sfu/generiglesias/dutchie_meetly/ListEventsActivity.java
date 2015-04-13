@@ -404,29 +404,9 @@ public class ListEventsActivity extends ActionBarActivity {
         buttonApply.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // update the frequency time on server with the selected value.
-//                final MeetlyServer server = new MeetlyServerImpl();
-
                 timer.cancel();
-                timer.purge();
+                timer.purge();                
                 scheduleFetchEventTask();
-//                new Thread(new Runnable() {
-//                    @Override
-//                    public void run() {
-//                        try {
-//                            for (Event e : server.fetchEventsAfter(selectedFrequencyVal)) {
-//                                Log.i("DBTester", "Event " + e.getEventName());
-//                                Log.i("Retrieved Start Time: ", e.getEventStartTime());
-//                                Log.i("Retrieved End Time: ", e.getEventEndTime());
-//                            }
-//
-//                            Log.i("Set Value:", "True");
-//                        } catch (MeetlyServer.FailedFetchException e) {
-//                            e.printStackTrace();
-//                        }
-//                    }
-//                }).start();
-
                 dialog.dismiss();
             }
         });
@@ -457,6 +437,7 @@ public class ListEventsActivity extends ActionBarActivity {
     public void scheduleFetchEventTask(){
 
         final MeetlyServer server = new MeetlyServerImpl();
+        long selectedFrequency = 1;
         TimerTask fetchEvent = new TimerTask() {
             @Override
             public void run() {
@@ -469,13 +450,10 @@ public class ListEventsActivity extends ActionBarActivity {
                             Log.i("Retrieved Start Time: ", e.getEventStartTime());
                             Log.i("Retrieved End Time: ", e.getEventEndTime());
                         }
-
-                        Log.i("Set Value:", "True");
-                        Log.i("Set Value:", "True");
-                        Log.i("Selected frequency val", Integer.toString(selectedFrequencyVal));
                     } catch (MeetlyServer.FailedFetchException e) {
                         e.printStackTrace();
                     }
+//                }
             }
         };
 
