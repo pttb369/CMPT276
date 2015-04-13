@@ -1,6 +1,7 @@
 package ca.sfu.generiglesias.dutchie_meetly;
 
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 /**
@@ -15,8 +16,6 @@ public class Event implements Serializable{
     private String cityName;
     private String eventDescription;
     private String eventStartTime;
-    private Calendar calEventStart;
-    private Calendar calEventEnd;
     private String eventEndTime;
     private String eventDuration;
     private int eventIconId;
@@ -91,8 +90,8 @@ public class Event implements Serializable{
 
                 this.lastUpdate = lastUpdate;
                 this.eventName = eventName;
-                this.calEventStart = eventStartTime;
-                this.calEventEnd = eventEndTime;
+                this.eventStartTime = new SimpleDateFormat("HH:mm").format(eventStartTime.getTime()).toString();
+                this.eventEndTime = new SimpleDateFormat("HH:mm").format(eventEndTime.getTime()).toString();
                 this.latitude = latitude;
                 this.longitude = longitude;
                 this.eventId = eventId;
@@ -153,10 +152,4 @@ public class Event implements Serializable{
     public String getSharedFlag() {return sharedFlag; }
 
     public String getEventAuthor() {return eventAuthor; }
-
-    public int getLastUpdate() {return lastUpdate; }
-
-    public Calendar getCalEventStart() {return calEventStart; }
-
-    public Calendar getCalEventEnd() {return calEventEnd; }
 }

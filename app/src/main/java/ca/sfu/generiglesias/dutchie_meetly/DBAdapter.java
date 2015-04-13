@@ -82,15 +82,6 @@ public class DBAdapter {
     public static final int DATABASE_VERSION = 2;
 
     private static final String DATABASE_CREATE_SQL =
-
-//            "CREATE TABLE " + LOGIN_TABLE
-//                    + " ("
-//                    + KEY_LOGIN_ID + " integer primary key auto increment, "
-//                    + KEY_LOGIN_USERNAME + " text not null, "
-//                    + KEY_LOGIN_PASSWORD + " text not null, "
-//                    + ");"
-//                    + "\n" +
-
             "CREATE TABLE " + DATABASE_TABLE
                     + " ("
                     + KEY_ROWID + " integer primary key autoincrement, "
